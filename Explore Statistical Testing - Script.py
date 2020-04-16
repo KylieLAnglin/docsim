@@ -20,7 +20,7 @@ from library import start
 # In[43]:
 
 
-def distance_to_doc(matrix_main: pd.DataFrame, comp_doc: pd.Dat):
+def distance_to_doc(matrix_main: pd.DataFrame, comp_doc: pd.DataFrame):
     """
     Returns list of similarity of every doc in matrix_main to comp_doc
     """
@@ -66,7 +66,7 @@ def feedback_sim(matrix_transcripts: pd.DataFrame, matrix_scripts: pd.DataFrame,
 # In[45]:
 
 
-def behavior_sim(matrix_transcripts_file, matrix_scripts_file, text_df):
+def behavior_sim(matrix_transcripts_file: str, matrix_scripts_file: str, text_df: pd.DataFrame):
     # limit to behavior transciprs
     behavior_results = text_df[(text_df.scenario == 'behavior')]
     behavior_matrix = matrix_transcripts[matrix_transcripts.index.isin(behavior_results.index)]
@@ -151,7 +151,6 @@ def similarity_pass(df: pd.DataFrame, script_matrix: pd.DataFrame, sim_matrix: p
                     scenario_func: typing.Callable = feedback_sim):
     """Given a DataFrame and a value for column study, compute pairwise similarity metric 
         while holding out holdout proportion of values. This is a single pass."""
-    breakpoint()
     df_copy = df.copy()
     filtered_df = df_copy[df_copy[study_col] == study_val]
     sampled_indices = random.choices(filtered_df.index, k = len(filtered_df))
@@ -159,8 +158,7 @@ def similarity_pass(df: pd.DataFrame, script_matrix: pd.DataFrame, sim_matrix: p
     matrix_copy = sim_matrix.copy()
     
     filtered_matrix = matrix_copy[matrix_copy.index.isin(sampled_indices)]
-    
-    similarity = scenario_func(filtered_matrix, script_matrix, df_copy)
+    similarity = scenario_func(filtered_matrix, script_matrix, df_copy[df_copy.index.isin(sampled_indices)])
     
     return similarity.mean()
 

@@ -34,11 +34,13 @@ def distance_to_doc(matrix_main: pd.DataFrame, comp_doc: pd.DataFrame):
 # In[44]:
 
 
-def feedback_sim(matrix_transcripts: pd.DataFrame, matrix_scripts: pd.DataFrame, text_df: pd.DataFrame):
-    """ Takes a doc-term matrix of transcripts and scripts and a text dataframe.
-    Caluclates similarity of every feedback doc in transcripts to every feedback script.
-    Create column for each. 
-    Then creates column of max.
+def feedback_sim(matrix_transcripts: pd.DataFrame,
+                 matrix_scripts: pd.DataFrame,
+                 text_df: pd.DataFrame):
+    """ Takes a doc-term matrix of transcripts and scripts and
+        a text dataframe. Caluclates similarity of every
+        feedback doc in transcripts to every feedback script.
+        Create column for each. Then creates column of max.
     """
 
     # limit to feedback scripts
@@ -51,7 +53,8 @@ def feedback_sim(matrix_transcripts: pd.DataFrame, matrix_scripts: pd.DataFrame,
     # sim to feedback script
     script_indices = []
     script_names = []
-    for doc in feedback_scripts.index:  # save list of script names that are just letter and number
+    # save list of script names that are just letter and number
+    for doc in feedback_scripts.index:
         script_indices.append(str(doc))
         script_names.append(str(doc[15:18]))
 
@@ -68,7 +71,9 @@ def feedback_sim(matrix_transcripts: pd.DataFrame, matrix_scripts: pd.DataFrame,
 # In[45]:
 
 
-def behavior_sim(matrix_transcripts_file: str, matrix_scripts_file: str, text_df: pd.DataFrame):
+def behavior_sim(matrix_transcripts_file: str,
+                 matrix_scripts_file: str,
+                 text_df: pd.DataFrame):
     # limit to behavior transciprs
     behavior_results = text_df[(text_df.scenario == 'behavior')]
     behavior_matrix = matrix_transcripts[matrix_transcripts.index.isin(
@@ -124,7 +129,7 @@ results = pd.read_csv(clean_filepath + 'results_lsa_wgt_stop.csv')
 feedback_results = feedback_sim(
     matrix_transcripts, matrix_scripts, text_df=docs_transcripts)
 
-# Goal: Create a distribution of similarities from documents to the ideal script
+# Goal: Create a distribution of similarities from docs to the ideal script
 
 # Start with feedback
 
@@ -150,14 +155,19 @@ docs_transcripts = add_study(docs_transcripts)
 
 
 # In[57]:
-# This function will give us one single bootstrap. Holdout `holdout` documents, then compute the similarity within the same study for the remaining. If we do this lots of times, we'll get a distribution.
+# This function will give us one single bootstrap.
+# Holdout `holdout` documents, then compute the similarity
+# within the same study for the remaining. If we do this lots of times,
+#  we'll get a distribution.
 
-def similarity_pass(df: pd.DataFrame, script_matrix: pd.DataFrame, sim_matrix: pd.DataFrame,
+def similarity_pass(df: pd.DataFrame, script_matrix: pd.DataFrame,
+                    sim_matrix: pd.DataFrame,
                     study_col: str = 'study',
                     study_val: str = '2017-18fall',
                     scenario_func: typing.Callable = feedback_sim):
-    """Given a DataFrame and a value for column study, compute pairwise similarity metric 
-        while holding out holdout proportion of values. This is a single pass."""
+    """Given a DataFrame and a value for column study, compute pairwise
+    similarity metric while holding out holdout proportion of values.
+    This is a single pass."""
     df_copy = df.copy()
     filtered_df = df_copy[df_copy[study_col] == study_val]
     sampled_indices = random.choices(filtered_df.index, k=len(filtered_df))
@@ -166,7 +176,8 @@ def similarity_pass(df: pd.DataFrame, script_matrix: pd.DataFrame, sim_matrix: p
 
     filtered_matrix = matrix_copy[matrix_copy.index.isin(sampled_indices)]
     similarity = scenario_func(
-        filtered_matrix, script_matrix, df_copy[df_copy.index.isin(sampled_indices)])
+        filtered_matrix, script_matrix,
+        df_copy[df_copy.index.isin(sampled_indices)])
     return similarity.mean()
 
 
@@ -180,14 +191,16 @@ study_func_dict = {'2017-18fall': feedback_sim,
 # try running it a few times
 for study_val in study_func_dict:
     similarity_pass(df=docs_transcripts, script_matrix=matrix_scripts,
-                    sim_matrix=matrix_transcripts, study_col='study', study_val=study_val,
+                    sim_matrix=matrix_transcripts, study_col='study',
+                    study_val=study_val,
                     scenario_func=study_func_dict[study_val])
 
 # Now let's define a convenient lambda with our defaults.
 
 
 def sim_pass(study_val, scenario_func): return similarity_pass(
-    df=docs_transcripts, script_matrix=matrix_scripts, sim_matrix=matrix_transcripts,
+    df=docs_transcripts, script_matrix=matrix_scripts,
+    sim_matrix=matrix_transcripts,
     study_col='study', study_val=study_val, scenario_func=scenario_func
 )
 

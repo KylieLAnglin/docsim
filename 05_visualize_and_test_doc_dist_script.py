@@ -4,6 +4,7 @@ import pickle
 import matplotlib.pyplot as plt
 import seaborn as sns
 import statistics
+import numpy as np
 from library import start
 
 sns.set()
@@ -15,7 +16,7 @@ palette = sns.husl_palette(8)
 file = open(start.clean_filepath + 'script_sims_dict', 'rb')
 script_sims_dict = pickle.load(file)
 
-results = pd.read_csv(clean_filepath + 'results_lsa_wgt_stop.csv')
+results = pd.read_csv(start.clean_filepath + 'results_lsa_wgt_stop.csv')
 
 
 def make_list_from_dict_tuples(sim_dict: dict, dict_key: str):
@@ -39,7 +40,7 @@ def make_hist(title: str, boot_list: list, color_int: int):
 fall1718_boots = make_list_from_dict_tuples(sim_dict=script_sims_dict,
                                             dict_key='2017-18fall')
 
-make_hist(title="Script Similarity - Fall 2017-18 " /
+make_hist(title="Script Similarity - Fall 2017-18 " \
           "Feedback Bootstrapped Distribution",
           boot_list=fall1718_boots, color_int=3)
 
@@ -63,7 +64,7 @@ fall1819_boots = make_list_from_dict_tuples(sim_dict=script_sims_dict,
                                             dict_key='2018-19fall')
 
 make_hist(title="Script Similarity - Fall 2018-19 Feedback",
-          boot_list=fall1819_boots)
+          boot_list=fall1819_boots, color_int=3)
 
 
 # %%
@@ -71,11 +72,13 @@ spring1819_boots = make_list_from_dict_tuples(sim_dict=script_sims_dict,
                                               dict_key='2018-19spring')
 
 make_hist(title="Script Similarity - Spring 2018-19 Behavior",
-          boot_list=spring1819_boots)
+          boot_list=spring1819_boots, color_int=4)
 
 # %%
 fall1920_boots = make_list_from_dict_tuples(sim_dict=script_sims_dict,
                                             dict_key='2019-20fall')
 
 make_hist(title="Script Similarity - Fall 2019-20 Behavior",
-          boot_list=fall1920_boots)
+          boot_list=fall1920_boots, color_int=5)
+
+# %%

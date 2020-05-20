@@ -19,6 +19,8 @@ fall_2018_notes = fall_2018_notes[['Q1', 'Q16', 'Q6']]
 spring_2019_notes = pd.read_csv(skills_path + 'Spring 2019 Coaching Notes.csv')
 spring_2019_notes = spring_2019_notes[['Q37', 'Q38', 'Q31']]
 
+fall_2019_skills = pd.read_csv(skills_path + 'Fall 2019 TAP Skills.csv')
+
 ids_2018_2019 = pd.read_csv(skills_path + 'Linking Roster 2018.csv')
 
 
@@ -54,12 +56,14 @@ spring_2019_skills = spring_2019_skills.rename(
     columns={'ID': 'id', 'Skill': 'skill'})
 
 
+
 # %% Exports
 
 for df, file in zip([fall_2017_skills, spring_2018_skills,
-                     fall_2018_skills, spring_2019_skills],
+                     fall_2018_skills, spring_2019_skills, fall_2019_skills],
                     ['fall_2017_skills.csv', 'spring_2018_skills.csv',
-                     'fall_2018_skills.csv', 'spring_2019_skills.csv']):
+                     'fall_2018_skills.csv', 'spring_2019_skills.csv', 
+                     'fall_2019_skills.csv']):
 
     df.to_csv(skills_path + file)
 

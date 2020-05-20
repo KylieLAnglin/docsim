@@ -11,6 +11,12 @@
 # In[1]:
 
 
+from sklearn import metrics
+from scipy import spatial
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import CountVectorizer
+from collections import Counter
+from sklearn.feature_extraction.text import TfidfVectorizer
 import docx
 import os
 import nltk
@@ -18,36 +24,26 @@ import re
 from nltk import sent_tokenize, word_tokenize
 import pandas as pd
 
-from nltk import WordNetLemmatizer 
+from nltk import WordNetLemmatizer
 import operator
 
 import fnmatch
 
 import statistics
-lemmatizer = WordNetLemmatizer() 
-
-from sklearn.feature_extraction.text import TfidfVectorizer
-
-from collections import Counter
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from scipy import spatial
-from sklearn import metrics
+lemmatizer = WordNetLemmatizer()
 
 
-# In[2]:
+# %%
 
+dir = '/Users/kylie/docsim/'
 
-fall2017_filepath = '/Users/kylieleblancKylie/domino/docsim/data/fall_2017/coaching/'
-fall2018_filepath = '/Users/kylieleblancKylie/domino/docsim/data/fall_2018/coaching/'
-spring2018_filepath = '/Users/kylieleblancKylie/domino/docsim/data/spring_2018/coaching/'
-spring2019_filepath = '/Users/kylieleblancKylie/domino/docsim/data/spring_2019/coaching/'
-fall2019_filepath = "/Users/kylieleblancKylie/domino/docsim/data/fall_2019_TAP/coaching/"
+fall2017_filepath = dir + 'data/fall_2017/coaching/'
+fall2018_filepath = dir + 'data/fall_2018/coaching/'
+spring2018_filepath = dir + 'data/spring_2018/coaching/'
+spring2019_filepath = dir + 'data/spring_2019/coaching/'
+fall2019_filepath = dir + 'data/fall_2019_TAP/coaching/'
 
-clean_filepath = "/Users/kylieleblancKylie/domino/docsim/data/clean/"
-
-
-
+clean_filepath = dir + 'data/clean/'
 
 # In[3]:
 
@@ -147,9 +143,15 @@ fall2019 = create_df(fall2019_dict, '2019-20', 'fall', 'behavior')
 
 
 # In[8]:
+fall2018['id'] = fall2018.index.str[5:]
+fall2018['id'] = fall2018.id.str[:-19]
+fall2018['id'] = fall2018.id.astype(int)
 
+skills = pd.read_csv(dir + 'data/coaching_notes/' + 'fall_2018_skills.csv')
 
-spring2019.sample()
+fall2018 = fall2018.merge(skills[['id', 'skill']], how = 'left',
+left_on = 'id', right_on='id')
+
 
 
 # In[9]:

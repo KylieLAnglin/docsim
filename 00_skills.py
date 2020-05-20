@@ -47,7 +47,7 @@ fall_2018_skills = fall_2018_skills.rename(
 
 
 spring_2019_skills = spring_2019_notes.merge(ids_2018_2019, how='inner',
-                                             left_on='Q38', right_on='Email', 
+                                             left_on='Q38', right_on='Email',
                                              indicator=True)
 spring_2019_skills['Skill'] = spring_2019_skills['Q31'].map(
     behavior_skill_labels)
@@ -55,14 +55,12 @@ spring_2019_skills = spring_2019_skills[['ID', 'Skill']]
 spring_2019_skills = spring_2019_skills.rename(
     columns={'ID': 'id', 'Skill': 'skill'})
 
-
-
 # %% Exports
 
 for df, file in zip([fall_2017_skills, spring_2018_skills,
                      fall_2018_skills, spring_2019_skills, fall_2019_skills],
                     ['fall_2017_skills.csv', 'spring_2018_skills.csv',
-                     'fall_2018_skills.csv', 'spring_2019_skills.csv', 
+                     'fall_2018_skills.csv', 'spring_2019_skills.csv',
                      'fall_2019_skills.csv']):
 
     df.to_csv(skills_path + file)

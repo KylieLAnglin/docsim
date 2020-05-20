@@ -142,16 +142,47 @@ spring2019 = create_df(spring2019_dict, '2018-19', 'spring', 'behavior')
 fall2019 = create_df(fall2019_dict, '2019-20', 'fall', 'behavior')
 
 
-# In[8]:
-fall2018['id'] = fall2018.index.str[5:]
-fall2018['id'] = fall2018.id.str[:-19]
-fall2018['id'] = fall2018.id.astype(int)
+# %% Add Skill columns
+# Fall 2017
+fall2017['id'] = fall2017.index.str[:-18].astype(int)
+fall2017_skills = pd.read_csv(
+    dir + 'data/coaching_notes/' + 'fall_2017_skills.csv')
+fall2017 = fall2017.reset_index().merge(fall2017_skills[['id', 'skill']], how='left',
+                                        left_on='id', right_on='id').set_index('doc')
 
-skills = pd.read_csv(dir + 'data/coaching_notes/' + 'fall_2018_skills.csv')
+# Spring 2018
+spring2018['id'] = spring2018.index.str[:-8].astype(int)
+spring2018_skills = pd.read_csv(
+    dir + 'data/coaching_notes/' + 'spring_2018_skills.csv')
+spring2018 = spring2018.reset_index().merge(spring2018_skills[['id', 'skill']], how='left',
+                                        left_on='id', right_on='id').set_index('doc')
 
-fall2018 = fall2018.merge(skills[['id', 'skill']], how = 'left',
-left_on = 'id', right_on='id')
+# Fall 2018
+fall2018['id'] = fall2018.index.str[5:-19].astype(int)
+fall2018_skills = pd.read_csv(
+    dir + 'data/coaching_notes/' + 'fall_2018_skills.csv')
+fall2018_skills2 = pd.DataFrame({'id': [56, 13, 94],
+                                 'skill': [2, 2, 1]})
+fall2018_skills = fall2018_skills.append(fall2018_skills2[['id', 'skill']])
 
+fall2018 = fall2018.reset_index().merge(fall2018_skills[['id', 'skill']], how='left',
+                                        left_on='id', right_on='id').set_index('doc')
+
+# Spring 2019
+spring2019['id'] = spring2019.index.str[5:-19].astype(int)
+spring2019_skills = pd.read_csv(dir + 'data/coaching_notes/' + 'spring_2019_skills.csv')
+spring2019_skills2 = pd.DataFrame({'id': [16, 119, 7, 25, 40, 30, 10, 84, 89, 113, 87, 106, 54],
+'skill': [4, 2, 2, 3, 2, 2, 3, 2, 2, 3, 3, 2, 4]})
+spring2019_skills = spring2019_skills.append(spring2019_skills2[['id', 'skill']])
+spring2019 = spring2019.reset_index().merge(spring2019_skills[['id', 'skill']], how='left',
+                          left_on='id', right_on='id').set_index('doc')
+
+# Fall 2019
+fall2019['id'] = fall2019.index.str[11:-20].astype(int)
+fall2019_skills = pd.read_csv(
+    dir + 'data/coaching_notes/' + 'fall_2019_skills.csv')
+fall2019 = fall2019.reset_index().merge(fall2019_skills[['id', 'skill']], how='left',
+                                        left_on='id', right_on='id').set_index('doc')
 
 
 # In[9]:
@@ -171,3 +202,6 @@ corpus_df.sample(10)
 
 corpus_df.to_csv(clean_filepath + 'text_transcripts.csv')
 
+
+
+# %%

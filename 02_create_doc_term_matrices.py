@@ -47,7 +47,7 @@ df_ideal.sample(3)
 # In[5]:
 
 
-df = df_ideal.append(df_corpus, sort = True)
+df = df_ideal.append(df_corpus, sort=True)
 df.sample(5)
 
 
@@ -60,7 +60,8 @@ df[df.text.isnull()]
 docs = list(df.text)
 vec = CountVectorizer()
 X = vec.fit_transform(docs)
-matrix = pd.DataFrame(X.toarray(), columns=vec.get_feature_names(), index = df.index)
+matrix = pd.DataFrame(
+    X.toarray(), columns=vec.get_feature_names(), index=df.index)
 print('Number of words: ', len(matrix.columns))
 matrix.sample()
 
@@ -81,7 +82,8 @@ matrix_corpus.sample()
 docs = list(df.text)
 vec = TfidfVectorizer()
 X = vec.fit_transform(docs)
-matrix_wgt = pd.DataFrame(X.toarray(), columns=vec.get_feature_names(), index = df.index)
+matrix_wgt = pd.DataFrame(
+    X.toarray(), columns=vec.get_feature_names(), index=df.index)
 print('Number of words: ', len(matrix_wgt.columns))
 matrix_wgt.sample()
 
@@ -113,12 +115,12 @@ stop_words
 
 
 docs = list(df.text)
-vec = CountVectorizer(stop_words = stop_words)
+vec = CountVectorizer(stop_words=stop_words)
 X = vec.fit_transform(docs)
-matrix_stop = pd.DataFrame(X.toarray(), columns=vec.get_feature_names(), index = df.index)
+matrix_stop = pd.DataFrame(
+    X.toarray(), columns=vec.get_feature_names(), index=df.index)
 print('Number of words: ', len(matrix_stop.columns))
 matrix_stop.sample()
-
 
 
 matrix_ideal_stop = matrix_stop[matrix_stop.index.str.contains('Model')]
@@ -137,26 +139,29 @@ matrix_corpus_stop.sample()
 
 
 docs = list(df.text)
-vec = TfidfVectorizer(stop_words = stop_words)
+vec = TfidfVectorizer(stop_words=stop_words)
 X = vec.fit_transform(docs)
-matrix_stop_wgt = pd.DataFrame(X.toarray(), columns=vec.get_feature_names(), index = df.index)
+matrix_stop_wgt = pd.DataFrame(
+    X.toarray(), columns=vec.get_feature_names(), index=df.index)
 print('Number of words: ', len(matrix_stop_wgt.columns))
 matrix_stop_wgt.sample()
 
-matrix_ideal_stop_wgt = matrix_stop_wgt[matrix_stop_wgt.index.str.contains('Model')]
+matrix_ideal_stop_wgt = matrix_stop_wgt[matrix_stop_wgt.index.str.contains(
+    'Model')]
 matrix_ideal_stop_wgt.to_csv(clean_filepath + 'matrix_scripts_stop_wgt.csv')
 matrix_ideal_stop_wgt.sample()
 
 
-matrix_corpus_stop_wgt = matrix_stop_wgt[~matrix_stop_wgt.index.str.contains('Model')]
-matrix_corpus_stop_wgt.to_csv(clean_filepath + 'matrix_transcripts_stop_wgt.csv')
+matrix_corpus_stop_wgt = matrix_stop_wgt[~matrix_stop_wgt.index.str.contains(
+    'Model')]
+matrix_corpus_stop_wgt.to_csv(
+    clean_filepath + 'matrix_transcripts_stop_wgt.csv')
 matrix_corpus_stop_wgt.sample()
 
 
 # # Stem
 
 
-# Initialize spacy 'en' model, keeping only tagger component needed for lemmatization
 nlp = spacy.load('en', disable=['parser', 'ner'])
 
 sentence = "The striped bats are hanging on their feet for best singing."
@@ -166,8 +171,7 @@ doc = nlp(sentence)
 
 # Extract the lemma for each token and join
 " ".join([token.lemma_ for token in doc])
-#> 'the strip bat be hang on -PRON- foot for good'
-
+# > 'the strip bat be hang on -PRON- foot for good'
 
 
 stems = [" ".join([token.lemma_ for token in nlp(text)]) for text in df.text]
@@ -175,11 +179,11 @@ df['text'] = stems
 df.sample(5)
 
 
-
 docs = list(df.text)
 vec = CountVectorizer()
 X = vec.fit_transform(docs)
-matrix_stem = pd.DataFrame(X.toarray(), columns=vec.get_feature_names(), index = df.index)
+matrix_stem = pd.DataFrame(
+    X.toarray(), columns=vec.get_feature_names(), index=df.index)
 print('Number of words: ', len(matrix_stem.columns))
 matrix_stem.sample()
 
@@ -187,7 +191,6 @@ matrix_stem.sample()
 matrix_scripts_stem = matrix_stem[matrix_stem.index.str.contains('Model')]
 matrix_scripts_stem.to_csv(clean_filepath + 'matrix_scripts_stem.csv')
 matrix_scripts_stem.sample()
-
 
 
 matrix_transcripts_stem = matrix_stem[~matrix_stem.index.str.contains('Model')]
@@ -201,22 +204,23 @@ matrix_transcripts_stem.sample()
 
 
 docs = list(df.text)
-vec = CountVectorizer(stop_words = stop_words)
+vec = CountVectorizer(stop_words=stop_words)
 X = vec.fit_transform(docs)
-matrix_stem_stop = pd.DataFrame(X.toarray(), columns=vec.get_feature_names(), index = df.index)
+matrix_stem_stop = pd.DataFrame(
+    X.toarray(), columns=vec.get_feature_names(), index=df.index)
 print('Number of words: ', len(matrix_stem_stop.columns))
 matrix_stem_stop.sample()
 
-
-
-matrix_scripts_stem_stop = matrix_stem_stop[matrix_stem_stop.index.str.contains('Model')]
-matrix_scripts_stem_stop.to_csv(clean_filepath + 'matrix_scripts_stem_stop.csv')
+matrix_scripts_stem_stop = matrix_stem_stop[matrix_stem_stop.index.str.contains(
+    'Model')]
+matrix_scripts_stem_stop.to_csv(
+    clean_filepath + 'matrix_scripts_stem_stop.csv')
 matrix_scripts_stem_stop.sample()
 
-
-
-matrix_transcripts_stem_stop = matrix_stem_stop[~matrix_stem_stop.index.str.contains('Model')]
-matrix_transcripts_stem_stop.to_csv(clean_filepath + 'matrix_transcripts_stem_stop.csv')
+matrix_transcripts_stem_stop = matrix_stem_stop[~matrix_stem_stop.index.str.contains(
+    'Model')]
+matrix_transcripts_stem_stop.to_csv(
+    clean_filepath + 'matrix_transcripts_stem_stop.csv')
 matrix_transcripts_stem_stop.sample()
 
 
@@ -226,20 +230,25 @@ matrix_transcripts_stem_stop.sample()
 
 
 docs = list(df.text)
-vec = TfidfVectorizer(stop_words = stop_words)
+vec = TfidfVectorizer(stop_words=stop_words)
 X = vec.fit_transform(docs)
-matrix_stem_stop_wgt = pd.DataFrame(X.toarray(), columns=vec.get_feature_names(), index = df.index)
+matrix_stem_stop_wgt = pd.DataFrame(
+    X.toarray(), columns=vec.get_feature_names(), index=df.index)
 print('Number of words: ', len(matrix_stem_stop_wgt.columns))
 matrix_stem_stop_wgt.sample()
 
 
-matrix_scripts_stem_stop_wgt = matrix_stem_stop_wgt[matrix_stem_stop_wgt.index.str.contains('Model')]
-matrix_scripts_stem_stop_wgt.to_csv(clean_filepath + 'matrix_scripts_stem_stop_wgt.csv')
+matrix_scripts_stem_stop_wgt = matrix_stem_stop_wgt[matrix_stem_stop_wgt.index.str.contains(
+    'Model')]
+matrix_scripts_stem_stop_wgt.to_csv(
+    clean_filepath + 'matrix_scripts_stem_stop_wgt.csv')
 matrix_scripts_stem_stop_wgt.sample()
 
 
-matrix_transcripts_stem_stop_wgt = matrix_stem_stop_wgt[~matrix_stem_stop_wgt.index.str.contains('Model')]
-matrix_transcripts_stem_stop_wgt.to_csv(clean_filepath + 'matrix_transcripts_stem_stop_wgt.csv')
+matrix_transcripts_stem_stop_wgt = matrix_stem_stop_wgt[~matrix_stem_stop_wgt.index.str.contains(
+    'Model')]
+matrix_transcripts_stem_stop_wgt.to_csv(
+    clean_filepath + 'matrix_transcripts_stem_stop_wgt.csv')
 matrix_transcripts_stem_stop_wgt.sample()
 
 
@@ -253,18 +262,19 @@ matrix_scripts_lsa = pd.read_csv(clean_filepath + 'matrix_scripts.csv')
 matrix_lsa = matrix_transcripts_lsa.append(matrix_scripts_lsa)
 matrix_lsa = matrix_lsa.set_index('doc')
 
-lsa = TruncatedSVD(n_components = 100, random_state = 100)
+lsa = TruncatedSVD(n_components=100, random_state=100)
 lsa_fit = lsa.fit_transform(matrix_lsa)
 lsa_fit = Normalizer(copy=False).fit_transform(lsa_fit)
 print(lsa_fit.shape)
 
-## Each LSA component is a linear combo of words
-word_weights = pd.DataFrame(lsa.components_, columns = matrix_lsa.columns)
+#  Each LSA component is a linear combo of words
+word_weights = pd.DataFrame(lsa.components_, columns=matrix_lsa.columns)
 word_weights.head()
 word_weights_trans = word_weights.T
 
-## Each document is a linear combination of components
-matrix_lsa = pd.DataFrame(lsa_fit, index = matrix_lsa.index, columns = word_weights.index)
+# Each document is a linear combination of components
+matrix_lsa = pd.DataFrame(
+    lsa_fit, index=matrix_lsa.index, columns=word_weights.index)
 matrix_lsa.sample(5)
 
 
@@ -281,31 +291,37 @@ word_weights_trans.to_csv(clean_filepath + 'lsa_topics.csv')
 
 # In[43]:
 
-matrix_transcripts_lsa_stop = pd.read_csv(clean_filepath + 'matrix_transcripts_stop.csv')
-matrix_scripts_lsa_stop = pd.read_csv(clean_filepath + 'matrix_scripts_stop.csv')
+matrix_transcripts_lsa_stop = pd.read_csv(
+    clean_filepath + 'matrix_transcripts_stop.csv')
+matrix_scripts_lsa_stop = pd.read_csv(
+    clean_filepath + 'matrix_scripts_stop.csv')
 matrix_lsa_stop = matrix_transcripts_lsa_stop.append(matrix_scripts_lsa_stop)
 matrix_lsa_stop = matrix_lsa_stop.set_index('doc')
 
-lsa = TruncatedSVD(n_components = 100, random_state = 100)
+lsa = TruncatedSVD(n_components=100, random_state=100)
 lsa_fit = lsa.fit_transform(matrix_lsa_stop)
 lsa_fit = Normalizer(copy=False).fit_transform(lsa_fit)
 print(lsa_fit.shape)
 
-## Each LSA component is a linear combo of words
-word_weights = pd.DataFrame(lsa.components_, columns = matrix_lsa_stop.columns)
+# Each LSA component is a linear combo of words
+word_weights = pd.DataFrame(lsa.components_, columns=matrix_lsa_stop.columns)
 word_weights.head()
 word_weights_trans = word_weights.T
 
-## Each document is a linear combination of components
-matrix_lsa_stop = pd.DataFrame(lsa_fit, index = matrix_lsa.index, columns = word_weights.index)
+# Each document is a linear combination of components
+matrix_lsa_stop = pd.DataFrame(
+    lsa_fit, index=matrix_lsa.index, columns=word_weights.index)
 matrix_lsa_stop.sample(5)
 
 
-matrix_scripts_lsa_stop = matrix_lsa_stop[matrix_lsa_stop.index.str.contains('Model')]
+matrix_scripts_lsa_stop = matrix_lsa_stop[matrix_lsa_stop.index.str.contains(
+    'Model')]
 matrix_scripts_lsa_stop.to_csv(clean_filepath + 'matrix_scripts_lsa_stop.csv')
 
-matrix_transcripts_lsa_stop = matrix_lsa_stop[~matrix_lsa_stop.index.str.contains('Model')]
-matrix_transcripts_lsa_stop.to_csv(clean_filepath + 'matrix_transcripts_lsa_stop.csv')
+matrix_transcripts_lsa_stop = matrix_lsa_stop[~matrix_lsa_stop.index.str.contains(
+    'Model')]
+matrix_transcripts_lsa_stop.to_csv(
+    clean_filepath + 'matrix_transcripts_lsa_stop.csv')
 
 word_weights_trans.to_csv(clean_filepath + 'lsa_stop_topics.csv')
 
@@ -315,66 +331,80 @@ word_weights_trans.to_csv(clean_filepath + 'lsa_stop_topics.csv')
 # In[44]:
 
 
-matrix_transcripts_lsa_wgt = pd.read_csv(clean_filepath + 'matrix_transcripts_wgt.csv')
+matrix_transcripts_lsa_wgt = pd.read_csv(
+    clean_filepath + 'matrix_transcripts_wgt.csv')
 matrix_scripts_lsa_wgt = pd.read_csv(clean_filepath + 'matrix_scripts_wgt.csv')
 matrix_lsa_wgt = matrix_transcripts_lsa_wgt.append(matrix_scripts_lsa_wgt)
 matrix_lsa_wgt = matrix_lsa_wgt.set_index('doc')
 
-lsa = TruncatedSVD(n_components = 100, random_state = 100)
+lsa = TruncatedSVD(n_components=100, random_state=100)
 lsa_fit = lsa.fit_transform(matrix_lsa_wgt)
 lsa_fit = Normalizer(copy=False).fit_transform(lsa_fit)
 print(lsa_fit.shape)
 
-## Each LSA component is a linear combo of words
-word_weights = pd.DataFrame(lsa.components_, columns = matrix_lsa_wgt.columns)
+# Each LSA component is a linear combo of words
+word_weights = pd.DataFrame(lsa.components_, columns=matrix_lsa_wgt.columns)
 word_weights.head()
 word_weights_trans = word_weights.T
 
 
-## Each document is a linear combination of components
-matrix_lsa_wgt = pd.DataFrame(lsa_fit, index = matrix_lsa_wgt.index, columns = word_weights.index)
+# Each document is a linear combination of components
+matrix_lsa_wgt = pd.DataFrame(
+    lsa_fit, index=matrix_lsa_wgt.index, columns=word_weights.index)
 matrix_lsa_wgt.sample(5)
 
 
-matrix_scripts_lsa_wgt = matrix_lsa_wgt[matrix_lsa_wgt.index.str.contains('Model')]
+matrix_scripts_lsa_wgt = matrix_lsa_wgt[matrix_lsa_wgt.index.str.contains(
+    'Model')]
 matrix_scripts_lsa_wgt.to_csv(clean_filepath + 'matrix_scripts_lsa_wgt.csv')
 
-matrix_transcripts_lsa_wgt = matrix_lsa_wgt[~matrix_lsa_wgt.index.str.contains('Model')]
-matrix_transcripts_lsa_wgt.to_csv(clean_filepath + 'matrix_transcripts_lsa_wgt.csv')
+matrix_transcripts_lsa_wgt = matrix_lsa_wgt[~matrix_lsa_wgt.index.str.contains(
+    'Model')]
+matrix_transcripts_lsa_wgt.to_csv(
+    clean_filepath + 'matrix_transcripts_lsa_wgt.csv')
 
 word_weights_trans.to_csv(clean_filepath + 'lsa_wgt_topics.csv')
 
 
-# # LSA, Weighting, Stop Words
+# LSA, Weighting, Stop Words
 
 # In[45]:
 
 
-matrix_transcripts_lsa_wgt_stop = pd.read_csv(clean_filepath + 'matrix_transcripts_stop_wgt.csv')
-matrix_scripts_lsa_wgt_stop = pd.read_csv(clean_filepath + 'matrix_scripts_stop_wgt.csv')
-matrix_lsa_wgt_stop = matrix_transcripts_lsa_wgt_stop.append(matrix_scripts_lsa_wgt_stop)
+matrix_transcripts_lsa_wgt_stop = pd.read_csv(
+    clean_filepath + 'matrix_transcripts_stop_wgt.csv')
+matrix_scripts_lsa_wgt_stop = pd.read_csv(
+    clean_filepath + 'matrix_scripts_stop_wgt.csv')
+matrix_lsa_wgt_stop = matrix_transcripts_lsa_wgt_stop.append(
+    matrix_scripts_lsa_wgt_stop)
 matrix_lsa_wgt_stop = matrix_lsa_wgt_stop.set_index('doc')
 
-lsa = TruncatedSVD(n_components = 100, random_state = 100)
+lsa = TruncatedSVD(n_components=100, random_state=100)
 lsa_fit = lsa.fit_transform(matrix_lsa_wgt_stop)
 lsa_fit = Normalizer(copy=False).fit_transform(lsa_fit)
 print(lsa_fit.shape)
 
-## Each LSA component is a linear combo of words
-word_weights = pd.DataFrame(lsa.components_, columns = matrix_lsa_wgt_stop.columns)
+# Each LSA component is a linear combo of words
+word_weights = pd.DataFrame(
+    lsa.components_, columns=matrix_lsa_wgt_stop.columns)
 word_weights.head()
 word_weights_trans = word_weights.T
 
 
-## Each document is a linear combination of components
-matrix_lsa_wgt_stop = pd.DataFrame(lsa_fit, index = matrix_lsa_wgt_stop.index, columns = word_weights.index)
+# Each document is a linear combination of components
+matrix_lsa_wgt_stop = pd.DataFrame(
+    lsa_fit, index=matrix_lsa_wgt_stop.index, columns=word_weights.index)
 matrix_lsa_wgt_stop.sample(5)
 
 
-matrix_scripts_lsa_wgt_stop = matrix_lsa_wgt_stop[matrix_lsa_wgt_stop.index.str.contains('Model')]
-matrix_scripts_lsa_wgt_stop.to_csv(clean_filepath + 'matrix_scripts_lsa_wgt_stop.csv')
+matrix_scripts_lsa_wgt_stop = matrix_lsa_wgt_stop[matrix_lsa_wgt_stop.index.str.contains(
+    'Model')]
+matrix_scripts_lsa_wgt_stop.to_csv(
+    clean_filepath + 'matrix_scripts_lsa_wgt_stop.csv')
 
-matrix_transcripts_lsa_wgt_stop = matrix_lsa_wgt_stop[~matrix_lsa_wgt_stop.index.str.contains('Model')]
-matrix_transcripts_lsa_wgt_stop.to_csv(clean_filepath + 'matrix_transcripts_lsa_wgt_stop.csv')
+matrix_transcripts_lsa_wgt_stop = matrix_lsa_wgt_stop[~matrix_lsa_wgt_stop.index.str.contains(
+    'Model')]
+matrix_transcripts_lsa_wgt_stop.to_csv(
+    clean_filepath + 'matrix_transcripts_lsa_wgt_stop.csv')
 
 word_weights_trans.to_csv(clean_filepath + 'lsa_wgt_stop_topics.csv')

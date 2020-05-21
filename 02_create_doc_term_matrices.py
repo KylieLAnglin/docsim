@@ -25,7 +25,13 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import spacy
 
-clean_filepath = "/Users/kylieleblancKylie/domino/docsim/data/clean/"
+nlp = spacy.load('en', disable=['parser', 'ner'])
+
+nltk.download('stopwords')
+
+dir = '/Users/kylie/docsim/'
+
+clean_filepath = dir + "data/clean/"
 
 
 # In[3]:

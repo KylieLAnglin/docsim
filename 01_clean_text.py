@@ -176,12 +176,14 @@ fall2018_skills = fall2018_skills.append(fall2018_skills2[['id', 'skill']])
 fall2018 = fall2018.reset_index().merge(fall2018_skills[['id', 'skill']],
                                         how='left',
                                         left_on='id',
-                                        right_on='id').set_index('doc')
+                                        right_on='id',
+                                        validate='1:1').set_index('doc')
 
 # Spring 2019
 spring2019['id'] = spring2019.index.str[5:-19].astype(int)
 spring2019_skills = pd.read_csv(
     dir + 'data/coaching_notes/' + 'spring_2019_skills.csv')
+spring2019_skills = spring2019_skills.dropna(axis=0, subset=['skill'])
 spring2019_skills2 = pd.DataFrame({'id': [16, 119, 7, 25, 40, 30, 10, 84, 89, 113, 87, 106, 54],
                                    'skill': [4, 2, 2, 3, 2, 2, 3, 2, 2, 3, 3, 2, 4]})
 spring2019_skills = spring2019_skills.append(
@@ -189,7 +191,8 @@ spring2019_skills = spring2019_skills.append(
 spring2019 = spring2019.reset_index().merge(spring2019_skills[['id', 'skill']],
                                             how='left',
                                             left_on='id',
-                                            right_on='id').set_index('doc')
+                                            right_on='id',
+                                            validate='1:1').set_index('doc')
 
 # Fall 2019
 fall2019['id'] = fall2019.index.str[11:-20].astype(int)
@@ -198,7 +201,8 @@ fall2019_skills = pd.read_csv(
 fall2019 = fall2019.reset_index().merge(fall2019_skills[['id', 'skill']],
                                         how='left',
                                         left_on='id',
-                                        right_on='id').set_index('doc')
+                                        right_on='id',
+                                        validate='1:1').set_index('doc')
 
 
 # In[9]:

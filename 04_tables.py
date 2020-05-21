@@ -197,3 +197,32 @@ row = row+1
 
 
 # %%
+
+
+sns.set()
+sns.set_palette('husl', 8)
+
+palette = sns.husl_palette(8)
+
+
+def make_hist(title: str, value_list: list, color_int: int):
+
+    bins = np.linspace(min(value_list), max(value_list), num=20)
+    plt.title(title)
+
+    plt.hist(value_list, bins, color='black')
+
+    plt.savefig(table_filepath + title)
+
+    plt.show()
+
+
+make_hist('Figure 1: Fidelity Scores - Behavior Study 1',
+          results[(results.year == '2017-18') &
+                  (results.semester == 'spring')].script_sim,
+          2)
+
+
+
+
+# %%

@@ -20,7 +20,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from library import start
 
-nltk.download('stopwords')
 
 # %%
 clean_filepath = start.clean_filepath
@@ -115,6 +114,21 @@ def study_similarity(matrix_transcripts_file, text_df):
         results['study_sim_' + semester + year[0:4] + '_' + year[5:7]] = sims
     return results
 
+def limit_transcripts(matrix_transcripts_file:str, 
+                        text_df:pd.DataFrame, 
+                        scenario:str):
+    matrix_transcripts = pd.read_csv(clean_filepath + matrix_transcripts_file)
+    matrix_transcripts = matrix_transcripts.set_index('doc')
+
+    # limit to scenario scripts
+    limited_results = text_df[(text_df.scenario == 'scenario')]
+    limited_matrix = matrix_transcripts[matrix_transcripts.index.isin(
+        limited_results.index)]
+    return limited_results
+
+
+    
+
 
 def script_similarity(matrix_transcripts_file, matrix_scripts_file, text_df):
 
@@ -146,7 +160,7 @@ def script_similarity(matrix_transcripts_file, matrix_scripts_file, text_df):
     # keep max value
     feedback_results['script_sim'] = feedback_results[script_names].max(axis=1)
 
-    # limit to behavior transciprs
+    # limit to behavior transciprt
     behavior_results = text_df[(text_df.scenario == 'behavior')]
     behavior_matrix = matrix_transcripts[matrix_transcripts.index.isin(
         behavior_results.index)]
@@ -177,11 +191,10 @@ def script_similarity(matrix_transcripts_file, matrix_scripts_file, text_df):
 # %%
 # No pre-processing
 results = session_similarity('matrix_transcripts.csv', docs)  # session sim col
-results = study_similarity('matrix_scripts.csv',
-                           docs)  # creates study sim cols
+results = study_similarity('matrix_transcripts.csv', docs)  # creates study sim cols
 
 script_results = script_similarity(
-    matrix_transcripts_file, matrix_scripts_file, docs)
+    'matrix_transcripts.csv', 'matrix_scripts.csv', docs)
 results = results.merge(script_results, left_index=True, right_index=True)
 results.to_csv((clean_filepath + 'results.csv'))
 

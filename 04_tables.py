@@ -11,13 +11,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from library import start
 
-
 # In[2]:
-
 
 clean_filepath = start.clean_filepath
 table_filepath = start.table_filepath
-
 
 # In[3]:
 
@@ -38,51 +35,62 @@ results.sample(3)
 
 
 techniques = ['', '_stop', '_stop_wgt', '_stem_stop_wgt', '_lsa_wgt_stop']
-columns = [2,3,4,5,6]
+columns = [2, 3, 4, 5, 6]
 
 
 # In[6]:
 
-
 # Script Similarity
 
-file = table_filepath + 'Script Similarity.xlsx'
+file = table_filepath + 'table1_fidelity.xlsx'
 wb = load_workbook(file)
 ws = wb.active
 
+row = 3
+# Behavior
+# Spring 2018
+for tech, col in zip(techniques, columns):
+    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
+    value = round(results[((results.year == '2017-18') &
+                           (results.semester == 'spring'))].script_sim.mean(), 2)
+    ws.cell(row=row, column=col).value = value
+wb.save(file)
+row = row + 1
+
+# Spring 2019
+for tech, col in zip(techniques, columns):
+    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
+    value = round(results[((results.year == '2018-19') &
+                           (results.semester == 'spring'))].script_sim.mean(), 2)
+    ws.cell(row=row, column=col).value = value
+wb.save(file)
+row = row + 1
+
+# Fall 2019
+for tech, col in zip(techniques, columns):
+    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
+    value = round(results[((results.year == '2019-20') &
+                           (results.semester == 'fall'))].script_sim.mean(), 2)
+    ws.cell(row=row, column=col).value = value
+wb.save(file)
+row = row + 1
+
+# Feedback
 # Fall 2017
 for tech, col in zip(techniques, columns):
     results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2017-18') & (results.semester == 'fall'))].script_sim.mean(), 2)
-    ws.cell(row= 3, column= col).value = value
+    value = round(results[((results.year == '2017-18') &
+                           (results.semester == 'fall'))].script_sim.mean(), 2)
+    ws.cell(row=row, column=col).value = value
 wb.save(file)
+row = row + 1
 
 # Fall 2018
 for tech, col in zip(techniques, columns):
     results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2018-19') & (results.semester == 'fall'))].script_sim.mean(), 2)
-    ws.cell(row= 4, column= col).value = value
-wb.save(file)
-
-# Spring 2018
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2017-18') & (results.semester == 'spring'))].script_sim.mean(), 2)
-    ws.cell(row= 5, column= col).value = value
-wb.save(file)
-
-# Spring 2019
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2018-19') & (results.semester == 'spring'))].script_sim.mean(), 2)
-    ws.cell(row= 6, column= col).value = value
-wb.save(file)
-
-# Spring 2019
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2019-20') & (results.semester == 'fall'))].script_sim.mean(), 2)
-    ws.cell(row= 7, column= col).value = value
+    value = round(results[((results.year == '2018-19') &
+                           (results.semester == 'fall'))].script_sim.mean(), 2)
+    ws.cell(row=row, column=col).value = value
 wb.save(file)
 
 

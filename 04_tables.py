@@ -52,7 +52,8 @@ row = 3
 for tech, col in zip(techniques, columns):
     results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
     value = round(results[((results.year == '2017-18') &
-                           (results.semester == 'spring'))].script_sim.mean(), 2)
+                           (results.semester == 'spring'))].script_sim.mean(),
+                  2)
     ws.cell(row=row, column=col).value = value
 wb.save(file)
 row = row + 1
@@ -61,7 +62,8 @@ row = row + 1
 for tech, col in zip(techniques, columns):
     results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
     value = round(results[((results.year == '2018-19') &
-                           (results.semester == 'spring'))].script_sim.mean(), 2)
+                           (results.semester == 'spring'))].script_sim.mean(),
+                  2)
     ws.cell(row=row, column=col).value = value
 wb.save(file)
 row = row + 1
@@ -70,7 +72,8 @@ row = row + 1
 for tech, col in zip(techniques, columns):
     results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
     value = round(results[((results.year == '2019-20') &
-                           (results.semester == 'fall'))].script_sim.mean(), 2)
+                           (results.semester == 'fall'))].script_sim.mean(),
+                  2)
     ws.cell(row=row, column=col).value = value
 wb.save(file)
 row = row + 1
@@ -80,7 +83,8 @@ row = row + 1
 for tech, col in zip(techniques, columns):
     results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
     value = round(results[((results.year == '2017-18') &
-                           (results.semester == 'fall'))].script_sim.mean(), 2)
+                           (results.semester == 'fall'))].script_sim.mean(),
+                  2)
     ws.cell(row=row, column=col).value = value
 wb.save(file)
 row = row + 1
@@ -92,7 +96,6 @@ for tech, col in zip(techniques, columns):
                            (results.semester == 'fall'))].script_sim.mean(), 2)
     ws.cell(row=row, column=col).value = value
 wb.save(file)
-
 
 
 # %% Study Similarity - Spring 2019 Baseline
@@ -155,7 +158,8 @@ ws = wb.active
 
 results = pd.read_csv(clean_filepath + 'results_lsa_wgt_stop.csv')
 
-comps = ['study_sim_spring2017_18', 'study_sim_spring2018_19', 'study_sim_fall2019_20',
+comps = ['study_sim_spring2017_18', 'study_sim_spring2018_19',
+         'study_sim_fall2019_20',
          'study_sim_fall2017_18', 'study_sim_fall2018_19']
 cols = [2, 3, 4, 5, 6]
 
@@ -222,6 +226,10 @@ make_hist('Figure 1: Fidelity Scores - Behavior Study 1',
                   (results.semester == 'spring')].script_sim,
           2)
 
+make_hist('Figure 2: Fidelity Scores - Behavior Study 2',
+          results[(results.year == '2018-19') &
+                  (results.semester == 'spring')].script_sim,
+          2)
 
 
 

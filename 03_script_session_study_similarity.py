@@ -35,6 +35,7 @@ script_df.sample(5)
 
 # %%
 
+
 def distance_to_mean(matrix_main, matrix_comparison):
     sims = []
     for maindoc in matrix_main.index:
@@ -123,7 +124,7 @@ def script_similarity(matrix_transcripts_file, limited_transcript_df,
                       matrix_scripts_file, limited_script_df):
     # limit transcripts
     transcript_matrix = import_limited_matrices(matrix_transcripts_file,
-                                                limited_transcript_df)    
+                                                limited_transcript_df)
 
     # limit scripts
     script_matrix = import_limited_matrices(matrix_scripts_file,
@@ -136,7 +137,8 @@ def script_similarity(matrix_transcripts_file, limited_transcript_df,
 
 
 def max_sim(transcript_matrix, script_matrix):
-    sims_df = pd.DataFrame({'doc': transcript_matrix.index.tolist()}).set_index('doc')
+    sims_df = pd.DataFrame(
+        {'doc': transcript_matrix.index.tolist()}).set_index('doc')
     for script in script_matrix.index:
         sims = distance_to_doc(transcript_matrix, script_matrix.loc[script])
         sims_df[script] = sims
@@ -158,25 +160,25 @@ def import_limited_matrices(matrix_file: str,
     return limited_matrix
 
 
-
-
-
-
-
 # %%
 # No pre-processing
-results = session_similarity('matrix_transcripts.csv', transcript_df)  # session sim col
-results = study_similarity('matrix_transcripts.csv', transcript_df)  # creates study sim cols
+results = session_similarity(
+    'matrix_transcripts.csv', transcript_df)  # session sim col
+results = study_similarity('matrix_transcripts.csv',
+                           transcript_df)  # creates study sim cols
 
 script_results = pd.DataFrame()
 for scenario in ['feedback', 'behavior']:
-    sim_df = script_similarity(
-        matrix_transcripts_file='matrix_transcripts.csv',
-        limited_transcript_df=transcript_df[(
-            transcript_df.scenario == scenario)],
-        matrix_scripts_file='matrix_scripts.csv',
-        limited_script_df=script_df[(script_df.scenario == scenario)])
-    script_results = script_results.append(sim_df)
+    for skill in [1, 2, 3, 4]:
+        sim_df = script_similarity(
+            matrix_transcripts_file='matrix_transcripts.csv',
+            limited_transcript_df=transcript_df[(
+                (transcript_df.scenario == scenario) &
+                (transcript_df.skill == skill))],
+            matrix_scripts_file='matrix_scripts.csv',
+            limited_script_df=script_df[(script_df.scenario == scenario) &
+                                        (script_df.skill == skill)])
+        script_results = script_results.append(sim_df)
 
 
 results = results.merge(script_results, left_index=True, right_index=True)
@@ -193,13 +195,19 @@ for tech in techniques:
 
     script_results = pd.DataFrame()
     for scenario in ['feedback', 'behavior']:
-        sim_df = script_similarity(
-            matrix_transcripts_file=matrix_transcripts_file,
-            limited_transcript_df=transcript_df[(
-                transcript_df.scenario == scenario)],
-            matrix_scripts_file=matrix_scripts_file,
-            limited_script_df=script_df[(script_df.scenario == scenario)])
-        script_results = script_results.append(sim_df)
+        for skill in [1, 2, 3, 4]:
+            sim_df = script_similarity(
+                matrix_transcripts_file=matrix_transcripts_file,
+                limited_transcript_df=transcript_df[(
+                    (transcript_df.scenario == scenario) &
+                    (transcript_df.skill == skill))],
+                matrix_scripts_file=matrix_scripts_file,
+                limited_script_df=script_df[(script_df.scenario == scenario) &
+                                            (script_df.skill == skill)])
+            script_results = script_results.append(sim_df)
 
     results = results.merge(script_results, left_index=True, right_index=True)
     results.to_csv((clean_filepath + 'results' + tech + '.csv'))
+
+
+# %%

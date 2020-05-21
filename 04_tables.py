@@ -94,172 +94,106 @@ for tech, col in zip(techniques, columns):
 wb.save(file)
 
 
-# In[8]:
 
+# %% Study Similarity - Spring 2019 Baseline
 
-# Session Similarity
-
-file = table_filepath + 'Session Similarity.xlsx'
+file = table_filepath + 'table2_replicability.xlsx'
 wb = load_workbook(file)
 ws = wb.active
+
+row = 3
+# spring 2017
+for tech, col in zip(techniques, columns):
+    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
+    value = round(results[((results.year == '2017-18') &
+                           (results.semester == 'spring'))].study_sim_spring2017_18.mean(), 2)
+    ws.cell(row=row, column=col).value = value
+wb.save(file)
+row = row + 1
+
+# spring 2018
+for tech, col in zip(techniques, columns):
+    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
+    value = round(results[((results.year == '2018-19') &
+                           (results.semester == 'spring'))].study_sim_spring2017_18.mean(), 2)
+    ws.cell(row=row, column=col).value = value
+wb.save(file)
+row = row + 1
+
+# Spring 2018
+for tech, col in zip(techniques, columns):
+    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
+    value = round(results[((results.year == '2019-20') &
+                           (results.semester == 'fall'))].study_sim_spring2017_18.mean(), 2)
+    ws.cell(row=5, column=col).value = value
+wb.save(file)
+row = row + 1
 
 # Fall 2017
 for tech, col in zip(techniques, columns):
     results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2017-18') & (results.semester == 'fall'))].session_sim.mean(), 2)
-    ws.cell(row= 3, column= col).value = value
+    value = round(results[((results.year == '2017-18') &
+                           (results.semester == 'fall'))].study_sim_spring2017_18.mean(), 2)
+    ws.cell(row=row, column=col).value = value
 wb.save(file)
+row = row + 1
 
 # Fall 2018
 for tech, col in zip(techniques, columns):
     results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2018-19') & (results.semester == 'fall'))].session_sim.mean(), 2)
-    ws.cell(row= 4, column= col).value = value
-wb.save(file)
-
-# Spring 2018
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2017-18') & (results.semester == 'spring'))].session_sim.mean(), 2)
-    ws.cell(row= 5, column= col).value = value
-wb.save(file)
-
-# Spring 2019
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2018-19') & (results.semester == 'spring'))].session_sim.mean(), 2)
-    ws.cell(row= 6, column= col).value = value
-wb.save(file)
-
-# Fall 2019
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2019-20') & (results.semester == 'fall'))].session_sim.mean(), 2)
-    ws.cell(row= 7, column= col).value = value
+    value = round(results[((results.year == '2018-19') &
+                           (results.semester == 'fall'))].study_sim_spring2017_18.mean(), 2)
+    ws.cell(row=row, column=col).value = value
 wb.save(file)
 
 
-# In[10]:
-
-
-# Study Similarity - Spring 2019 Baseline
-
-file = table_filepath + 'Study Similarity - Spring 2019 Baseline.xlsx'
+# %% Study Matrix
+file = table_filepath + 'table3_replicability_matrix.xlsx'
 wb = load_workbook(file)
 ws = wb.active
 
-# spring 2017
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2018-19') & (results.semester == 'spring'))].session_sim.mean(), 2)
-    ws.cell(row= 3, column= col).value = value
+
+results = pd.read_csv(clean_filepath + 'results_lsa_wgt_stop.csv')
+
+comps = ['study_sim_spring2017_18', 'study_sim_spring2018_19', 'study_sim_fall2019_20',
+         'study_sim_fall2017_18', 'study_sim_fall2018_19']
+cols = [2, 3, 4, 5, 6]
+
+row = 3
+for comp, col in zip(comps, cols):
+    value = round(results[((results.year == '2017-18') &
+                           (results.semester == 'spring'))][comp].mean(), 2)
+    ws.cell(row=row, column=col).value = value
 wb.save(file)
+row = row+1
 
-# spring 2018
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2018-19') & (results.semester == 'spring'))].study_sim_spring2017_18.mean(), 2)
-    ws.cell(row= 4, column= col).value = value
+for comp, col in zip(comps, cols):
+    value = round(results[((results.year == '2018-19') &
+                           (results.semester == 'spring'))][comp].mean(), 2)
+    ws.cell(row=row, column=col).value = value
 wb.save(file)
+row = row+1
 
-# Spring 2018
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2018-19') & (results.semester == 'spring'))].study_sim_fall2018_19.mean(), 2)
-    ws.cell(row= 5, column= col).value = value
+for comp, col in zip(comps, cols):
+    value = round(results[((results.year == '2019-20') &
+                           (results.semester == 'fall'))][comp].mean(), 2)
+    ws.cell(row=row, column=col).value = value
 wb.save(file)
+row = row+1
 
-
-# In[14]:
-
-
-# Study Similarity Matrix - Spring 2019 Baseline V2
-file = table_filepath + 'Study Similarity - Spring 2019 Baseline V2.xlsx'
-wb = load_workbook(file)
-ws = wb.active
-
-# fall 2017 
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2018-19') & (results.semester == 'spring'))].study_sim_fall2017_18.mean(), 2)
-    ws.cell(row= 3, column= col).value = value
+for comp, col in zip(comps, cols):
+    value = round(results[((results.year == '2017-18') &
+                           (results.semester == 'fall'))][comp].mean(), 2)
+    ws.cell(row=row, column=col).value = value
 wb.save(file)
+row = row+1
 
-# fall 2018
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2018-19') & (results.semester == 'spring'))].study_sim_fall2018_19.mean(), 2)
-    ws.cell(row= 4, column= col).value = value
+for comp, col in zip(comps, cols):
+    value = round(results[((results.year == '2018-19') &
+                           (results.semester == 'fall'))][comp].mean(), 2)
+    ws.cell(row=row, column=col).value = value
 wb.save(file)
-
-# spring 2018
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2018-19') & (results.semester == 'spring'))].study_sim_spring2017_18.mean(), 2)
-    ws.cell(row= 5, column= col).value = value
-wb.save(file)
-
-# spring 2019
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2018-19') & (results.semester == 'spring'))].study_sim_spring2018_19.mean(), 2)
-    ws.cell(row= 6, column= col).value = value
-wb.save(file)
-
-# Fall 2019
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2018-19') & (results.semester == 'spring'))].study_sim_fall2019_20.mean(), 2)
-    ws.cell(row= 7, column= col).value = value
-wb.save(file)
+row = row+1
 
 
-# In[13]:
-
-
-# Study Similarity Matrix - Fall 2019 Baseline V2
-file = table_filepath + 'Study Similarity - Fall 2017 Baseline V2.xlsx'
-wb = load_workbook(file)
-ws = wb.active
-
-# fall 2017 
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2017-18') & (results.semester == 'fall'))].study_sim_fall2017_18.mean(), 2)
-    ws.cell(row= 3, column= col).value = value
-wb.save(file)
-
-# fall 2018
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2017-18') & (results.semester == 'fall'))].study_sim_fall2018_19.mean(), 2)
-    ws.cell(row= 4, column= col).value = value
-wb.save(file)
-
-# spring 2018
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2017-18') & (results.semester == 'fall'))].study_sim_spring2017_18.mean(), 2)
-    ws.cell(row= 5, column= col).value = value
-wb.save(file)
-
-# spring 2019
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2017-18') & (results.semester == 'fall'))].study_sim_spring2018_19.mean(), 2)
-    ws.cell(row= 6, column= col).value = value
-wb.save(file)
-
-# Fall 2019
-for tech, col in zip(techniques, columns):
-    results = pd.read_csv(clean_filepath + 'results' + tech + '.csv')
-    value = round(results[((results.year == '2017-18') & (results.semester == 'fall'))].study_sim_fall2019_20.mean(), 2)
-    ws.cell(row= 7, column= col).value = value
-wb.save(file)
-
-
-# In[ ]:
-
-
-
-
+# %%

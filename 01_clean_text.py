@@ -146,7 +146,7 @@ spring2019 = create_df(spring2019_dict, '2018-19', 'spring', 'behavior')
 fall2019 = create_df(fall2019_dict, '2019-20', 'fall', 'behavior')
 
 
-# %% Add Skill columns
+# %% Add Coaching Notes
 # Fall 2017
 fall2017['id'] = fall2017.index.str[:-18].astype(int)
 fall2017_skills = pd.read_csv(
@@ -188,7 +188,7 @@ spring2019_skills2 = pd.DataFrame({'id': [16, 119, 7, 25, 40, 30, 10, 84, 89, 11
                                    'skill': [4, 2, 2, 3, 2, 2, 3, 2, 2, 3, 3, 2, 4]})
 spring2019_skills = spring2019_skills.append(
     spring2019_skills2[['id', 'skill']])
-spring2019 = spring2019.reset_index().merge(spring2019_skills[['id', 'skill']],
+spring2019 = spring2019.reset_index().merge(spring2019_skills[['id', 'skill', 'coach']],
                                             how='left',
                                             left_on='id',
                                             right_on='id',

@@ -17,7 +17,7 @@ fall_2018_notes = pd.read_csv(skills_path + 'Fall 2018 Coaching Notes.csv')
 fall_2018_notes = fall_2018_notes[['Q1', 'Q16', 'Q6']]
 
 spring_2019_notes = pd.read_csv(skills_path + 'Spring 2019 Coaching Notes.csv')
-spring_2019_notes = spring_2019_notes[['Q37', 'Q38', 'Q31']]
+spring_2019_notes = spring_2019_notes[['Q37', 'Q38', 'Q31', 'Q41']]
 
 fall_2019_skills = pd.read_csv(skills_path + 'Fall 2019 TAP Skills.csv')
 
@@ -51,9 +51,9 @@ spring_2019_skills = spring_2019_notes.merge(ids_2018_2019, how='inner',
                                              indicator=True)
 spring_2019_skills['Skill'] = spring_2019_skills['Q31'].map(
     behavior_skill_labels)
-spring_2019_skills = spring_2019_skills[['ID', 'Skill']]
+spring_2019_skills = spring_2019_skills[['ID', 'Skill', 'Q41']]
 spring_2019_skills = spring_2019_skills.rename(
-    columns={'ID': 'id', 'Skill': 'skill'})
+    columns={'ID': 'id', 'Skill': 'skill', 'Q41': 'coach'})
 
 # %% Exports
 

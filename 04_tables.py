@@ -232,6 +232,8 @@ plt.show()
 
 # %%
 
+results = pd.read_csv(clean_filepath + 'results_lsa_wgt_stop.csv')
+
 
 bins = np.linspace(0, .5, num=30)
 plt.title('Figure 1: Fidelity Scores for Behavior Study 1 and 2')

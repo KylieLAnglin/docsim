@@ -209,28 +209,50 @@ sns.set_palette('husl', 8)
 palette = sns.husl_palette(8)
 
 
-def make_hist(title: str, value_list: list, color_int: int):
+def make_hist(title: str, value_list: list, color: str, range_list: list):
 
-    bins = np.linspace(min(value_list), max(value_list), num=20)
+    bins = np.linspace(min(range_list), max(range_list), num=20)
     plt.title(title)
 
-    plt.hist(value_list, bins, color='black')
-
-    plt.savefig(table_filepath + title)
-
-    plt.show()
+    plt.hist(value_list, bins, color=color, alpha=.5)
 
 
 make_hist('Figure 1: Fidelity Scores - Behavior Study 1',
           results[(results.year == '2017-18') &
                   (results.semester == 'spring')].script_sim,
-          2)
+          'black', range_list=[0, .5])
 
 make_hist('Figure 2: Fidelity Scores - Behavior Study 2',
           results[(results.year == '2018-19') &
                   (results.semester == 'spring')].script_sim,
-          2)
+          'gray', [0, .5])
 
 
+plt.show()
 
 # %%
+
+
+bins = np.linspace(0, .5, num=30)
+plt.title('Figure 1: Fidelity Scores for Behavior Study 1 and 2')
+
+study1_values = results[(results.year == '2017-18') &
+                        (results.semester == 'spring')].script_sim
+plt.hist(study1_values, bins,
+         color='darkgray', alpha=.75,
+         label='Study 1')
+sns.distplot(study1_values, hist=False, rug=False, color='darkgray')
+
+study2_values = results[(results.year == '2018-19') &
+                        (results.semester == 'spring')].script_sim
+plt.hist(study2_values,
+         bins, color='black', alpha=.5, label='Study 2')
+sns.distplot(study2_values, hist=False, rug=False, color='black')
+
+
+plt.legend(loc='upper right')
+plt.xlabel("Fidelity Scores")
+plt.ylabel("Number of Documents")
+plt.savefig(table_filepath + 'Figure 1')
+
+plt.show()

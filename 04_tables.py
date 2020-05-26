@@ -57,6 +57,8 @@ for tech, col in zip(techniques, columns):
     ws.cell(row=row, column=col).value = value
 wb.save(file)
 row = row + 1
+print(len(results[((results.year == '2017-18') &
+                           (results.semester == 'spring'))]))
 
 # Spring 2019
 for tech, col in zip(techniques, columns):
@@ -67,6 +69,8 @@ for tech, col in zip(techniques, columns):
     ws.cell(row=row, column=col).value = value
 wb.save(file)
 row = row + 1
+print(len(results[((results.year == '2018-19') &
+                           (results.semester == 'spring'))]))
 
 # Fall 2019
 for tech, col in zip(techniques, columns):
@@ -77,6 +81,8 @@ for tech, col in zip(techniques, columns):
     ws.cell(row=row, column=col).value = value
 wb.save(file)
 row = row + 1
+print(len(results[((results.year == '2019-20') &
+                           (results.semester == 'fall'))]))
 
 # Feedback
 # Fall 2017
@@ -88,6 +94,8 @@ for tech, col in zip(techniques, columns):
     ws.cell(row=row, column=col).value = value
 wb.save(file)
 row = row + 1
+print(len(results[((results.year == '2017-18') &
+                           (results.semester == 'fall'))]))
 
 # Fall 2018
 for tech, col in zip(techniques, columns):
@@ -96,6 +104,8 @@ for tech, col in zip(techniques, columns):
                            (results.semester == 'fall'))].script_sim.mean(), 2)
     ws.cell(row=row, column=col).value = value
 wb.save(file)
+print(len(results[((results.year == '2018-19') &
+                           (results.semester == 'fall'))]))
 
 
 # %% Study Similarity - Spring 2019 Baseline
@@ -258,3 +268,55 @@ plt.ylabel("Number of Documents")
 plt.savefig(table_filepath + 'Figure 1')
 
 plt.show()
+
+# %%
+# %% Explore by Coach
+bins = np.linspace(0, .5, num=10)
+plt.title('Figure 2: Fidelity Scores for Behavior Study 2 by Coach')
+
+coach1 = results[(results.year == '2018-19') &
+                 (results.semester == 'spring') &
+                 (results.coach == 'Casedy')].script_sim
+coach1_mean = round(coach1.mean(), 2)
+
+coach2 = results[(results.year == '2018-19') &
+                 (results.semester == 'spring') &
+                 (results.coach == 'Emily')].script_sim
+coach2_mean = round(coach2.mean(), 2)
+
+
+coach3 = results[(results.year == '2018-19') &
+                 (results.semester == 'spring') &
+                 (results.coach == 'Bryan')].script_sim
+coach3_mean = round(coach3.mean(), 2)
+
+
+coach4 = results[(results.year == '2018-19') &
+                 (results.semester == 'spring') &
+                 (results.coach == 'Arielle')].script_sim
+coach4_mean = round(coach4.mean(), 2)
+
+
+sns.distplot(coach1, hist=False, rug=False, color='black',
+             kde_kws={'linestyle': 'solid'}, label='Coach 1')
+
+sns.distplot(coach2, hist=False, rug=False, color='black',
+             kde_kws={'linestyle': 'dotted'}, label='Coach 2')
+
+sns.distplot(coach3, hist=False, rug=False, color='black',
+             kde_kws={'linestyle': 'dashed'}, label='Coach 3')
+
+sns.distplot(coach4, hist=False, rug=False, color='black',
+             kde_kws={'linestyle': 'dashdot'}, label='Coach 4')
+
+plt.legend(loc='upper right')
+plt.xlabel("Fidelity Scores")
+plt.ylabel("Density")
+# plt.savefig(table_filepath + 'Figure 1')
+
+plt.show()
+
+for coach in [coach1_mean, coach2_mean, coach3_mean, coach4_mean]:
+    print(coach)
+
+# %%

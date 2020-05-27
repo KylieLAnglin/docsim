@@ -312,7 +312,7 @@ sns.distplot(coach4, hist=False, rug=False, color='black',
 plt.legend(loc='upper right')
 plt.xlabel("Fidelity Scores")
 plt.ylabel("Density")
-# plt.savefig(table_filepath + 'Figure 1')
+plt.savefig(table_filepath + 'Figure 2 Fidelity Scores for Behavior Study 2 by Coach')
 
 plt.show()
 

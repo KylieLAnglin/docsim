@@ -20,14 +20,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import TruncatedSVD
 from sklearn.preprocessing import Normalizer
 
-
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import spacy
 
 nlp = spacy.load('en', disable=['parser', 'ner'])
 
-nltk.download('stopwords')
 
 dir = '/Users/kylie/docsim/'
 
@@ -68,7 +66,7 @@ vec = CountVectorizer()
 X = vec.fit_transform(docs)
 matrix = pd.DataFrame(
     X.toarray(), columns=vec.get_feature_names(), index=df.index)
-print('Number of words: ', len(matrix.columns))
+print('Number of words with no preprocessing: ', len(matrix.columns))
 matrix.sample()
 
 matrix_ideal = matrix[matrix.index.str.contains('Model')]
@@ -90,7 +88,6 @@ vec = TfidfVectorizer()
 X = vec.fit_transform(docs)
 matrix_wgt = pd.DataFrame(
     X.toarray(), columns=vec.get_feature_names(), index=df.index)
-print('Number of words: ', len(matrix_wgt.columns))
 matrix_wgt.sample()
 
 matrix_ideal_wgt = matrix_wgt[matrix_wgt.index.str.contains('Model')]
@@ -125,7 +122,7 @@ vec = CountVectorizer(stop_words=stop_words)
 X = vec.fit_transform(docs)
 matrix_stop = pd.DataFrame(
     X.toarray(), columns=vec.get_feature_names(), index=df.index)
-print('Number of words: ', len(matrix_stop.columns))
+print('Number of words after removing stop words: ', len(matrix_stop.columns))
 matrix_stop.sample()
 
 
@@ -165,7 +162,7 @@ matrix_corpus_stop_wgt.to_csv(
 matrix_corpus_stop_wgt.sample()
 
 
-# # Stem
+# %% Stem
 
 
 nlp = spacy.load('en', disable=['parser', 'ner'])
@@ -190,7 +187,7 @@ vec = CountVectorizer()
 X = vec.fit_transform(docs)
 matrix_stem = pd.DataFrame(
     X.toarray(), columns=vec.get_feature_names(), index=df.index)
-print('Number of words: ', len(matrix_stem.columns))
+print('Number of words after stemming: ', len(matrix_stem.columns))
 matrix_stem.sample()
 
 
@@ -240,7 +237,7 @@ vec = TfidfVectorizer(stop_words=stop_words)
 X = vec.fit_transform(docs)
 matrix_stem_stop_wgt = pd.DataFrame(
     X.toarray(), columns=vec.get_feature_names(), index=df.index)
-print('Number of words: ', len(matrix_stem_stop_wgt.columns))
+print('Number of words after stopping and stemming: ', len(matrix_stem_stop_wgt.columns))
 matrix_stem_stop_wgt.sample()
 
 
@@ -291,6 +288,8 @@ matrix_transcripts_lsa = matrix_lsa[~matrix_lsa.index.str.contains('Model')]
 matrix_transcripts_lsa.to_csv(clean_filepath + 'matrix_transcripts_lsa.csv')
 
 word_weights_trans.to_csv(clean_filepath + 'lsa_topics.csv')
+
+print('Number of words after lsa: ', len(matrix_transcripts_lsa.columns))
 
 
 # # LSA + Stop

@@ -320,3 +320,20 @@ for coach in [coach1_mean, coach2_mean, coach3_mean, coach4_mean]:
     print(coach)
 
 # %%
+coach_code = {'Casedy': 1, 'Emily': 2, 'Bryan': 3, 'Arielle': 4}
+results['coach_code'] = results['coach'].map(coach_code)
+
+
+sns.boxplot(x='coach_code', y='script_sim', data=results[(results.year == '2018-19') & 
+                            (results.semester == 'spring')],
+                            color = 'white')
+sns.swarmplot(x='coach_code', y='script_sim', 
+                    data=results[(results.year == '2018-19') & 
+                            (results.semester == 'spring')],
+                    color="black")
+plt.xlabel("Coach")
+plt.ylabel("Fidelity Scores")
+plt.savefig(table_filepath + 'Figure 2b Fidelity Scores for Behavior Study 2 by Coach')
+
+plt.show()
+# %%

@@ -37,7 +37,7 @@ study4_values = results[(results.year == '2017-18') &
 study5_values = results[(results.year == '2018-19') &
                         (results.semester == 'fall')].script_sim
 
-# %% Explore by Coach
+# %% Figure 1 Fidelity Score Distributions
 
 # Figure 2 Version 1
 plt.figure(figsize=(10,10))
@@ -48,24 +48,24 @@ plt.title('Figure 1: Fidelity Score Distributions')
 
 
 sns.distplot(study1_values, hist=False, rug=False, color='black',
-             kde_kws={'linestyle': 'solid'}, label='Coach 1')
+             kde_kws={'linestyle': 'solid'}, label='Behavior Study 1')
 
 sns.distplot(study2_values, hist=False, rug=False, color='black',
-             kde_kws={'linestyle': 'dotted'}, label='Coach 2')
+             kde_kws={'linestyle': 'dashed'}, label='Behavior Study 2')
 
 sns.distplot(study3_values, hist=False, rug=False, color='black',
-             kde_kws={'linestyle': 'dashed'}, label='Coach 3')
+             kde_kws={'linestyle': 'dotted'}, label='Behavior Study 3')
 
-sns.distplot(study4_values, hist=False, rug=False, color='black',
-             kde_kws={'linestyle': 'dashdot'}, label='Coach 4')
+sns.distplot(study4_values, hist=False, rug=False, color='lightgray',
+             kde_kws={'linestyle': 'dashdot'}, label='Feedback Study 1')
 
-sns.distplot(study5_values, hist=False, rug=False, color='gray',
-             kde_kws={'linestyle': 'solid'}, label='Coach 4')
+sns.distplot(study5_values, hist=False, rug=False, color='lightgray',
+             kde_kws={'linestyle': 'solid'}, label='Feedback Study 2')
 
 plt.legend(loc='upper right')
 plt.xlabel("Fidelity Scores")
 plt.ylabel("Density")
-plt.savefig(table_filepath + 'Figure 2 Fidelity Scores for Behavior Study 2 by Coach')
+plt.savefig(table_filepath + 'Figure 1 Fidelity Score Distributions')
 
 plt.show()
 
@@ -104,14 +104,14 @@ ax3.set_title('Behavior Study 3')
 ax3.set_xticks([0, .1, .2, .3, .4, .5])
 
 ax4.hist(study4_values, bins,
-         color='darkgray', alpha=.75)
+         color='darkgray', alpha=1)
 ax4.set_title('Feedback Study 1')
 ax4.hist(study4_values.where(study4_values < .09), bins,
         color = 'black')
 ax4.set_xticks([0, .1, .2, .3, .4, .5])
 
 ax5.hist(study3_values, bins,
-         color='darkgray', alpha=.75)
+         color='darkgray', alpha=1)
 ax5.set_title('Feedback Study 2')
 ax5.set_xticks([0, .1, .2, .3, .4, .5])
 for ax in fig.get_axes():

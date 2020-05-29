@@ -108,6 +108,7 @@ print(len(results[((results.year == '2018-19') &
                            (results.semester == 'fall'))]))
 
 
+
 # %% Study Similarity - Spring 2019 Baseline
 
 file = table_filepath + 'table2_replicability.xlsx'

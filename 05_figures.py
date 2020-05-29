@@ -1,7 +1,6 @@
 
 # In[1]:
 
-
 import pandas as pd
 from openpyxl import load_workbook
 import numpy as np
@@ -16,7 +15,6 @@ table_filepath = start.table_filepath
 
 # In[3]:
 
-
 docs = pd.read_csv(clean_filepath + 'text_transcripts.csv')
 docs = docs.set_index('doc')
 docs.sample(5)
@@ -24,21 +22,116 @@ docs.sample(5)
 # %%
 results = pd.read_csv(clean_filepath + 'results_lsa_wgt_stop.csv')
 
-# %% Figure 1
-# Figure 1 
+plt.figure(figsize=(20,20))
+sns.set_style("white")
 
+# %% Fidelity Results
+study1_values = results[(results.year == '2017-18') &
+                        (results.semester == 'spring')].script_sim
+study2_values = results[(results.year == '2018-19') &
+                        (results.semester == 'spring')].script_sim
+study3_values = results[(results.year == '2019-20') &
+                        (results.semester == 'fall')].script_sim
+study4_values = results[(results.year == '2017-18') &
+                        (results.semester == 'fall')].script_sim
+study5_values = results[(results.year == '2018-19') &
+                        (results.semester == 'fall')].script_sim
+
+# %% Explore by Coach
+
+# Figure 2 Version 1
 plt.figure(figsize=(10,10))
 sns.set_style("white")
 
+bins = np.linspace(0, .5, num=10)
+plt.title('Figure 1: Fidelity Score Distributions')
 
-study1_values = results[(results.year == '2017-18') &
-                        (results.semester == 'spring')].script_sim
 
-study2_values = results[(results.year == '2018-19') &
-                        (results.semester == 'spring')].script_sim
+sns.distplot(study1_values, hist=False, rug=False, color='black',
+             kde_kws={'linestyle': 'solid'}, label='Coach 1')
+
+sns.distplot(study2_values, hist=False, rug=False, color='black',
+             kde_kws={'linestyle': 'dotted'}, label='Coach 2')
+
+sns.distplot(study3_values, hist=False, rug=False, color='black',
+             kde_kws={'linestyle': 'dashed'}, label='Coach 3')
+
+sns.distplot(study4_values, hist=False, rug=False, color='black',
+             kde_kws={'linestyle': 'dashdot'}, label='Coach 4')
+
+sns.distplot(study5_values, hist=False, rug=False, color='gray',
+             kde_kws={'linestyle': 'solid'}, label='Coach 4')
+
+plt.legend(loc='upper right')
+plt.xlabel("Fidelity Scores")
+plt.ylabel("Density")
+plt.savefig(table_filepath + 'Figure 2 Fidelity Scores for Behavior Study 2 by Coach')
+
+plt.show()
+
+for coach in [coach1_mean, coach2_mean, coach3_mean, coach4_mean]:
+    print(coach)
+
+
+# %% Figure 2
+
+fig, axs = plt.subplots(nrows = 2, ncols = 3, sharey = True)
+ax1 = axs[0,0]
+ax2 = axs[0,1]
+ax3 = axs[0,2]
+ax4 = axs[1,0]
+ax5 = axs[1,1]
 
 bins = np.linspace(0, .5, num=30)
-plt.title('Figure 1: Fidelity Scores for Behavior Study 1 and 2')
+
+fig.suptitle('Figure 2: Fidelity Scores  with Unusual Transcripts Highlighted')
+
+ax1.hist(study1_values, bins,
+         color='darkgray', alpha=.75)
+ax1.set_title('Behavior Study 1')
+ax1.set_xticks([0, .1, .2, .3, .4, .5])
+
+ax2.hist(study2_values, bins,
+         color='darkgray', alpha=.75)
+ax2.set_title('Behavior Study 2')
+ax2.hist(study2_values.where(study2_values < .2), bins,
+        color = 'black')
+ax2.set_xticks([0, .1, .2, .3, .4, .5])
+
+ax3.hist(study3_values, bins,
+         color='darkgray', alpha=.75)
+ax3.set_title('Behavior Study 3')
+ax3.set_xticks([0, .1, .2, .3, .4, .5])
+
+ax4.hist(study4_values, bins,
+         color='darkgray', alpha=.75)
+ax4.set_title('Feedback Study 1')
+ax4.hist(study4_values.where(study4_values < .09), bins,
+        color = 'black')
+ax4.set_xticks([0, .1, .2, .3, .4, .5])
+
+ax5.hist(study3_values, bins,
+         color='darkgray', alpha=.75)
+ax5.set_title('Feedback Study 2')
+ax5.set_xticks([0, .1, .2, .3, .4, .5])
+for ax in fig.get_axes():
+    ax.label_outer()
+
+ax1.set(ylabel = "Number of Documents")
+ax5.set(xlabel="Fidelity Scores")
+
+# Hide x labels and tick labels for top plots and y ticks for right plots.
+for ax in axs.flat:
+    ax.label_outer()
+
+fig.delaxes(axs[1,2])
+
+plt.savefig(table_filepath + 'Figure 2', dpi = 200)
+
+# %%
+
+bins = np.linspace(0, .5, num=30)
+plt.title('Figure 1: Fidelity Scores')
 
 plt.hist(study1_values, bins,
          color='darkgray', alpha=.75,
@@ -141,16 +234,7 @@ plt.figure(figsize=(10,10))
 sns.set_style("white")
 
 
-study1_values = results[(results.year == '2017-18') &
-                        (results.semester == 'spring')].script_sim
-study2_values = results[(results.year == '2018-19') &
-                        (results.semester == 'spring')].script_sim
-study3_values = results[(results.year == '2019-20') &
-                        (results.semester == 'fall')].script_sim
-study4_values = results[(results.year == '2017-18') &
-                        (results.semester == 'fall')].script_sim
-study5_values = results[(results.year == '2018-19') &
-                        (results.semester == 'fall')].script_sim
+
 
 bins = np.linspace(0, .5, num=30)
 plt.title('Figure 2: Fidelity Scores Across All Studies')

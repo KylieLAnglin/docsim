@@ -65,13 +65,13 @@ sns.distplot(study5_values, hist=False, rug=False, color='lightgray',
 plt.legend(loc='upper right')
 plt.xlabel("Fidelity Scores")
 plt.ylabel("Density")
-plt.savefig(table_filepath + 'Figure 1 Fidelity Score Distributions')
+plt.savefig(table_filepath + 'Figure 1 Fidelity Score Distributions', 
+bbox = 'tight', pad_inches = 0.05)
 
 plt.show()
 
-for coach in [coach1_mean, coach2_mean, coach3_mean, coach4_mean]:
-    print(coach)
-
+for study in [study1_values, study2_values, study3_values, study4_values, study5_values]:
+    print(study.std())
 
 # %% Figure 2
 

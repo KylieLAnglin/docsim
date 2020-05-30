@@ -22,10 +22,12 @@ docs.sample(5)
 # %%
 results = pd.read_csv(clean_filepath + 'results_lsa_wgt_stop.csv')
 
-plt.figure(figsize=(20,20))
 sns.set_style("white")
 
 # %% Fidelity Results
+###
+# Fidelity Results
+###
 study1_values = results[(results.year == '2017-18') &
                         (results.semester == 'spring')].script_sim
 study2_values = results[(results.year == '2018-19') &
@@ -39,15 +41,14 @@ study5_values = results[(results.year == '2018-19') &
 
 # %% Figure 1 Fidelity Score Distributions
 
-# Figure 2 Version 1
-plt.figure(figsize=(10,10))
-sns.set_style("white")
+fig = plt.figure(figsize=(10,10))
+ax = plt.axes()
+
+ax.set_title('Figure 1: Fidelity Score Distributions', fontsize=15)
 
 bins = np.linspace(0, .5, num=10)
-plt.title('Figure 1: Fidelity Score Distributions')
 
-
-sns.distplot(study1_values, hist=False, rug=False, color='black',
+sns.distplot(study1_values, hist=False, rug=False, color='0.01',
              kde_kws={'linestyle': 'solid'}, label='Behavior Study 1')
 
 sns.distplot(study2_values, hist=False, rug=False, color='black',
@@ -57,18 +58,22 @@ sns.distplot(study3_values, hist=False, rug=False, color='black',
              kde_kws={'linestyle': 'dotted'}, label='Behavior Study 3')
 
 sns.distplot(study4_values, hist=False, rug=False, color='lightgray',
-             kde_kws={'linestyle': 'dashdot'}, label='Feedback Study 1')
+             kde_kws={'linestyle': 'solid'}, label='Feedback Study 1')
 
 sns.distplot(study5_values, hist=False, rug=False, color='lightgray',
-             kde_kws={'linestyle': 'solid'}, label='Feedback Study 2')
+             kde_kws={'linestyle': 'dashed'}, label='Feedback Study 2')
 
-plt.legend(loc='upper right')
-plt.xlabel("Fidelity Scores")
-plt.ylabel("Density")
-plt.savefig(table_filepath + 'Figure 1 Fidelity Score Distributions', 
-bbox = 'tight', pad_inches = 0.05)
+ax.legend(loc='upper right')
+ax.set_xlabel("Fidelity Scores")
+ax.set_ylabel("Kernel Density")
+notes = "Notes: Fidelity scores are estimated by calculating the similarity between" \
+" each transcript and an ideal script. " \
+"A higher score indicates higher fidelity to the script."
+fig.text(.1, .05, notes, ha='left', wrap = True)
 
-plt.show()
+fig.savefig(table_filepath + 'Figure 1 Fidelity Score Distributions',
+            bbox='tight', pad_inches=0.05)
+
 
 for study in [study1_values, study2_values, study3_values, study4_values, study5_values]:
     print(study.std())
@@ -109,6 +114,9 @@ ax4.set_title('Feedback Study 1')
 ax4.hist(study4_values.where(study4_values < .09), bins,
         color = 'black')
 ax4.set_xticks([0, .1, .2, .3, .4, .5])
+#ax4.text(0.00, 2, "Session", fontsize = 7, ha = 'left')
+ax4.annotate('abnormal', xy=(.03, 1), xytext=(.03, 3), fontsize = 7,
+arrowprops = dict(arrowstyle = "->"))
 
 ax5.hist(study3_values, bins,
          color='darkgray', alpha=1)

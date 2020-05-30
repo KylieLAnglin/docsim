@@ -78,11 +78,7 @@ fig.savefig(table_filepath + 'Figure 1 Fidelity Score Distributions',
 for study in [study1_values, study2_values, study3_values, study4_values, study5_values]:
     print(study.std())
 
-# %% Explore Coaches
-
-
 # %% Figure 2
-# Figure 2 Version 2
 fig = plt.figure(figsize=(10, 10))
 ax = plt.axes()
 
@@ -117,120 +113,72 @@ fig.savefig(table_filepath +
             'Figure 2 Fidelity Scores for Feedback Study 2 by Coach')
 plt.show()
 
-# %% 
-# Figure 2 Explore Coaches
+for coach in ['A', 'B', 'C', 'D']:
+    print(results[(results.semester == 'fall') & 
+            (results.year == '2018-19') & 
+            (results.coach_code == coach)].script_sim.median())
 
-plt.figure(figsize=(10,10))
-
-bins = np.linspace(0, 1, num=20)
-plt.title('Figure 2: Fidelity Scores for Feeback Study 2 by Coach')
-
-coach1 = results[(results.year == '2018-19') &
-                 (results.semester == 'fall') &
-                 (results.coach == 'Casedy')].script_sim
-coach1_mean = round(coach1.mean(), 2)
-
-coach2 = results[(results.year == '2018-19') &
-                 (results.semester == 'fall') &
-                 (results.coach == 'Arielle')].script_sim
-coach2_mean = round(coach2.mean(), 2)
+# %% Figure 3: Panel of Histograms
 
 
-coach3 = results[(results.year == '2018-19') &
-                 (results.semester == 'fall') &
-                 (results.coach == 'Sarah')].script_sim
-coach3_mean = round(coach3.mean(), 2)
+fig, axs = plt.subplots(nrows=2, ncols=3, figsize=(10, 10))
+ax1 = axs[0, 0]
+ax2 = axs[0, 1]
+ax3 = axs[0, 2]
+ax4 = axs[1, 0]
+ax5 = axs[1, 1]
 
+bins = np.linspace(0, .75, num=30)
 
-coach4 = results[(results.year == '2018-19') &
-                 (results.semester == 'fall') &
-                 (results.coach == 'Alex')].script_sim
-coach4_mean = round(coach4.mean(), 2)
-
-
-sns.distplot(coach1, hist=False, rug=False, color='black',
-             kde_kws={'linestyle': 'solid'}, label='Coach 1')
-
-sns.distplot(coach2, hist=False, rug=False, color='black',
-             kde_kws={'linestyle': 'dotted'}, label='Coach 2')
-
-sns.distplot(coach3, hist=False, rug=False, color='black',
-             kde_kws={'linestyle': 'dashed'}, label='Coach 3')
-
-sns.distplot(coach4, hist=False, rug=False, color='black',
-             kde_kws={'linestyle': 'dashdot'}, label='Coach 4')
-
-plt.legend(loc='upper right')
-plt.xlabel("Fidelity Scores")
-plt.ylabel("Density")
-plt.savefig(table_filepath + 'Figure 2 Fidelity Scores for Feedback Study 2 by Coach')
-
-plt.show()
-
-for coach in [coach1_mean, coach2_mean, coach3_mean, coach4_mean]:
-    print(coach)
-
-# %% Figure 2
-
-fig, axs = plt.subplots(nrows = 2, ncols = 3, sharey = True)
-ax1 = axs[0,0]
-ax2 = axs[0,1]
-ax3 = axs[0,2]
-ax4 = axs[1,0]
-ax5 = axs[1,1]
-
-bins = np.linspace(0, .5, num=30)
-
-fig.suptitle('Figure 2: Fidelity Scores  with Unusual Transcripts Highlighted')
+fig.suptitle('Figure 3: Fidelity Scores  with Unusual Transcripts Highlighted',
+             fontsize=15)
 
 ax1.hist(study1_values, bins,
          color='darkgray', alpha=.75)
-ax1.set_title('Behavior Study 1')
-ax1.set_xticks([0, .1, .2, .3, .4, .5])
+ax1.set_xlabel('Behavior Study 1')
 
 ax2.hist(study2_values, bins,
          color='darkgray', alpha=.75)
-ax2.set_title('Behavior Study 2')
+ax2.set_xlabel('Behavior Study 2')
 ax2.hist(study2_values.where(study2_values < .2), bins,
-        color = 'black')
-ax2.set_xticks([0, .1, .2, .3, .4, .5])
+         color='black')
 
 ax3.hist(study3_values, bins,
          color='darkgray', alpha=.75)
-ax3.set_title('Behavior Study 3')
-ax3.set_xticks([0, .1, .2, .3, .4, .5])
+ax3.set_xlabel('Behavior Study 3')
+ax3.hist(study3_values.where(study3_values > 0.36), bins,
+         color='black')
 
 ax4.hist(study4_values, bins,
          color='darkgray', alpha=1)
-ax4.set_title('Feedback Study 1')
-ax4.hist(study4_values.where(study4_values < .09), bins,
-        color = 'black')
-ax4.set_xticks([0, .1, .2, .3, .4, .5])
-#ax4.text(0.00, 2, "Session", fontsize = 7, ha = 'left')
-ax4.annotate('abnormal', xy=(.03, 1), xytext=(.03, 3), fontsize = 7,
-arrowprops = dict(arrowstyle = "->"))
+ax4.set_xlabel('Feedback Study 1')
+ax4.hist(study4_values.where((study4_values < .09) | (study4_values > 0.31)),
+         bins, color='black')
 
-ax5.hist(study3_values, bins,
+ax5.hist(study5_values, bins,
          color='darkgray', alpha=1)
-ax5.set_title('Feedback Study 2')
-ax5.set_xticks([0, .1, .2, .3, .4, .5])
-for ax in fig.get_axes():
-    ax.label_outer()
+ax5.set_xlabel('Feedback Study 2')
+ax5.hist(study5_values.where((study5_values > 0.61)), bins,
+                             color='black')
 
-ax1.set(ylabel = "Number of Documents")
-ax5.set(xlabel="Fidelity Scores")
+for ax in [ax1, ax2, ax3, ax4, ax5]:
+    ax.set_ylim(0, 20)
 
-# Hide x labels and tick labels for top plots and y ticks for right plots.
-for ax in axs.flat:
-    ax.label_outer()
+fig.delaxes(axs[1, 2])
 
-fig.delaxes(axs[1,2])
+notes = "Notes: Fidelity scores are estimated by calculating the " \
+    "similarity between each transcript and an ideal script. " \
+    "A higher score  \nindicates higher fidelity to the script. " \
+    "Potentially abnormal transcripts (based on visual examination) " \
+    "are highlighted in black. \nThese are the transcripts we have" \
+    " flagged for manual observation."
+fig.text(.1, .025, notes, ha='left')
 
-plt.savefig(table_filepath + 'Figure 2', dpi = 200)
+plt.savefig(table_filepath + 'Figure 3: Fidelity Panels', dpi=200)
 
 # %%
 
-bins = np.linspace(0, .5, num=30)
+bins = np.linspace(0, .5, num=10)
 plt.title('Figure 1: Fidelity Scores')
 
 plt.hist(study1_values, bins,

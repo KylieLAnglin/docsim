@@ -41,7 +41,7 @@ study5_values = results[(results.year == '2018-19') &
 
 # %% Figure 1 Fidelity Score Distributions
 
-fig = plt.figure(figsize=(10,10))
+fig = plt.figure(figsize=(10, 10))
 ax = plt.axes()
 
 ax.set_title('Figure 1: Fidelity Score Distributions', fontsize=15)
@@ -67,9 +67,9 @@ ax.legend(loc='upper right')
 ax.set_xlabel("Fidelity Scores")
 ax.set_ylabel("Kernel Density")
 notes = "Notes: Fidelity scores are estimated by calculating the similarity between" \
-" each transcript and an ideal script. " \
-"A higher score indicates higher fidelity to the script."
-fig.text(.1, .05, notes, ha='left', wrap = True)
+    " each transcript and an ideal script. " \
+    "A higher score indicates higher fidelity to the script."
+fig.text(.1, .05, notes, ha='left', wrap=True)
 
 fig.savefig(table_filepath + 'Figure 1 Fidelity Score Distributions',
             bbox='tight', pad_inches=0.05)
@@ -77,6 +77,98 @@ fig.savefig(table_filepath + 'Figure 1 Fidelity Score Distributions',
 
 for study in [study1_values, study2_values, study3_values, study4_values, study5_values]:
     print(study.std())
+
+# %% Explore Coaches
+
+
+# %% Figure 2
+# Figure 2 Version 2
+fig = plt.figure(figsize=(10, 10))
+ax = plt.axes()
+
+ax.set_title('Figure 2: Fidelity Scores for Feedback Study 2 by Coach',
+             fontsize=15)
+
+coach_code = {'Casedy': 'C', 'Sarah': 'A', 'Alex': 'D', 'Arielle': 'B'}
+results['coach_code'] = results['coach'].map(coach_code)
+
+
+sns.boxplot(x='coach_code', y='script_sim', data=results[(results.year == '2018-19') &
+                                                         (results.semester == 'fall')],
+            color='white')
+sns.swarmplot(x='coach_code', y='script_sim',
+              data=results[(results.year == '2018-19') &
+                           (results.semester == 'fall')],
+              color="black")
+
+ax.set_xlabel("Coach")
+ax.set_ylabel("Fidelity Scores")
+
+notes = "Notes: Fidelity scores are estimated by calculating the similarity between" \
+    " each transcript and an ideal script. " \
+    "A higher score indicates \n " \
+    "higher fidelity to the script." \
+    "Boxes indicate the 50th percentile and interquartile range. " \
+    "Whiskers extend to all scores within 1.5 \n times the interquartile range. "
+fig.text(.1, .025, notes, ha='left', wrap=True)
+
+
+fig.savefig(table_filepath +
+            'Figure 2 Fidelity Scores for Feedback Study 2 by Coach')
+plt.show()
+
+# %% 
+# Figure 2 Explore Coaches
+
+plt.figure(figsize=(10,10))
+
+bins = np.linspace(0, 1, num=20)
+plt.title('Figure 2: Fidelity Scores for Feeback Study 2 by Coach')
+
+coach1 = results[(results.year == '2018-19') &
+                 (results.semester == 'fall') &
+                 (results.coach == 'Casedy')].script_sim
+coach1_mean = round(coach1.mean(), 2)
+
+coach2 = results[(results.year == '2018-19') &
+                 (results.semester == 'fall') &
+                 (results.coach == 'Arielle')].script_sim
+coach2_mean = round(coach2.mean(), 2)
+
+
+coach3 = results[(results.year == '2018-19') &
+                 (results.semester == 'fall') &
+                 (results.coach == 'Sarah')].script_sim
+coach3_mean = round(coach3.mean(), 2)
+
+
+coach4 = results[(results.year == '2018-19') &
+                 (results.semester == 'fall') &
+                 (results.coach == 'Alex')].script_sim
+coach4_mean = round(coach4.mean(), 2)
+
+
+sns.distplot(coach1, hist=False, rug=False, color='black',
+             kde_kws={'linestyle': 'solid'}, label='Coach 1')
+
+sns.distplot(coach2, hist=False, rug=False, color='black',
+             kde_kws={'linestyle': 'dotted'}, label='Coach 2')
+
+sns.distplot(coach3, hist=False, rug=False, color='black',
+             kde_kws={'linestyle': 'dashed'}, label='Coach 3')
+
+sns.distplot(coach4, hist=False, rug=False, color='black',
+             kde_kws={'linestyle': 'dashdot'}, label='Coach 4')
+
+plt.legend(loc='upper right')
+plt.xlabel("Fidelity Scores")
+plt.ylabel("Density")
+plt.savefig(table_filepath + 'Figure 2 Fidelity Scores for Feedback Study 2 by Coach')
+
+plt.show()
+
+for coach in [coach1_mean, coach2_mean, coach3_mean, coach4_mean]:
+    print(coach)
 
 # %% Figure 2
 

@@ -173,7 +173,7 @@ fall2018_skills2 = pd.DataFrame({'id': [56, 13, 94],
                                  'skill': [2, 2, 1]})
 fall2018_skills = fall2018_skills.append(fall2018_skills2[['id', 'skill']])
 
-fall2018 = fall2018.reset_index().merge(fall2018_skills[['id', 'skill']],
+fall2018 = fall2018.reset_index().merge(fall2018_skills[['id', 'skill', 'coach']],
                                         how='left',
                                         left_on='id',
                                         right_on='id',

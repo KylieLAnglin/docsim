@@ -19,18 +19,14 @@ from collections import Counter
 from sklearn.feature_extraction.text import TfidfVectorizer
 import docx
 import os
-import nltk
 import re
-from nltk import sent_tokenize, word_tokenize
 import pandas as pd
 
-from nltk import WordNetLemmatizer
 import operator
 
 import fnmatch
 
 import statistics
-lemmatizer = WordNetLemmatizer()
 
 
 # %%

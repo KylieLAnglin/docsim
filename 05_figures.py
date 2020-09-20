@@ -44,7 +44,7 @@ study5_values = results[(results.year == '2018-19') &
 fig = plt.figure(figsize=(10, 10))
 ax = plt.axes()
 
-ax.set_title('Figure 1: Fidelity Score Distributions', fontsize=15)
+#ax.set_title('Figure 1: Fidelity Score Distributions', fontsize=15)
 
 bins = np.linspace(0, .5, num=10)
 
@@ -66,10 +66,10 @@ sns.distplot(study5_values, hist=False, rug=False, color='lightgray',
 ax.legend(loc='upper right')
 ax.set_xlabel("Fidelity Scores")
 ax.set_ylabel("Kernel Density")
-notes = "Notes: Fidelity scores are estimated by calculating the " \
-    "similarity between each transcript and an ideal script. " \
-    "A higher score indicates higher fidelity to the script."
-fig.text(.1, .05, notes, ha='left', wrap=True)
+# notes = "Notes: Fidelity scores are estimated by calculating the " \
+#     "similarity between each transcript and an ideal script. " \
+#     "A higher score indicates higher fidelity to the script."
+# fig.text(.1, .05, notes, ha='left', wrap=True)
 
 fig.savefig(table_filepath + 'Figure 1 Fidelity Score Distributions',
             bbox='tight', pad_inches=0.05)
@@ -83,8 +83,8 @@ for study in [study1_values, study2_values, study3_values,
 fig = plt.figure(figsize=(10, 10))
 ax = plt.axes()
 
-ax.set_title('Figure 2: Fidelity Scores for Feedback Study 2 by Coach',
-             fontsize=15)
+#ax.set_title('Figure 2: Fidelity Scores for Feedback Study 2 by Coach',
+#             fontsize=15)
 
 coach_code = {'Casedy': 'C', 'Sarah': 'A', 'Alex': 'D', 'Arielle': 'B'}
 results['coach_code'] = results['coach'].map(coach_code)
@@ -102,15 +102,15 @@ sns.swarmplot(x='coach_code', y='script_sim',
 ax.set_xlabel("Coach")
 ax.set_ylabel("Fidelity Scores")
 
-notes = "Notes: Fidelity scores are estimated by calculating" \
-    " the similarity between" \
-    " each transcript and an ideal script. " \
-    "A higher score indicates \n " \
-    "higher fidelity to the script." \
-    "Boxes indicate the 50th percentile and interquartile range. " \
-    "Whiskers extend to all scores within 1.5 \n times the" \
-    " interquartile range. "
-fig.text(.1, .025, notes, ha='left', wrap=True)
+# notes = "Notes: Fidelity scores are estimated by calculating" \
+#     " the similarity between" \
+#     " each transcript and an ideal script. " \
+#     "A higher score indicates \n " \
+#     "higher fidelity to the script." \
+#     "Boxes indicate the 50th percentile and interquartile range. " \
+#     "Whiskers extend to all scores within 1.5 \n times the" \
+#     " interquartile range. "
+# fig.text(.1, .025, notes, ha='left', wrap=True)
 
 
 fig.savefig(table_filepath +
@@ -134,8 +134,8 @@ ax5 = axs[1, 1]
 
 bins = np.linspace(0, .75, num=30)
 
-fig.suptitle('Figure 3: Fidelity Scores  with Unusual Transcripts Highlighted',
-             fontsize=15)
+#fig.suptitle('Figure 3: Fidelity Scores  with Unusual Transcripts Highlighted',
+#             fontsize=15)
 
 ax1.hist(study1_values, bins,
          color='darkgray', alpha=.75)
@@ -170,13 +170,13 @@ for ax in [ax1, ax2, ax3, ax4, ax5]:
 
 fig.delaxes(axs[1, 2])
 
-notes = "Notes: Fidelity scores are estimated by calculating the " \
-    "similarity between each transcript and an ideal script. " \
-    "A higher score  \nindicates higher fidelity to the script. " \
-    "Potentially abnormal transcripts (based on visual examination) " \
-    "are highlighted in black. \nThese are the transcripts we have" \
-    " flagged for manual observation."
-fig.text(.1, .025, notes, ha='left')
+# notes = "Notes: Fidelity scores are estimated by calculating the " \
+#     "similarity between each transcript and an ideal script. " \
+#     "A higher score  \nindicates higher fidelity to the script. " \
+#     "Potentially abnormal transcripts (based on visual examination) " \
+#     "are highlighted in black. \nThese are the transcripts we have" \
+#     " flagged for manual observation."
+# fig.text(.1, .025, notes, ha='left')
 
 plt.savefig(table_filepath + 'Figure 3: Fidelity Panels', dpi=200)
 

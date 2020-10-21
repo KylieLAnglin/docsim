@@ -64,7 +64,7 @@ sns.distplot(study5_values, hist=False, rug=False, color='lightgray',
              kde_kws={'linestyle': 'dashed'}, label='Feedback Study 2')
 
 ax.legend(loc='upper right')
-ax.set_xlabel("Fidelity Scores")
+ax.set_xlabel("Adherence Scores")
 ax.set_ylabel("Kernel Density")
 # notes = "Notes: Fidelity scores are estimated by calculating the " \
 #     "similarity between each transcript and an ideal script. " \
@@ -100,7 +100,7 @@ sns.swarmplot(x='coach_code', y='script_sim',
               color="black")
 
 ax.set_xlabel("Coach")
-ax.set_ylabel("Fidelity Scores")
+ax.set_ylabel("Adherence Scores")
 
 # notes = "Notes: Fidelity scores are estimated by calculating" \
 #     " the similarity between" \
@@ -135,7 +135,7 @@ ax5 = axs[1, 1]
 bins = np.linspace(0, .75, num=30)
 
 #fig.suptitle('Figure 3: Fidelity Scores  with Unusual Transcripts Highlighted',
-#             fontsize=15)
+ #            fontsize=15)
 
 ax1.hist(study1_values, bins,
          color='darkgray', alpha=.75)
@@ -170,6 +170,9 @@ for ax in [ax1, ax2, ax3, ax4, ax5]:
 
 fig.delaxes(axs[1, 2])
 
+fig.text(0.5, 0.04, 'Adherence Scores', ha='center')
+fig.text(0.04, 0.5, 'Number of Transcripts', va='center', rotation='vertical')
+
 # notes = "Notes: Fidelity scores are estimated by calculating the " \
 #     "similarity between each transcript and an ideal script. " \
 #     "A higher score  \nindicates higher fidelity to the script. " \
@@ -199,8 +202,10 @@ sns.swarmplot(x='coach_code', y='script_sim',
                            (results.semester == 'spring')],
               color="black")
 plt.xlabel("Coach")
-plt.ylabel("Fidelity Scores")
+plt.ylabel("Adherence Scores")
 plt.savefig(table_filepath +
             'Figure 2b Fidelity Scores for Behavior Study 2 by Coach')
 
 plt.show()
+
+# %%

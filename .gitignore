@@ -14,3 +14,4 @@ venv
 .idea/modules.xml
 src.code-workspace
 *.ipynb
+zz_archive/

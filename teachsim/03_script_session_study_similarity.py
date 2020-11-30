@@ -18,7 +18,7 @@ from sklearn.preprocessing import Normalizer
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from library import start
+from docsim.library import start
 
 clean_filepath = start.clean_filepath
 table_filepath = start.table_filepath

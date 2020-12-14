@@ -24,6 +24,6 @@ def import_text(filepath: str, pattern: str):
             for para in doc.paragraphs:
                 text_list.append(para.text)
             text = " ".join(text_list)
-    doc_dict[filename] = text
+            doc_dict[filename] = text
 
     return doc_dict

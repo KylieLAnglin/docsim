@@ -16,11 +16,22 @@ spring2019_notes = qualtrics.select_valid_rows(
     spring2019_notes, keep_previews=True, min_duration=0
 )
 spring2019_skills = spring2019_notes[["Q37", "Q38", "Q31", "Q41"]].rename(
-    columns={"Q37": "name", "Q38": "email", "Q41": "coach", "Q31": "skill"}
+    columns={"Q37": "name", "Q38": "email", "Q41": "coach", "Q31": "skill_name"}
 )
 
+ids_2018_2019 = pd.read_csv(
+    start.raw_filepath + "coaching_notes/" + "Linking Roster 2018.csv"
+)
 
-# %% Merges and clean
+# link skills to ids
+spring2019_skills = spring2019_skills.merge(
+    ids_2018_2019[["ID", "Email"]], how="left", left_on="email", right_on="Email"
+)  # missing 14/99. These people may have transcripts.
+# So these are qualtrics surveys by a coach that do not link to the \
+# linking doc with student IDs. Don't know yet how many transcripts don't \
+# link to a coach
+
+# %%
 behavior_skill_labels = {
     "Timely redirection": 1,
     "Specific redirection": 2,
@@ -28,47 +39,9 @@ behavior_skill_labels = {
     "Calm redirection": 4,
 }
 
-
-fall_2018_skills = fall_2018_notes.merge(
-    ids_2018_2019, how="inner", left_on="Q16", right_on="Email", indicator=True
-)
-fall_2018_skills["Skill"] = fall_2018_skills["Q6"].map(feedback_skill_labels)
-fall_2018_skills = fall_2018_skills[["ID", "Skill"]]
-fall_2018_skills = fall_2018_skills.rename(columns={"ID": "id", "Skill": "skill"})
-fall_2018_skills = fall_2018_skills.merge(
-    coach_ids_fall2018, how="inner", left_on="id", right_on="id"
-)
-
-
-spring_2019_skills = spring_2019_notes.merge(
-    ids_2018_2019, how="inner", left_on="Q38", right_on="Email", indicator=True
-)
-spring_2019_skills["Skill"] = spring_2019_skills["Q31"].map(behavior_skill_labels)
-spring_2019_skills = spring_2019_skills[["ID", "Skill", "Q41"]]
-spring_2019_skills = spring_2019_skills.rename(
-    columns={"ID": "id", "Skill": "skill", "Q41": "coach"}
-)
+spring2019_skills["skill"] = spring2019_skills.skill_name.map(behavior_skill_labels)
 
 # %% Exports
+spring2019_path = start.raw_filepath + "Spring_2019/" + "Spring 2019 Coaching Notes.csv"
 
-for df, file in zip(
-    [
-        fall_2017_skills,
-        spring_2018_skills,
-        fall_2018_skills,
-        spring_2019_skills,
-        fall_2019_skills,
-    ],
-    [
-        "fall_2017_skills.csv",
-        "spring_2018_skills.csv",
-        "fall_2018_skills.csv",
-        "spring_2019_skills.csv",
-        "fall_2019_skills.csv",
-    ],
-):
-
-    df.to_csv(skills_path + file)
-
-
-# %%
+spring2019_skills.to_csv(start.raw_filepath + "coaching_notes/" + "spring2019_skills")

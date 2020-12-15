@@ -75,7 +75,7 @@ text_df = pd.DataFrame.from_dict(
 text_df["year"] = 2019
 text_df["semester"] = "spring"
 text_df["scenario"] = "behavior"
-
+text_df = text_df.reset_index().rename(columns={"index": "doc"})
 # %%
 
-text_df.to_csv(start.clean_filepath + "text_transcripts.csv")
+text_df.to_csv(start.clean_filepath + "text_transcripts.csv", index=False)

@@ -16,7 +16,9 @@ ideal_behavior_df["skill"] = ideal_behavior_df.index.str[26:28]
 ideal_behavior_df["skill"] = ideal_behavior_df["skill"].map(skill_dict).astype(int)
 
 ideal_behavior_df = ideal_behavior_df.rename(columns={0: "clean_text"})
+ideal_behavior_df = ideal_behavior_df.reset_index().rename(columns={"index": "doc"})
+
 # In[7]:
 
 
-ideal_behavior_df.to_csv(start.clean_filepath + "text_scripts.csv")
+ideal_behavior_df.to_csv(start.clean_filepath + "text_scripts.csv", index=False)

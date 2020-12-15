@@ -5,23 +5,27 @@ from docsim.library import start
 from docsim.library import clean_text
 
 # %% Import text
+
+
+# %% Import text and clean
 spring2019_filepath = start.raw_filepath + "spring_2019/coaching/"
+
 spring2019_docs = clean_text.import_text(
     filepath=spring2019_filepath, pattern="*docx", paragraph_tag="[New Speaker] "
 )
 
-# %% Clean speaker tags
 speaker_tags_df = pd.read_csv(
     start.raw_filepath + "spring_2019/Coaching/Spring2019_speaker_tags.csv", header=0
 )
 temp_dict = speaker_tags_df.set_index("doc").to_dict(orient="index")
 speaker_tags = {k: v["coach"] for k, v in temp_dict.items()}
 
-for key in spring2019_docs.keys():
-    spring2019_docs[key] = spring2019_docs[key].replace(speaker_tags[key], "Coach:")
+spring2019_docs = {
+    k: v.replace(speaker_tags[k], "Coach:") for k, v in spring2019_docs.items()
+}
+
 
 # %%
-new_text = string.replace("Instructor:", "Coach:")
 
 
 # In[3]:

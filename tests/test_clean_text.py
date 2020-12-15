@@ -22,13 +22,10 @@ def test_import_text_segmented():
     assert test["test1.docx"].count("[New Speaker]") == 2
 
 
-def test_replace_substring_in_dict():
-    test_dict = {
-        "test1": "Interviewer: This is a text.",
-        "test2": "Interviewee: This is a text.",
-    }
-
-    test = clean_text.replace_substring_in_dict(
-        test_dict, "Interviewer:", "Interviewee:"
+def test_filter_segments():
+    test = "[New Speaker] Interviewer: This is string. [New Speaker] And this is a second string."
+    result = clean_text.filter_segments(
+        test, segment_tag="[New Speaker]", filter_tag="Interviewer:"
     )
-    assert test["test1"] == "Interviewee: This is a text."
+
+    assert result == "[New Speaker] Interviewer: This is string."

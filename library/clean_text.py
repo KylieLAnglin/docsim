@@ -1,5 +1,6 @@
 import os
 import fnmatch
+import re
 
 import docx
 
@@ -33,8 +34,26 @@ def import_text(filepath: str, pattern: str, paragraph_tag: str = None):
     return doc_dict
 
 
+def filter_segments(
+    text: str, segment_tag: str, filter_tag: str, keep_if_tagged: bool = True
+):
+    """Filters a text by searching individual segments for instance of string
 
+    Args:
+        text (str): string to filter
+        segment_tag (str): tag indicating text segments to search
+        filter_tag (str): string to search for
+        keep_if_tagged (bool, optional): Keep segment if contains filter_tag? Defaults to True.
 
+    Returns:
+        [str]: filtered string
+    """
+    segments = [
+        segment_tag + " " + string.strip()
+        for string in text.split(segment_tag)
+        if string
+    ]
+    filtered_segments = [segment for segment in segments if filter_tag in segment]
+    filtered_text = " ".join(filtered_segments)
 
-def filter_segments(segment_tag: str, check_for: str):
-
+    return filtered_text

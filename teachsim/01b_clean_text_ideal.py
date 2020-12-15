@@ -8,6 +8,7 @@ ideal_behavior_dict = clean_text.import_text(
 )
 ideal_behavior_df = pd.DataFrame.from_dict(ideal_behavior_dict, orient="index")
 ideal_behavior_df["scenario"] = "behavior"
+ideal_behavior_df["study"] = "model"
 
 
 # %% Add skill column
@@ -18,7 +19,6 @@ ideal_behavior_df["skill"] = ideal_behavior_df["skill"].map(skill_dict).astype(i
 ideal_behavior_df = ideal_behavior_df.rename(columns={0: "clean_text"})
 ideal_behavior_df = ideal_behavior_df.reset_index().rename(columns={"index": "doc"})
 
-# In[7]:
-
+# %%
 
 ideal_behavior_df.to_csv(start.clean_filepath + "text_scripts.csv", index=False)

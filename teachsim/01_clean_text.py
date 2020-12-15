@@ -34,6 +34,32 @@ def replace_string_value_as_list(input_dict: dict):
     return {k: [v] for k, v in input_dict.items()}
 
 
+def replace_string_key(input_dict: dict, old_str: str, new_str: str):
+    """Replaces substring in dictionary key values
+
+    Args:
+        input_dict (dict): dictionary with string as key
+        old_str (str): old substring to replace
+        new_str (str): new substring
+
+    Returns:
+        [dict]: dictionary with replaced substrings in keys
+    """
+    return {k.replace(old_str, new_str): v for k, v in input_dict.items()}
+
+
+def string_key_as_int(input_dict: dict):
+    """new dictionary with string keys converted to int
+
+    Args:
+        input_dict (dict): input dictionary with string keys
+
+    Returns:
+        [dict]: new dictionary with int keys
+    """
+    return {int(k): v for k, v in input_dict.items()}
+
+
 # %% Import text and clean
 
 
@@ -63,19 +89,34 @@ cleaned_coach_text = {
     k: re.sub(r"Coach:", " ", v) for k, v in cleaned_coach_text.items()
 }
 
+# %%
 
 # combine dictionaries
 big_dict = {k: [raw_text[k]] + [cleaned_coach_text[k]] for k in raw_text.keys()}
+big_dict = replace_string_key(big_dict, "2019_", "")
+big_dict = replace_string_key(big_dict, "_5C_Transcript.docx", "")
+big_dict = string_key_as_int(big_dict)
+
+# %%
 
 text_df = pd.DataFrame.from_dict(
     big_dict,
     orient="index",
     columns=["raw_text", "clean_text"],
 )
+text_df["study"] = "spring2019"
 text_df["year"] = 2019
 text_df["semester"] = "spring"
 text_df["scenario"] = "behavior"
-text_df = text_df.reset_index().rename(columns={"index": "doc"})
+
+
+skills = pd.read_csv(
+    start.raw_filepath + "coaching_notes/" + "spring2019_skills", index_col="ID"
+)
+text_df = text_df.merge(skills, left_index=True, right_index=True)
+
+
 # %%
+
 
 text_df.to_csv(start.clean_filepath + "text_transcripts.csv", index=False)

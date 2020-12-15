@@ -33,20 +33,8 @@ def import_text(filepath: str, pattern: str, paragraph_tag: str = None):
     return doc_dict
 
 
-def replace_substring_in_dict(string_dict: dict, old_str: str, new_str: str):
-    """Replaces substrings within dict values
 
-    Args:
-        dict (dict): dictionary with string values
-        old_str (str): old substring
-        new_str (str): new substring
 
-    Returns:
-        [dict]: same dictionary with new values
-    """
-    new_dict = string_dict.copy()
 
-    for key in new_dict.keys():
-        new_dict[key] = new_dict[key].replace(old_str, new_str)
+def filter_segments(segment_tag: str, check_for: str):
 
-    return new_dict

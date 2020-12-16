@@ -5,60 +5,7 @@ import pandas as pd
 
 from docsim.library import start
 from docsim.library import clean_text
-
-# %% Functions
-def fold_nested_dictionary(input_dict: dict, inner_key: str):
-    """Given an input dictionary with keys mapping to inner dictionaries, extract
-        the value of some common key to the inner dictionary and return the new
-        "folded" dictionary.
-
-    Arguments:
-        input_dict (Dict[Any, Dict[str, Any]]): The input dictionary containing dictionaries as values
-        inner_key (str): The key to use to extract a given value out of the inner dictionaries.
-
-    Returns:
-        A new "folded" dictionary consisting of the original dictionary's keys and the values of the inner_key.
-    """
-    return {k: v[inner_key] for k, v in input_dict.items()}
-
-
-def replace_string_value_as_list(input_dict: dict):
-    """Given an input dictionary, replace string values with list of one string
-
-    Args:
-        input_dict (dict): Dictionary containing string values
-
-    Returns:
-        [type]: Dictionary containing list values of one item each
-    """
-    return {k: [v] for k, v in input_dict.items()}
-
-
-def replace_string_key(input_dict: dict, old_str: str, new_str: str):
-    """Replaces substring in dictionary key values
-
-    Args:
-        input_dict (dict): dictionary with string as key
-        old_str (str): old substring to replace
-        new_str (str): new substring
-
-    Returns:
-        [dict]: dictionary with replaced substrings in keys
-    """
-    return {k.replace(old_str, new_str): v for k, v in input_dict.items()}
-
-
-def string_key_as_int(input_dict: dict):
-    """new dictionary with string keys converted to int
-
-    Args:
-        input_dict (dict): input dictionary with string keys
-
-    Returns:
-        [dict]: new dictionary with int keys
-    """
-    return {int(k): v for k, v in input_dict.items()}
-
+from docsim.library import dictionary_tools
 
 # %% Import text and clean
 
@@ -73,7 +20,7 @@ speaker_tags_df = pd.read_csv(
     spring2019_filepath + "Spring2019_speaker_tags.csv", header=0
 )
 temp_dict = speaker_tags_df.set_index("doc").to_dict(orient="index")
-speaker_tags = fold_nested_dictionary(temp_dict, "coach")
+speaker_tags = dictionary_tools.fold_nested_dictionary(temp_dict, "coach")
 
 
 cleaned_speaker_text = {
@@ -93,9 +40,9 @@ cleaned_coach_text = {
 
 # combine dictionaries
 big_dict = {k: [raw_text[k]] + [cleaned_coach_text[k]] for k in raw_text.keys()}
-big_dict = replace_string_key(big_dict, "2019_", "")
-big_dict = replace_string_key(big_dict, "_5C_Transcript.docx", "")
-big_dict = string_key_as_int(big_dict)
+big_dict = dictionary_tools.replace_string_key(big_dict, "2019_", "")
+big_dict = dictionary_tools.replace_string_key(big_dict, "_5C_Transcript.docx", "")
+big_dict = dictionary_tools.string_key_as_int(big_dict)
 
 # %%
 
@@ -108,15 +55,19 @@ text_df["study"] = "spring2019"
 text_df["year"] = 2019
 text_df["semester"] = "spring"
 text_df["scenario"] = "behavior"
+text_df = text_df.reset_index().rename(columns={"index": "id"}).set_index("id")
 
-
+# %% Merge skills
 skills = pd.read_csv(
     start.raw_filepath + "coaching_notes/" + "spring2019_skills", index_col="ID"
 )
-text_df = text_df.merge(skills, left_index=True, right_index=True)
 
+text_df = text_df.merge(skills, left_index=True, right_index=True)
+text_df = text_df.reset_index().rename(columns={"index": "id"}).set_index("id")
 
 # %%
 
 
-text_df.to_csv(start.clean_filepath + "text_transcripts.csv", index=False)
+text_df.to_csv(start.clean_filepath + "text_transcripts.csv")
+
+# %%

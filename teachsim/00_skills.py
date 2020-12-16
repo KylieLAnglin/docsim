@@ -38,8 +38,11 @@ behavior_skill_labels = {
 }
 
 spring2019_skills["skill"] = spring2019_skills.skill_name.map(behavior_skill_labels)
+spring2019_skills = spring2019_skills.set_index("ID")
 
 # %% Save
 spring2019_skills.to_csv(
-    start.raw_filepath + "coaching_notes/" + "spring2019_skills", index=False
+    start.raw_filepath + "coaching_notes/" + "spring2019_skills",
 )
+
+# %%

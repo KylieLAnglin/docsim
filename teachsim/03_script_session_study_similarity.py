@@ -7,14 +7,26 @@ from docsim.library import analyze
 # %%
 
 transcript_df = pd.read_csv(start.clean_filepath + "text_transcripts.csv")
-script_df = pd.read_csv(start.clean_filepath + "text_scripts.csv")
+script_df = pd.read_csv(start.clean_filepath + "text_scripts.csv").set_index("id")
+
+df = transcript_df.append(script_df)
+df = df[["study", "year", "semester", "scenario", "coach", "skill"]]
 
 matrix = pd.read_csv(start.clean_filepath + "matrix_stop_wgt_lsa.csv")
+matrix = matrix.add_prefix("term_")
+
+df = df.merge(matrix, how="left", left_index=True, right_index=True)
 
 # %%
 # Script similarity
-# loop through index of transcripts, calc sim to all relevant scripts. Keep the highest score
-# what are the relevant scripts for spring2019
+values = []
+for doc in df[df.study == "spring2019"].index:
+    value = analyze.max_sim_of_rows(
+        df[list(df.filter(regex=("term")))],
+        doc,
+        list(df[(df.study == "model") & (df.scenario == "behavior")].index),
+    )
+    values.append(value)
 
 
 def max_sim(transcript_matrix, script_matrix):

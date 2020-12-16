@@ -20,4 +20,4 @@ df["id"] = df.scenario + df.skill.astype(str) + df.id
 df = df.set_index("id")
 # %%
 
-df.to_csv(start.clean_filepath + "text_scripts.csv", index=False)
+df.to_csv(start.clean_filepath + "text_scripts.csv")

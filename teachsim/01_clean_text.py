@@ -61,9 +61,9 @@ text_df = text_df.reset_index().rename(columns={"index": "id"}).set_index("id")
 skills = pd.read_csv(
     start.raw_filepath + "coaching_notes/" + "spring2019_skills", index_col="ID"
 )
-
-text_df = text_df.merge(skills, left_index=True, right_index=True)
-text_df = text_df.reset_index().rename(columns={"index": "id"}).set_index("id")
+skills = skills.reset_index().rename(columns={"ID": "id"}).set_index("id")
+# %%
+text_df = text_df.merge(skills, on="id")
 
 # %%
 

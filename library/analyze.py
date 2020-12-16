@@ -18,7 +18,12 @@ def cosine_similarity_row(matrix: pd.DataFrame, index1, index2):
 
 
 def max_sim_of_rows(matrix: pd.DataFrame, main_index, comp_indices: list):
+    try:
+        return max(
+            [cosine_similarity_row(matrix, main_index, comp) for comp in comp_indices]
+        )
+    except:
+        return None
 
-    return max(
-        [cosine_similarity_row(matrix, main_index, comp) for comp in comp_indices]
-    )
+
+# TODO: fix so that if there are no matches?

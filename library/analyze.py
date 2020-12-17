@@ -18,7 +18,6 @@ def cosine_similarity_row(matrix: pd.DataFrame, index1, index2):
     return 1 - spatial.distance.cosine(matrix.loc[index1], matrix.loc[index2])
 
 
-# TODO: fix so that if there are no matches?
 def max_sim_of_rows(matrix: pd.DataFrame, main_index, comp_indices: list):
     """[summary]
 
@@ -37,7 +36,7 @@ def max_sim_of_rows(matrix: pd.DataFrame, main_index, comp_indices: list):
     else:
         max_sim = np.nan
 
-    return
+    return max_sim
 
 
 def row_is_peer(df: pd.DataFrame, main_row, col_to_match: str):

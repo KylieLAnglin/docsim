@@ -30,7 +30,7 @@ doc_term_matrix = df[list(df.filter(regex=("term")))]
 df["peers"] = analyze.row_matches_in_lists(df, col_to_match="skill")
 study_groups = df.groupby(["study", "scenario"])
 
-new_df = df[df.study == "spring2019"][["study", "year", "semester", "skill"]]
+new_df = df.loc[study_groups.groups["spring2019", "behavior"]]
 new_df["script_sim"] = [
     analyze.max_sim_of_rows(
         matrix=doc_term_matrix,
@@ -42,6 +42,9 @@ new_df["script_sim"] = [
     for i in study_groups.groups["spring2019", "behavior"]
 ]
 
+new_df = new_df[
+    ["study", "year", "semester", "scenario", "skill", "coach", "script_sim"]
+]
 # %%
 
 new_df.to_csv(start.clean_filepath + "results_spring2019.csv")

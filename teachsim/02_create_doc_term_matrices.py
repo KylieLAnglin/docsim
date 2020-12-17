@@ -74,3 +74,7 @@ matrix = vectorize.vectorize_text(
 matrix.to_csv(start.clean_filepath + "matrix_stop_wgt_lsa.csv")
 
 # %%
+matrix = vectorize.vectorize_text(
+    df, "clean_text", remove_stopwords=True, tfidf=True, lemma=True, lsa=True
+)
+matrix.to_csv(start.clean_filepath + "matrix_stop_stem_wgt_lsa.csv")

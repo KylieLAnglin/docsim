@@ -44,6 +44,6 @@ new_df["script_sim"] = [
 
 # %%
 
-df.to_csv(start.clean_filepath + "results_spring2019.csv")
+new_df.to_csv(start.clean_filepath + "results_spring2019.csv")
 
 # %%

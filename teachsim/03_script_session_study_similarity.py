@@ -30,6 +30,7 @@ doc_term_matrix = df[list(df.filter(regex=("term")))]
 df["peers"] = analyze.row_matches_in_lists(df, col_to_match="skill")
 study_groups = df.groupby(["study", "scenario"])
 
+
 new_df = df.loc[study_groups.groups["spring2019", "behavior"]]
 new_df["script_sim"] = [
     analyze.max_sim_of_rows(

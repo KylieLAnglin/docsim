@@ -24,23 +24,26 @@ df = df.merge(matrix, how="left", left_index=True, right_index=True)
 # %%
 
 
+# %%
 doc_term_matrix = df[list(df.filter(regex=("term")))]
 
-values = []
-new_df = df[df.study == "spring2019"][[]]
-for doc in df[df.study == "spring2019"].index:
-    value = analyze.max_sim_of_rows(
+df["peers"] = analyze.row_matches_in_lists(df, col_to_match="skill")
+study_groups = df.groupby(["study", "scenario"])
+
+new_df = df[df.study == "spring2019"][["study", "year", "semester", "skill"]]
+new_df["script_sim"] = [
+    analyze.max_sim_of_rows(
         matrix=doc_term_matrix,
-        main_index=doc,
+        main_index=i,
         comp_indices=list(
-            df[
-                (df.study == "model")
-                & (df.scenario == "behavior")
-                & (df.skill == df.loc[doc].skill)
-            ].index
+            set(study_groups.groups["model", "behavior"]) & set(df.loc[i].peers)
         ),
     )
-    values.append(value)
-new_df["script_sim"] = values
+    for i in study_groups.groups["spring2019", "behavior"]
+]
 
-new_df.to_csv(start.clean_filepath + "results_spring2019.csv")
+# %%
+
+df.to_csv(start.clean_filepath + "results_spring2019.csv")
+
+# %%

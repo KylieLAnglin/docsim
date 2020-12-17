@@ -38,3 +38,9 @@ def test_filter_df_with_dict():
     result = analyze.filter_df_with_dict(test, test_rule)
 
     assert list(result.index) == [0, 1, 2, 3]
+
+
+def test_row_matches_in_list():
+    test = pd.DataFrame({"col1": [1, 2, 2, 1], "col2": [2, 3, 4, 2]})
+    result = analyze.row_matches_in_lists(test, "col1")
+    assert result[0] == [0, 3]

@@ -1,5 +1,6 @@
 from scipy import spatial
 import pandas as pd
+import numpy as np
 
 
 def cosine_similarity_row(matrix: pd.DataFrame, index1, index2):
@@ -29,9 +30,14 @@ def max_sim_of_rows(matrix: pd.DataFrame, main_index, comp_indices: list):
     Returns:
         [type]: [description]
     """
-    return max(
-        [cosine_similarity_row(matrix, main_index, comp) for comp in comp_indices]
-    )
+    if len(comp_indices) > 0:
+        max_sim = max(
+            [cosine_similarity_row(matrix, main_index, comp) for comp in comp_indices]
+        )
+    else:
+        max_sim = np.nan
+
+    return
 
 
 def row_is_peer(df: pd.DataFrame, main_row, col_to_match: str):
@@ -49,6 +55,24 @@ def row_is_peer(df: pd.DataFrame, main_row, col_to_match: str):
     """
 
     return list(df[col_to_match] == df.loc[main_row][col_to_match])
+
+
+def row_matches_in_lists(df: pd.DataFrame, col_to_match: str):
+    """Returns lists of row indices that match each rows value in column
+
+    Args:
+        df (pd.DataFrame): Dataframe containing rows to match
+        col_to_match (str): Dataframe column to find other rows that match
+
+    Returns:
+        [list]: List of lists of row indices
+    """
+    lists = [
+        list(df[(df[col_to_match] == df.loc[row][col_to_match])].index)
+        for row in df.index
+    ]
+
+    return lists
 
 
 def filter_df_with_dict(df: pd.DataFrame, filter_rules: dict):

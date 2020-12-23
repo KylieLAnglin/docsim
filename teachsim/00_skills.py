@@ -82,7 +82,7 @@ skills = notes[["Q37", "Q38", "Q31", "Q41"]].rename(
 
 # Merge coach notes to participant ids
 skills = skills.merge(
-    ids[["ID", "Email"]], how="left", left_on="email", right_on="Email"
+    ids_1819[["ID", "Email"]], how="left", left_on="email", right_on="Email"
 )  # missing 14/99. These people may have transcripts.
 # So these are qualtrics surveys by a coach that do not link to the \
 # linking doc with student IDs. Don't know yet how many transcripts don't \

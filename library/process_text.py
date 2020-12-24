@@ -138,7 +138,7 @@ def remove_tags(text: str, regex_str: str):
 
 # %%
 
-
+# TODO: Doesn't work with multiindex
 def what_words_matter(doc_term_matrix: pd.DataFrame, row1, row2, show_num: int = 5):
     """Given a two vectors in a doc-term matrix, show words /
     that discriminate between the documents.
@@ -164,17 +164,17 @@ def what_words_matter(doc_term_matrix: pd.DataFrame, row1, row2, show_num: int =
 
     new_df = new_df[(new_df[row1] != 0) | (new_df[row2] != 0)]
 
-    new_df[str(row1) + "_p"] = new_df[row1].round(2)
-    new_df[str(row2) + "_p"] = new_df[row2].round(2)
+    new_df["row1_p"] = new_df[row1].round(2)
+    new_df["row2_p"] = new_df[row2].round(2)
 
-    new_df[row1] = new_df[row1] * totals[0]
-    new_df[row2] = new_df[row2] * totals[1]
+    new_df["row1"] = new_df[row1] * totals[0]
+    new_df["row2"] = new_df[row2] * totals[1]
 
     row1_df = new_df.sort_values(by="diff").tail(show_num)
-    row1_df["type"] = str(row1) + "distinct"
+    row1_df["type"] = "row1_distinct"
 
     row2_df = new_df.sort_values(by="diff").head(show_num)
-    row2_df["type"] = str(row2) + "distinct"
+    row2_df["type"] = "row2_distinct"
 
     sim_df = new_df.sort_values(by="abs").head(show_num)
     sim_df["type"] = "shared"
@@ -182,7 +182,7 @@ def what_words_matter(doc_term_matrix: pd.DataFrame, row1, row2, show_num: int =
     words = (
         row1_df.append(sim_df)
         .append(row2_df)
-        .set_index(["type", "index"])[[row1, row2, str(row1) + "_p", str(row2) + "_p"]]
+        .set_index(["type", "index"])[["row1", "row2", "row1_p", "row2_p"]]
     )
 
     return words

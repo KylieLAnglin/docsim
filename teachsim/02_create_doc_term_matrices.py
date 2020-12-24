@@ -3,17 +3,24 @@ import pandas as pd
 
 from docsim.library import start
 from docsim.library import vectorize
+from docsim.library import process_text
 
 # %%
 
-df_corpus = pd.read_csv(start.clean_filepath + "text_transcripts.csv").set_index("id")
-df_ideal = pd.read_csv(start.clean_filepath + "text_scripts.csv").set_index("id")
+df_corpus = pd.read_csv(start.clean_filepath + "text_transcripts.csv").set_index(
+    ["study", "id"]
+)
+df_ideal = pd.read_csv(start.clean_filepath + "text_scripts.csv").set_index(
+    ["study", "id"]
+)
 df = df_corpus.append(df_ideal)
 
 # %%
-matrix = vectorize.vectorize_text(
+
+matrix = process_text.vectorize_text(
     df, "clean_text", remove_stopwords=False, tfidf=False, lemma=False, lsa=False
 )
+
 matrix.to_csv(start.clean_filepath + "matrix.csv")
 
 # %%

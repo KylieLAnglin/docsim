@@ -86,3 +86,20 @@ def filter_df_with_dict(df: pd.DataFrame, filter_rules: dict):
     """
 
     return df.loc[(df[list(filter_rules)] == pd.Series(filter_rules)).all(axis=1)]
+
+
+def pairwise_distance(matrix_main, matrix_comparison):
+    ave_sims = []
+    for maindoc in matrix_main.index:
+        sims = []
+        matrix_comp = matrix_comparison[
+            ~matrix_comparison.index.isin([maindoc])
+        ]  # exclude self
+        for compdoc in matrix_comp.index:
+            sim = 1 - spatial.distance.cosine(
+                matrix_main.loc[maindoc], matrix_comp.loc[compdoc]
+            )
+            sims.append(sim)
+        ave_sim = sum(sims) / len(sims)
+        ave_sims.append(ave_sim)
+    return ave_sims

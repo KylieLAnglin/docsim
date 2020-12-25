@@ -38,8 +38,29 @@ def create_results(merged_df: pd.DataFrame):
         for i in new_df.index
     ]
 
-    results = new_df[["year", "semester", "scenario", "skill", "coach", "script_sim"]]
+    results = new_df[
+        ["year", "semester", "scenario", "skill", "coach", "text", "script_sim"]
+    ]
 
+    results["sim_fall2017"] = analyze.pairwise_distance(
+        doc_term_matrix, doc_term_matrix.loc["fall2017"]
+    )
+
+    results["sim_fall2018"] = analyze.pairwise_distance(
+        doc_term_matrix, doc_term_matrix.loc["fall2018"]
+    )
+
+    results["sim_spring2018"] = analyze.pairwise_distance(
+        doc_term_matrix, doc_term_matrix.loc["spring2018"]
+    )
+
+    results["sim_spring2019"] = analyze.pairwise_distance(
+        doc_term_matrix, doc_term_matrix.loc["spring2019"]
+    )
+
+    results["sim_fall2019TAP"] = analyze.pairwise_distance(
+        doc_term_matrix, doc_term_matrix.loc["fall2019TAP"]
+    )
     return results
 
 

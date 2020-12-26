@@ -8,7 +8,19 @@ skills_path = start.raw_filepath + "coaching_notes/"
 
 # Import linking doc
 path = start.raw_filepath + "coaching_notes/" + "Linking Roster 2018.csv"
-ids_1819 = pd.read_csv(path)
+ids_1819 = pd.read_csv(path).rename(columns={"Email": "email", "ID": "id"})
+# %%
+# Merge coach id to participant id
+coach_ids = pd.read_excel(
+    skills_path + "Linking Roster (Fall 2018).xlsx",
+    sheet_name="Linking Roster",
+    engine="openpyxl",
+)[["ParticipantID", "Session3-4_CoachID_New"]].dropna(how="all")
+coach_ids = coach_ids.rename(
+    columns={"ParticipantID": "id", "Session3-4_CoachID_New": "coach"}
+)
+coach_ids["study"] = "fall2018"
+coach_ids = coach_ids.set_index(["study", "id"])
 
 # %% Label skills
 behavior_skill_labels = {
@@ -54,23 +66,19 @@ spring2018 = spring2018.set_index(["study", "id"])
 # %% Fall 2018
 notes = pd.read_csv(skills_path + "Fall 2018 Coaching Notes.csv")
 notes = qualtrics.select_valid_rows(notes, keep_previews=True, min_duration=0)
-skills = notes[["Q1", "Q16", "Q6"]].rename(
-    columns={"Q1": "name", "Q16": "email", "Q6": "skill_name"}
-)
-# skills["skill"] = "feedback" + skills.skill.map(str)
-
-# Merge coach notes to participant ids
-skills = skills.merge(
-    ids_1819[["ID", "Email"]], how="left", left_on="email", right_on="Email"
-)
-
+skills = (
+    notes[["Q1", "Q16", "Q6"]].rename(
+        columns={"Q1": "name", "Q16": "email", "Q6": "skill_name"}
+    )
+).dropna(how="all")
 skills["skill"] = skills.skill_name.map(feedback_skill_labels)
 
+skills = skills.merge(ids_1819[["id", "email"]], how="left", on="email")
 
-fall2018 = skills.rename(columns={"ID": "id"})[["id", "skill", "skill_name"]]
+skills["study"] = "fall2018"
+fall2018 = skills.set_index(["study", "id"])
+fall2018 = fall2018.merge(coach_ids, how="left", left_index=True, right_index=True)
 
-fall2018["study"] = "fall2018"
-fall2018 = fall2018.set_index(["study", "id"])
 
 # %% Spring 2019
 
@@ -82,7 +90,7 @@ skills = notes[["Q37", "Q38", "Q31", "Q41"]].rename(
 
 # Merge coach notes to participant ids
 skills = skills.merge(
-    ids_1819[["ID", "Email"]], how="left", left_on="email", right_on="Email"
+    ids_1819[["id", "email"]], how="left", left_on="email", right_on="email"
 )  # missing 14/99. These people may have transcripts.
 # So these are qualtrics surveys by a coach that do not link to the \
 # linking doc with student IDs. Don't know yet how many transcripts don't \
@@ -93,7 +101,7 @@ skills = skills.rename(columns={"ID": "id"})[["id", "skill", "skill_name", "coac
 
 spring2019 = skills
 spring2019["study"] = "spring2019"
-spring2019 = spring2019.set_index(["study", "id"])
+spring2019 = spring2019.dropna(subset=["id"]).set_index(["study", "id"])
 
 # %% Fall 2019
 skills = pd.read_csv(skills_path + "Fall 2019 TAP Skills.csv")

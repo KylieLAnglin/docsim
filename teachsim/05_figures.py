@@ -141,11 +141,19 @@ ax.set_ylabel("Adherence Scores")
 # fig.text(.1, .025, notes, ha='left', wrap=True)
 
 
-fig.savefig(table_filepath + "Figure 2 Fidelity Scores for Feedback Study 2 by Coach")
+fig.savefig(
+    start.table_filepath + "Figure 2 Fidelity Scores for Feedback Study 2 by Coach"
+)
 plt.show()
 
 for coach in ["A", "B", "C", "D"]:
-    print(results.loc["fall2018"][(results.coach_code == coach)].script_sim.median())
+    print(
+        results[
+            (results.coach_code == coach)
+            & (results.semester == "fall")
+            & (results.year == 2018)
+        ].script_sim.median()
+    )
 
 # %% Figure 3: Panel of Histograms
 
@@ -180,7 +188,7 @@ ax3.hist(study3_values.where(study3_values < 0.20), bins, color="black")
 ax4.hist(study4_values, bins, color="darkgray", alpha=1)
 ax4.set_xlabel("Feedback Study 1")
 ax4.hist(
-    study4_values.where((study4_values > 0.35)),
+    study4_values.where((study4_values > 0.33)),
     bins,
     color="black",
 )
@@ -206,33 +214,3 @@ fig.text(0.04, 0.5, "Number of Transcripts", va="center", rotation="vertical")
 # fig.text(.1, .025, notes, ha='left')
 
 plt.savefig(start.table_filepath + "Figure 3: Fidelity Panels", dpi=200)
-
-
-# %% Figure 2b
-# Figure 2 Version 2
-plt.figure(figsize=(10, 10))
-sns.set_style("white")
-
-coach_code = {"Casedy": 1, "Emily": 2, "Bryan": 3, "Arielle": 4}
-results["coach_code"] = results["coach"].map(coach_code)
-
-
-sns.boxplot(
-    x="coach_code",
-    y="script_sim",
-    data=results[(results.year == "2018-19") & (results.semester == "spring")],
-    color="white",
-)
-sns.swarmplot(
-    x="coach_code",
-    y="script_sim",
-    data=results[(results.year == "2018-19") & (results.semester == "spring")],
-    color="black",
-)
-plt.xlabel("Coach")
-plt.ylabel("Adherence Scores")
-plt.savefig(table_filepath + "Figure 2b Fidelity Scores for Behavior Study 2 by Coach")
-
-plt.show()
-
-# %%

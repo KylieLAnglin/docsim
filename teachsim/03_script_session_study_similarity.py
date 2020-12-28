@@ -61,6 +61,8 @@ def create_results(merged_df: pd.DataFrame):
     results["sim_fall2019TAP"] = analyze.pairwise_distance(
         doc_term_matrix, doc_term_matrix.loc["fall2019TAP"]
     )
+
+    results["study"]
     return results
 
 

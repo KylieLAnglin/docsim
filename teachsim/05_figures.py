@@ -11,8 +11,33 @@ from docsim.library import start
 
 # %%
 results = pd.read_csv(start.clean_filepath + "results_stop_wgt_lsa.csv").set_index(
-    "study", "id"
+    ["study", "id"]
 )
+results["study"] = [i[0] for i in results.index]
+results["study_sim"] = np.where(
+    results.study == "fall2017",
+    results.sim_fall2017,
+    np.where(
+        results.study == "fall2018",
+        results.sim_fall2018,
+        np.where(
+            results.study == "spring2018",
+            results.sim_spring2018,
+            np.where(
+                results.study == "spring2019",
+                results.sim_spring2019,
+                np.where(
+                    results.study == "fall2019TAP", results.sim_fall2019TAP, np.nan
+                ),
+            ),
+        ),
+    ),
+)
+
+
+for i, txt in enumerate(study.index):
+    plt.annotate(txt, (study.script_sim[i], study.sim_fall2017[i]))
+
 
 sns.set_style("white")
 
@@ -214,3 +239,30 @@ fig.text(0.04, 0.5, "Number of Transcripts", va="center", rotation="vertical")
 # fig.text(.1, .025, notes, ha='left')
 
 plt.savefig(start.table_filepath + "Figure 3: Fidelity Panels", dpi=200)
+
+# %% plot
+# fall 2017
+
+
+study = results.loc[["fall2017", "fall2018"]]
+sns.scatterplot(study.script_sim, study.study_sim, marker="", hue=study.study)
+plt.xlabel("Adherence Score")
+plt.ylabel("Replicability Score")
+
+
+for i, txt in enumerate(study.loc["fall2017"].index):
+    plt.annotate(
+        txt,
+        (study.loc["fall2017"].script_sim[i], study.loc["fall2017"].study_sim[i]),
+        color="blue",
+    )
+
+for i, txt in enumerate(study.loc["fall2018"].index):
+    plt.annotate(
+        txt,
+        (study.loc["fall2018"].script_sim[i], study.loc["fall2018"].study_sim[i]),
+        color="darkorange",
+    )
+
+
+# %%

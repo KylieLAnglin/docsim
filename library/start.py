@@ -1,4 +1,5 @@
-main_dir = "/Users/kylieanglin/"
+# main_dir = "/Users/kylieanglin/"
+main_dir = "/Users/kylie/"
 
 data_dir = main_dir + "Dropbox/docsim/"
 code_dir = main_dir + "docsim/docsim/"

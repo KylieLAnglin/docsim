@@ -8,6 +8,7 @@ from openpyxl import load_workbook
 
 from docsim.library import start
 
+sns.set_style("white")
 
 # %%
 results = pd.read_csv(start.clean_filepath + "results_stop_wgt_lsa.csv").set_index(
@@ -34,12 +35,6 @@ results["study_sim"] = np.where(
     ),
 )
 
-
-for i, txt in enumerate(study.index):
-    plt.annotate(txt, (study.script_sim[i], study.sim_fall2017[i]))
-
-
-sns.set_style("white")
 
 # %% Fidelity Results
 
@@ -244,7 +239,7 @@ plt.savefig(start.table_filepath + "Figure 3: Fidelity Panels", dpi=200)
 # fall 2017
 
 
-study = results.loc[["fall2017", "fall2018"]]
+study = results.loc[["fall2017"]]
 sns.scatterplot(study.script_sim, study.study_sim, marker="", hue=study.study)
 plt.xlabel("Adherence Score")
 plt.ylabel("Replicability Score")
@@ -255,13 +250,6 @@ for i, txt in enumerate(study.loc["fall2017"].index):
         txt,
         (study.loc["fall2017"].script_sim[i], study.loc["fall2017"].study_sim[i]),
         color="blue",
-    )
-
-for i, txt in enumerate(study.loc["fall2018"].index):
-    plt.annotate(
-        txt,
-        (study.loc["fall2018"].script_sim[i], study.loc["fall2018"].study_sim[i]),
-        color="darkorange",
     )
 
 

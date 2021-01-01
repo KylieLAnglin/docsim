@@ -62,7 +62,7 @@ def create_results(merged_df: pd.DataFrame):
         doc_term_matrix, doc_term_matrix.loc["fall2019TAP"]
     )
 
-    results["study"]
+    results["study"]  # TODO: Add back study similarity
     return results
 
 

@@ -237,16 +237,17 @@ plt.savefig(start.table_filepath + "Figure 3: Fidelity Panels", dpi=200)
 
 # %% plot
 # fall 2017
-
+fig = plt.figure(figsize=(10, 10))
+ax = plt.axes()
 
 study = results.loc[["fall2017"]]
 sns.scatterplot(study.script_sim, study.study_sim, marker="", hue=study.study)
-plt.xlabel("Adherence Score")
-plt.ylabel("Replicability Score")
+ax.set_xlabel("Adherence Score")
+ax.set_ylabel("Replicability Score")
 
 
 for i, txt in enumerate(study.loc["fall2017"].index):
-    plt.annotate(
+    ax.annotate(
         txt,
         (study.loc["fall2017"].script_sim[i], study.loc["fall2017"].study_sim[i]),
         color="blue",

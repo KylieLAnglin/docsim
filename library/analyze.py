@@ -39,6 +39,33 @@ def max_sim_of_rows(matrix: pd.DataFrame, main_index, comp_indices: list):
     return max_sim
 
 
+def max_sim_of_rows_index(matrix: pd.DataFrame, main_index, comp_indices: list):
+    """[summary]
+
+    Args:
+        matrix (pd.DataFrame): doc-term matrix
+        main_index ([type]): index of row to calculate similarity to other rows
+        comp_indices (list): indices of comparison rows
+
+    Returns:
+        [type]: [description]
+    """
+
+    if len(comp_indices) > 0:
+        sim_list = [
+            cosine_similarity_row(matrix, main_index, comp) for comp in comp_indices
+        ]
+        try:
+            sim_list.remove(1)
+            print("here")
+            max_sim = np.argmax(sim_list)
+
+        except:
+            max_sim = np.argmax(sim_list)
+
+    return comp_indices[max_sim]
+
+
 def row_is_peer(df: pd.DataFrame, main_row, col_to_match: str):
     """[summary]
 

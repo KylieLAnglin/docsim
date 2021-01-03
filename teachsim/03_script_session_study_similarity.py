@@ -62,7 +62,6 @@ def create_results(merged_df: pd.DataFrame):
         doc_term_matrix, doc_term_matrix.loc["fall2019TAP"]
     )
 
-    results["study"]
     return results
 
 
@@ -134,3 +133,16 @@ df = text_df.merge(matrix, how="left", left_index=True, right_index=True)
 
 results = create_results(merged_df=df)
 results.to_csv(start.clean_filepath + "results_stop_stem_wgt_lsa.csv")
+
+
+# %% Stop Stem
+
+matrix = pd.read_csv(start.clean_filepath + "matrix_stop_stem.csv")
+matrix["id"] = matrix.id.astype(str)
+matrix = matrix.set_index(["study", "id"])
+
+df = text_df.merge(matrix, how="left", left_index=True, right_index=True)
+
+results = create_results(merged_df=df)
+results.to_csv(start.clean_filepath + "results_stop_stem.csv")
+# %%

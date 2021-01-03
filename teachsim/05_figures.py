@@ -10,7 +10,7 @@ from docsim.library import start
 
 
 # %%
-results = pd.read_csv(start.clean_filepath + "results_stop_wgt_lsa.csv").set_index(
+results = pd.read_csv(start.clean_filepath + "results_stop_stem_wgt_lsa.csv").set_index(
     ["study", "id"]
 )
 results["study"] = [i[0] for i in results.index]
@@ -33,10 +33,6 @@ results["study_sim"] = np.where(
         ),
     ),
 )
-
-
-for i, txt in enumerate(study.index):
-    plt.annotate(txt, (study.script_sim[i], study.sim_fall2017[i]))
 
 
 sns.set_style("white")

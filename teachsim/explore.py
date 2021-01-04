@@ -25,10 +25,15 @@ doc_term_col = list(matrix.filter(regex=("term")))
 doc_term_matrix = matrix.copy()
 doc_term_matrix = doc_term_matrix[doc_term_col]
 # %% Low and high fidelity
-print("Low fidelity: ", results.loc[studies]["script_sim"].idxmin())
+print(
+    "Low fidelity: ", results.loc[["spring2018", "spring2019"]]["script_sim"].idxmin()
+)
 # or 73, 91 has conversation at beginning about the sound
-print("High fidelity: ", results.loc[studies]["script_sim"].idxmax())
+print(
+    "High fidelity: ", results.loc[["spring2018", "spring2019"]]["script_sim"].idxmax()
+)
 
+# %%
 
 print(
     analyze.max_sim_of_rows_index(

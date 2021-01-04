@@ -62,10 +62,6 @@ def create_results(merged_df: pd.DataFrame):
         doc_term_matrix, doc_term_matrix.loc["fall2019TAP"]
     )
 
-<<<<<<< HEAD
-    results["study"]  # TODO: Add back study similarity
-=======
->>>>>>> 50caf57c35a3479272bf67137e71c833ab8070c7
     return results
 
 
@@ -149,4 +145,13 @@ df = text_df.merge(matrix, how="left", left_index=True, right_index=True)
 
 results = create_results(merged_df=df)
 results.to_csv(start.clean_filepath + "results_stop_stem.csv")
+# %%
+matrix = pd.read_csv(start.clean_filepath + "matrix_lsa.csv")
+matrix["id"] = matrix.id.astype(str)
+matrix = matrix.set_index(["study", "id"])
+
+df = text_df.merge(matrix, how="left", left_index=True, right_index=True)
+
+results = create_results(merged_df=df)
+results.to_csv(start.clean_filepath + "results_lsa.csv")
 # %%

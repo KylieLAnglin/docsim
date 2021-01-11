@@ -10,6 +10,8 @@ import scipy
 
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import TruncatedSVD
+from sklearn.preprocessing import Normalizer
 from nltk.corpus import stopwords
 
 from agileteacher.library import start
@@ -66,6 +68,7 @@ def vectorize_text(
     tfidf: bool = False,
     lemma: bool = False,
     lsa: bool = False,
+    n_components: int = 100,
 ):
 
     docs = [
@@ -91,7 +94,7 @@ def vectorize_text(
     print("Number of words: ", len(matrix.columns))
 
     if lsa:
-        lsa_dfs = create_lsa_dfs(matrix=matrix)
+        lsa_dfs = create_lsa_dfs(matrix=matrix, n_components=n_components)
         matrix = lsa_dfs.matrix
         print("Number of dimensions: ", len(matrix.columns))
 
@@ -114,7 +117,6 @@ def create_lsa_dfs(
 
     # Each document is a linear combination of components
     matrix_lsa = pd.DataFrame(lsa_fit, index=matrix.index, columns=word_weights.index)
-    matrix_lsa.sample(5)
 
     word_weights = word_weights_trans.sort_values(by=[0], ascending=False)
 

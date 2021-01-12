@@ -1,6 +1,6 @@
 import math
 
-import simulation
+from docsim.library import simulation
 
 
 def test_mutate():

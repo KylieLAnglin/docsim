@@ -17,7 +17,7 @@ def import_text(filepath: str, pattern: str, paragraph_tag: str = None):
     """
     doc_dict = {}
     for filename in os.listdir(filepath):
-        if fnmatch.fnmatch(filename, pattern):
+        if fnmatch.fnmatch(filename, pattern) and not filename.startswith("~$"):
             print(filename)
             docfile = filepath + filename
             doc = docx.Document(docfile)
@@ -57,3 +57,7 @@ def filter_segments(
     filtered_text = " ".join(filtered_segments)
 
     return filtered_text
+
+
+def add_whitespace_after_punct(s):
+    return re.sub(r"\.(?! )", ". ", re.sub(r" +", " ", s))

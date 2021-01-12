@@ -18,7 +18,7 @@ def cleaning_protocol(raw_text_dict: dict, speaker_tags_df: pd.DataFrame):
 
     Args:
         raw_text_dict (dict): Doc ID as keys, text as values
-        speaker_tags_df (pd.DataFrame): Doc ID in col 1, previious coach tag in col 2
+        speaker_tags_df (pd.DataFrame): Doc ID in col 1, previous coach tag in col 2
 
     Returns:
         [dict]: Doc ID as keys, cleaned text as values
@@ -45,6 +45,12 @@ def cleaning_protocol(raw_text_dict: dict, speaker_tags_df: pd.DataFrame):
     # drop coach speaker tag
     cleaned_coach_text = {
         k: re.sub(r"Coach:", " ", v) for k, v in cleaned_coach_text.items()
+    }
+
+    # fix white space
+    cleaned_coach_text = {
+        k: clean_text.add_whitespace_after_punct(v)
+        for k, v in cleaned_coach_text.items()
     }
 
     new_dict = {k: [raw_text[k]] + [cleaned_coach_text[k]] for k in raw_text.keys()}
@@ -211,3 +217,5 @@ df = df.merge(skills, how="left", left_index=True, right_index=True)
 
 
 df.to_csv(start.clean_filepath + "text_transcripts.csv")
+
+# %%

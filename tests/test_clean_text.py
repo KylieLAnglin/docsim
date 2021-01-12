@@ -29,3 +29,10 @@ def test_filter_segments():
     )
 
     assert result == "[New Speaker] Interviewer: This is string."
+
+
+def test_add_whitespace_after_punct():
+    test = "Hello. Hello.I'm Kylie."
+    result = clean_text.add_whitespace_after_punct(test)
+
+    assert result == "Hello. Hello. I'm Kylie. "

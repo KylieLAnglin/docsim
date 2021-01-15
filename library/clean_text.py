@@ -60,4 +60,8 @@ def filter_segments(
 
 
 def add_whitespace_after_punct(s):
-    return re.sub(r"\.(?! )", ". ", re.sub(r" +", " ", s))
+    return re.sub(r"([.?!])", ". ", re.sub(r" +", " ", s))
+
+
+def remove_trailing_hyphen(s):
+    return re.sub(r"(-+)\s", " ", re.sub(r" +", " ", s))

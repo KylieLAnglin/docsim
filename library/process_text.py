@@ -30,6 +30,7 @@ for word in spacy_stopwords:
             lexeme.is_stop = False
 
 contractions = ["n't", "'d", "'ll", "'m", "'re", "'s", "'ve"]
+spacy_stopwords.update(["-pron-", "-PRON-"])
 
 # %%
 def process_text(
@@ -40,14 +41,14 @@ def process_text(
     lemma: bool = False,
 ):
 
-    if not remove_stopwords:
+    if lemma:  # lemma needs to go first because spacy lemmatizer depends on context
+        doc = " ".join([token.lemma_ for token in nlp(text)])
+
+    elif not lemma:
         doc = " ".join([token.text for token in nlp(text)])
 
-    elif remove_stopwords:
-        doc = " ".join([token.text for token in nlp(text) if not token.is_stop])
-
-    if lemma:
-        doc = " ".join([token.lemma_ for token in nlp(doc)])
+    if remove_stopwords:
+        doc = " ".join([token.text for token in nlp(doc) if not token.is_stop])
 
     if remove_punct:
         doc = " ".join([token.text for token in nlp(doc) if not token.is_punct])

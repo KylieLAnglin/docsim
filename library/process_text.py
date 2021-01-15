@@ -16,7 +16,7 @@ from nltk.corpus import stopwords
 
 from agileteacher.library import start
 
-nlp = spacy.load("en", disable=["parser", "ner"])
+nlp = spacy.load("en_core_web_lg", disable=["parser", "ner"])
 
 # %% Replace spacy stop word list with nltks
 
@@ -31,6 +31,8 @@ for word in spacy_stopwords:
 
 contractions = ["n't", "'d", "'ll", "'m", "'re", "'s", "'ve"]
 spacy_stopwords.update(["-pron-", "-PRON-"])
+
+# %%
 
 # %%
 def process_text(
@@ -57,6 +59,9 @@ def process_text(
         doc = " ".join([token.lower_ for token in nlp(doc)])
 
     return doc
+
+
+# %%
 
 
 # %%
@@ -141,7 +146,7 @@ def remove_tags(text: str, regex_str: str):
 
 # %%
 
-# TODO: Doesn't work with multiindex
+
 def what_words_matter(doc_term_matrix: pd.DataFrame, row1, row2, show_num: int = 5):
     """Given a two vectors in a doc-term matrix, show words /
     that discriminate between the documents.
@@ -158,6 +163,7 @@ def what_words_matter(doc_term_matrix: pd.DataFrame, row1, row2, show_num: int =
     # divide by total word count
     new_df["total"] = new_df.sum(axis=1)
     totals = list(new_df.total)
+    print(totals)
 
     new_df = new_df.div(new_df.total, axis=0).drop(columns=["total"])
 
@@ -189,3 +195,47 @@ def what_words_matter(doc_term_matrix: pd.DataFrame, row1, row2, show_num: int =
     )
 
     return words
+
+
+def top_terms(doc_term_matrix: pd.DataFrame, row, show_num: int = 5):
+    new_df = doc_term_matrix.loc[row].to_frame().sort_values(by=row, ascending=False)
+
+    # divide by total word count
+    total = int(new_df.sum(axis=0))
+    print(total)
+
+    # new_df = new_df.div(new_df.total, axis=0).drop(columns=["total"])
+
+    return new_df.head(show_num)
+
+
+def doc_matrix_with_embeddings(df: pd.DataFrame, text_col: str):
+    df_index = df[[]].reset_index()
+    list_arrays = [ave_word_embedding_for_doc(text) for text in df[text_col]]
+    matrix = pd.concat([df_index, pd.DataFrame(list_arrays)], axis=1)
+    return matrix
+
+
+def weighted_doc_matrix_with_embeddings(tfidf_matrix: pd.DataFrame):
+    df_index = tfidf_matrix[[]].reset_index()
+    list_arrays = [
+        weighted_ave_word_embedding_for_doc(tfidf_matrix=tfidf_matrix, row=row)
+        for row in tfidf_matrix.index
+    ]
+    matrix = pd.concat([df_index, pd.DataFrame(list_arrays)], axis=1)
+    return matrix
+
+
+def weighted_ave_word_embedding_for_doc(tfidf_matrix: pd.DataFrame, row):
+    sum_vector = np.repeat(0, 300)
+    for col, weight in zip(tfidf_matrix.columns, tfidf_matrix.loc[row]):
+        sum_vector = sum_vector + (tfidf_matrix.loc[row][col] * nlp(col).vector)
+    return sum_vector
+
+
+def ave_word_embedding_for_doc(text: str):
+    sum_vector = np.repeat(0, 300)
+    for token in nlp(text):
+        sum_vector = sum_vector + token.vector
+
+    return sum_vector

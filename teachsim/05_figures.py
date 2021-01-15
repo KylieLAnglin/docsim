@@ -10,7 +10,7 @@ from docsim.library import start
 
 
 # %%
-results = pd.read_csv(start.clean_filepath + "results_stop_stem_wgt_lsa.csv").set_index(
+results = pd.read_csv(start.CLEAN_FILEPATH + "results_stop_stem_wgt_lsa.csv").set_index(
     ["study", "id"]
 )
 results["study"] = [i[0] for i in results.index]
@@ -109,7 +109,7 @@ ax.set_ylabel("Kernel Density")
 # fig.text(.1, .05, notes, ha='left', wrap=True)
 
 fig.savefig(
-    start.table_filepath + "Figure 1 Fidelity Score Distributions",
+    start.TABLE_FILEPATH + "Figure 1 Fidelity Score Distributions",
     bbox="tight",
     pad_inches=0.05,
 )
@@ -163,7 +163,7 @@ ax.set_ylabel("Adherence Scores")
 
 
 fig.savefig(
-    start.table_filepath + "Figure 2 Fidelity Scores for Feedback Study 2 by Coach"
+    start.TABLE_FILEPATH + "Figure 2 Fidelity Scores for Feedback Study 2 by Coach"
 )
 plt.show()
 
@@ -234,7 +234,7 @@ fig.text(0.04, 0.5, "Number of Transcripts", va="center", rotation="vertical")
 #     " flagged for manual observation."
 # fig.text(.1, .025, notes, ha='left')
 
-plt.savefig(start.table_filepath + "Figure 3: Fidelity Panels", dpi=200)
+plt.savefig(start.TABLE_FILEPATH + "Figure 3: Fidelity Panels", dpi=200)
 
 # %% plot
 # fall 2017

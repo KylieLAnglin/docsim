@@ -21,10 +21,10 @@ def loadGloveModel(File):
 
 # %%
 
-df_corpus = pd.read_csv(start.clean_filepath + "text_transcripts.csv").set_index(
+df_corpus = pd.read_csv(start.CLEAN_FILEPATH + "text_transcripts.csv").set_index(
     ["study", "id"]
 )
-df_ideal = pd.read_csv(start.clean_filepath + "text_scripts.csv").set_index(
+df_ideal = pd.read_csv(start.CLEAN_FILEPATH + "text_scripts.csv").set_index(
     ["study", "id"]
 )
 df = df_corpus.append(df_ideal)

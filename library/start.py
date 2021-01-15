@@ -1,9 +1,9 @@
 # main_dir = "/Users/kylieanglin/"
-main_dir = "/Users/kylie/"
+MAIN_DIR = "/Users/kylie/"
 
-data_dir = main_dir + "Dropbox/docsim/"
-code_dir = main_dir + "docsim/docsim/"
+DATA_DIR = MAIN_DIR + "Dropbox/docsim/"
+CODE_DIR = MAIN_DIR + "docsim/docsim/"
 
-raw_filepath = data_dir + "data/"
-clean_filepath = data_dir + "data/clean/"
-table_filepath = data_dir + "results/"
+RAW_FILEPATH = DATA_DIR + "data/"
+CLEAN_FILEPATH = DATA_DIR + "data/clean/"
+TABLE_FILEPATH = DATA_DIR + "results/"

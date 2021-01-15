@@ -13,8 +13,8 @@ from library import start
 
 # In[2]:
 
-clean_filepath = start.clean_filepath
-table_filepath = start.table_filepath
+clean_filepath = start.CLEAN_FILEPATH
+table_filepath = start.TABLE_FILEPATH
 
 # In[3]:
 

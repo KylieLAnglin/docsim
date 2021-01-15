@@ -10,13 +10,13 @@ from docsim.library import analyze
 
 # %%
 
-results = pd.read_csv(start.clean_filepath + "results_stop_stem_wgt_lsa.csv").set_index(
+results = pd.read_csv(start.CLEAN_FILEPATH + "results_stop_stem_wgt_lsa.csv").set_index(
     ["study", "id"]
 )
 
 studies = ["fall2017", "fall2018", "spring2018", "spring2019", "fall2019TAP"]
 
-matrix = pd.read_csv(start.clean_filepath + "results_stop_stem_wgt_lsa.csv")
+matrix = pd.read_csv(start.CLEAN_FILEPATH + "results_stop_stem_wgt_lsa.csv")
 matrix["id"] = matrix.id.astype(str)
 matrix = matrix.set_index(["study", "id"])
 

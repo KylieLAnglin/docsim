@@ -2,8 +2,8 @@
 import pandas as pd
 from library import start
 
-clean_filepath = start.clean_filepath
-table_filepath = start.table_filepath
+clean_filepath = start.CLEAN_FILEPATH
+table_filepath = start.TABLE_FILEPATH
 
 # %%
 # %%

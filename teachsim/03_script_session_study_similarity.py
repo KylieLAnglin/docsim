@@ -6,11 +6,11 @@ from docsim.library import analyze
 
 # %%
 
-transcript_df = pd.read_csv(start.clean_filepath + "text_transcripts.csv")
+transcript_df = pd.read_csv(start.CLEAN_FILEPATH + "text_transcripts.csv")
 transcript_df["id"] = transcript_df.id.astype(str)
 transcript_df = transcript_df.set_index(["study", "id"])
 
-script_df = pd.read_csv(start.clean_filepath + "text_scripts.csv").set_index(
+script_df = pd.read_csv(start.CLEAN_FILEPATH + "text_scripts.csv").set_index(
     ["study", "id"]
 )
 text_df = transcript_df.append(script_df)
@@ -66,92 +66,92 @@ def create_results(merged_df: pd.DataFrame):
 
 
 # %% No Pre-Processing
-matrix = pd.read_csv(start.clean_filepath + "matrix.csv")
+matrix = pd.read_csv(start.CLEAN_FILEPATH + "matrix.csv")
 matrix["id"] = matrix.id.astype(str)
 matrix = matrix.set_index(["study", "id"])
 
 df = text_df.merge(matrix, how="left", left_index=True, right_index=True)
 
 results = create_results(merged_df=df)
-results.to_csv(start.clean_filepath + "results.csv")
+results.to_csv(start.CLEAN_FILEPATH + "results.csv")
 
 # %%
-matrix = pd.read_csv(start.clean_filepath + "matrix_stop.csv")
+matrix = pd.read_csv(start.CLEAN_FILEPATH + "matrix_stop.csv")
 matrix["id"] = matrix.id.astype(str)
 matrix = matrix.set_index(["study", "id"])
 
 df = text_df.merge(matrix, how="left", left_index=True, right_index=True)
 
 results = create_results(merged_df=df)
-results.to_csv(start.clean_filepath + "results_stop.csv")
+results.to_csv(start.CLEAN_FILEPATH + "results_stop.csv")
 
 # %%
 # %%
-matrix = pd.read_csv(start.clean_filepath + "matrix_stop_wgt.csv")
+matrix = pd.read_csv(start.CLEAN_FILEPATH + "matrix_stop_wgt.csv")
 matrix["id"] = matrix.id.astype(str)
 matrix = matrix.set_index(["study", "id"])
 
 df = text_df.merge(matrix, how="left", left_index=True, right_index=True)
 
 results = create_results(merged_df=df)
-results.to_csv(start.clean_filepath + "results_stop_wgt.csv")
+results.to_csv(start.CLEAN_FILEPATH + "results_stop_wgt.csv")
 # %%
-matrix = pd.read_csv(start.clean_filepath + "matrix_stop_wgt.csv")
+matrix = pd.read_csv(start.CLEAN_FILEPATH + "matrix_stop_wgt.csv")
 matrix["id"] = matrix.id.astype(str)
 matrix = matrix.set_index(["study", "id"])
 
 df = text_df.merge(matrix, how="left", left_index=True, right_index=True)
 
 results = create_results(merged_df=df)
-results.to_csv(start.clean_filepath + "results_stop_wgt.csv")
+results.to_csv(start.CLEAN_FILEPATH + "results_stop_wgt.csv")
 
 # %%
 
-matrix = pd.read_csv(start.clean_filepath + "matrix_stop_stem_wgt.csv")
+matrix = pd.read_csv(start.CLEAN_FILEPATH + "matrix_stop_stem_wgt.csv")
 matrix["id"] = matrix.id.astype(str)
 matrix = matrix.set_index(["study", "id"])
 
 df = text_df.merge(matrix, how="left", left_index=True, right_index=True)
 
 results = create_results(merged_df=df)
-results.to_csv(start.clean_filepath + "results_stop_stem_wgt.csv")
+results.to_csv(start.CLEAN_FILEPATH + "results_stop_stem_wgt.csv")
 # %%
-matrix = pd.read_csv(start.clean_filepath + "matrix_stop_wgt_lsa.csv")
+matrix = pd.read_csv(start.CLEAN_FILEPATH + "matrix_stop_wgt_lsa.csv")
 matrix["id"] = matrix.id.astype(str)
 matrix = matrix.set_index(["study", "id"])
 
 df = text_df.merge(matrix, how="left", left_index=True, right_index=True)
 
 results = create_results(merged_df=df)
-results.to_csv(start.clean_filepath + "results_stop_wgt_lsa.csv")
+results.to_csv(start.CLEAN_FILEPATH + "results_stop_wgt_lsa.csv")
 #%%
-matrix = pd.read_csv(start.clean_filepath + "matrix_stop_stem_wgt_lsa.csv")
+matrix = pd.read_csv(start.CLEAN_FILEPATH + "matrix_stop_stem_wgt_lsa.csv")
 matrix["id"] = matrix.id.astype(str)
 matrix = matrix.set_index(["study", "id"])
 
 df = text_df.merge(matrix, how="left", left_index=True, right_index=True)
 
 results = create_results(merged_df=df)
-results.to_csv(start.clean_filepath + "results_stop_stem_wgt_lsa.csv")
+results.to_csv(start.CLEAN_FILEPATH + "results_stop_stem_wgt_lsa.csv")
 
 
 # %% Stop Stem
 
-matrix = pd.read_csv(start.clean_filepath + "matrix_stop_stem.csv")
+matrix = pd.read_csv(start.CLEAN_FILEPATH + "matrix_stop_stem.csv")
 matrix["id"] = matrix.id.astype(str)
 matrix = matrix.set_index(["study", "id"])
 
 df = text_df.merge(matrix, how="left", left_index=True, right_index=True)
 
 results = create_results(merged_df=df)
-results.to_csv(start.clean_filepath + "results_stop_stem.csv")
+results.to_csv(start.CLEAN_FILEPATH + "results_stop_stem.csv")
 # %%
-matrix = pd.read_csv(start.clean_filepath + "matrix_lsa.csv")
+matrix = pd.read_csv(start.CLEAN_FILEPATH + "matrix_lsa.csv")
 matrix["id"] = matrix.id.astype(str)
 matrix = matrix.set_index(["study", "id"])
 
 df = text_df.merge(matrix, how="left", left_index=True, right_index=True)
 
 results = create_results(merged_df=df)
-results.to_csv(start.clean_filepath + "results_lsa.csv")
+results.to_csv(start.CLEAN_FILEPATH + "results_lsa.csv")
 # %%

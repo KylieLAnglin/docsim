@@ -69,7 +69,7 @@ def extract_id(dict_with_id: dict, prefix: str, suffix: str):
 # %% Fall 2017
 
 # import text
-filepath = start.raw_filepath + "fall_2017/coaching/"
+filepath = start.RAW_FILEPATH + "fall_2017/coaching/"
 raw_text = clean_text.import_text(
     filepath=filepath, pattern="*docx", paragraph_tag="[New Speaker] "
 )
@@ -96,7 +96,7 @@ fall2017 = text_df
 # %% Spring 2018
 
 # import text
-filepath = start.raw_filepath + "spring_2018/coaching/"
+filepath = start.RAW_FILEPATH + "spring_2018/coaching/"
 raw_text = clean_text.import_text(
     filepath=filepath, pattern="*docx", paragraph_tag="[New Speaker] "
 )
@@ -123,7 +123,7 @@ spring2018 = text_df
 # %% Fall 2018
 
 # import text
-filepath = start.raw_filepath + "fall_2018/coaching/"
+filepath = start.RAW_FILEPATH + "fall_2018/coaching/"
 raw_text = clean_text.import_text(
     filepath=filepath, pattern="*docx", paragraph_tag="[New Speaker] "
 )
@@ -150,7 +150,7 @@ fall2018 = text_df
 # %% Spring2019
 
 # import text
-filepath = start.raw_filepath + "spring_2019/coaching/"
+filepath = start.RAW_FILEPATH + "spring_2019/coaching/"
 raw_text = clean_text.import_text(
     filepath=filepath, pattern="*docx", paragraph_tag="[New Speaker] "
 )
@@ -177,7 +177,7 @@ spring2019 = text_df
 # %% Fall 2019 TAP
 
 # import text
-filepath = start.raw_filepath + "fall_2019_TAP/coaching/"
+filepath = start.RAW_FILEPATH + "fall_2019_TAP/coaching/"
 raw_text = clean_text.import_text(
     filepath=filepath, pattern="*docx", paragraph_tag="[New Speaker] "
 )
@@ -209,13 +209,13 @@ df = df.reset_index().set_index(["study", "id"])
 
 # %% Merge skills
 skills = pd.read_csv(
-    start.raw_filepath + "coaching_notes/" + "skills_and_coaches.csv",
+    start.RAW_FILEPATH + "coaching_notes/" + "skills_and_coaches.csv",
     index_col=["study", "id"],
 )
 
 df = df.merge(skills, how="left", left_index=True, right_index=True)
 
 
-df.to_csv(start.clean_filepath + "text_transcripts.csv")
+df.to_csv(start.CLEAN_FILEPATH + "text_transcripts.csv")
 
 # %%

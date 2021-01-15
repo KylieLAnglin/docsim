@@ -11,10 +11,10 @@ from docsim.library import start
 from docsim.library import analyze
 
 # %%
-MATRIX_FILE = start.clean_filepath + "matrix" + PROCESSING + ".csv"
-TRANSCRIPTS_FILE = start.clean_filepath + "text_transcripts.csv"
-SCRIPTS_FILE = start.clean_filepath + "text_scripts.csv"
-RESULTS_FILE = start.clean_filepath + "results" + PROCESSING + ".csv"
+MATRIX_FILE = start.CLEAN_FILEPATH + "matrix" + PROCESSING + ".csv"
+TRANSCRIPTS_FILE = start.CLEAN_FILEPATH + "text_transcripts.csv"
+SCRIPTS_FILE = start.CLEAN_FILEPATH + "text_scripts.csv"
+RESULTS_FILE = start.CLEAN_FILEPATH + "results" + PROCESSING + ".csv"
 
 
 PROCESSING = "_stop_stem_wgt"

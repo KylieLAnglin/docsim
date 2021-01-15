@@ -8,7 +8,7 @@ from openpyxl import load_workbook
 from docsim.library import start
 
 # %%
-path = start.raw_filepath + "fall_2019_TAP/coaching/"
+path = start.RAW_FILEPATH + "fall_2019_TAP/coaching/"
 
 files = [file for file in os.listdir(path) if fnmatch.fnmatch(file, "*docx")]
 

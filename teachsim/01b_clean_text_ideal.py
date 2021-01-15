@@ -6,7 +6,7 @@ from docsim.library import clean_text
 
 # %% Behavior
 ideal_dict = clean_text.import_text(
-    start.raw_filepath + "models/", pattern="Classroom Management*.docx"
+    start.RAW_FILEPATH + "models/", pattern="Classroom Management*.docx"
 )
 df = pd.DataFrame.from_dict(ideal_dict, orient="index")
 df = df.rename(columns={0: "clean_text"})
@@ -19,7 +19,7 @@ df["skill"] = ["behavior" + str(list(filter(str.isdigit, doc))[0]) for doc in df
 behavior = df
 # %% Feedback
 ideal_dict = clean_text.import_text(
-    start.raw_filepath + "models/", pattern="Feedback Model*.docx"
+    start.RAW_FILEPATH + "models/", pattern="Feedback Model*.docx"
 )
 df = pd.DataFrame.from_dict(ideal_dict, orient="index")
 df = df.rename(columns={0: "clean_text"})
@@ -39,4 +39,4 @@ model_df["id"] = model_df.skill.astype(str) + model_df.id
 model_df = model_df.set_index("id")
 
 # %%
-model_df.to_csv(start.clean_filepath + "text_scripts.csv")
+model_df.to_csv(start.CLEAN_FILEPATH + "text_scripts.csv")

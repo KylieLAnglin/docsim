@@ -10,7 +10,7 @@ from docsim.library import start
 
 
 # %%
-results = pd.read_csv(start.clean_filepath + "results_stop_stem_wgt_lsa.csv").set_index(
+results = pd.read_csv(start.CLEAN_FILEPATH + "results_stop_stem_wgt_lsa.csv").set_index(
     ["study", "id"]
 )
 results["study"] = [i[0] for i in results.index]
@@ -34,7 +34,7 @@ results["study_sim"] = np.where(
     ),
 )
 
-results2 = pd.read_csv(start.clean_filepath + "results_lsa.csv").set_index(
+results2 = pd.read_csv(start.CLEAN_FILEPATH + "results_lsa.csv").set_index(
     ["study", "id"]
 )
 
@@ -216,7 +216,7 @@ ax.set_ylabel("Adherence Scores")
 
 
 fig.savefig(
-    start.table_filepath + "Figure 2 Fidelity Scores for Feedback Study 2 by Coach"
+    start.TABLE_FILEPATH + "Figure 2 Fidelity Scores for Feedback Study 2 by Coach"
 )
 plt.show()
 

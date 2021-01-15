@@ -4,29 +4,32 @@ import pandas as pd
 from docsim.library import start
 from docsim.library import qualtrics
 
-skills_path = start.raw_filepath + "coaching_notes/"
+SKILLS_PATH = start.RAW_FILEPATH + "coaching_notes/"
+
+TEACHSIM_DATASET_PATH = start.RAW_FILEPATH + "HTE_Outcomes_CPP_Final_Dec2020.dta"
+
+STUDY_SHORT_NAMES = {
+    "Fall 2017": "fall2017",
+    "Fall 2018": "fall2018",
+    "Fall 2019": "fall2019notTAP",
+    "Fall 2019 TAP": "fall2019TAP",
+    "Spring 2018": "spring2018",
+    "Spring 2019": "spring2019",
+    "Spring 2020": "spring2020",
+}
+
+LINKING_ROSTER_1819_PATH = SKILLS_PATH + "Linking Roster 2018.csv"
+
+# %%
 
 # %% Import linking doc
-ids_1819 = pd.read_csv(
-    start.raw_filepath + "coaching_notes/" + "Linking Roster 2018.csv"
-).rename(columns={"Email": "email", "ID": "id"})
+ids_1819 = pd.read_csv(LINKING_ROSTER_1819_PATH).rename(
+    columns={"Email": "email", "ID": "id"}
+)
 
 # %% Import final analytic TeachSIM dataset
-sim_data = pd.read_stata(
-    start.raw_filepath + "HTE_Outcomes_CPP_Final_Dec2020.dta",
-    convert_categoricals=False,
-)
-sim_data["study"] = sim_data.ma_study.map(
-    {
-        "Fall 2017": "fall2017",
-        "Fall 2018": "fall2018",
-        "Fall 2019": "fall2019notTAP",
-        "Fall 2019 TAP": "fall2019TAP",
-        "Spring 2018": "spring2018",
-        "Spring 2019": "spring2019",
-        "Spring 2020": "spring2020",
-    }
-)
+sim_data = pd.read_stata(TEACHSIM_DATASET_PATH, convert_categoricals=False)
+sim_data["study"] = sim_data.ma_study.map(STUDY_SHORT_NAMES)
 
 sim_data = sim_data[["id_student", "study", "id_coach"]]
 sim_data = sim_data.rename(columns={"id_student": "id", "id_coach": "coach_id"})
@@ -54,7 +57,7 @@ feedback_num_to_label = {v: k for k, v in feedback_skill_labels.items()}
 
 
 # %% Fall 2017
-skills = pd.read_csv(skills_path + "Fall 2017 Skills.csv")
+skills = pd.read_csv(SKILLS_PATH + "Fall 2017 Skills.csv")
 skills["skill"] = "feedback" + skills.Skill.map(str)
 skills["skill_name"] = skills.skill.map(feedback_num_to_label)
 
@@ -66,7 +69,7 @@ fall2017 = fall2017.set_index(["study", "id"])
 # %% Fall 2018
 # Merge coach id to participant id
 coach_ids = pd.read_excel(
-    skills_path + "Linking Roster (Fall 2018).xlsx",
+    SKILLS_PATH + "Linking Roster (Fall 2018).xlsx",
     sheet_name="Linking Roster",
     engine="openpyxl",
 )[["ParticipantID", "Session3-4_CoachID_New"]].dropna(how="all")
@@ -77,7 +80,7 @@ coach_ids["study"] = "fall2018"
 coach_ids = coach_ids.set_index(["study", "id"])
 
 # Add skills
-notes = pd.read_csv(skills_path + "Fall 2018 Coaching Notes.csv")
+notes = pd.read_csv(SKILLS_PATH + "Fall 2018 Coaching Notes.csv")
 notes = qualtrics.select_valid_rows(notes, keep_previews=True, min_duration=0)
 skills = (
     notes[["Q1", "Q16", "Q6"]].rename(
@@ -93,7 +96,7 @@ fall2018 = skills.set_index(["study", "id"])
 fall2018 = fall2018.merge(coach_ids, how="left", left_index=True, right_index=True)
 
 # %% Spring 2018
-skills = pd.read_csv(skills_path + "Spring 2018 Skills.csv")
+skills = pd.read_csv(SKILLS_PATH + "Spring 2018 Skills.csv")
 skills["skill"] = "behavior" + skills.Skill.map(str)
 skills["skill_name"] = skills.skill.map(behavior_num_to_label)
 
@@ -103,7 +106,7 @@ spring2018["study"] = "spring2018"
 spring2018 = spring2018.set_index(["study", "id"])
 
 # %% Spring 2019
-notes = pd.read_csv(skills_path + "Spring 2019 Coaching Notes.csv")
+notes = pd.read_csv(SKILLS_PATH + "Spring 2019 Coaching Notes.csv")
 notes = qualtrics.select_valid_rows(notes, keep_previews=True, min_duration=0)
 skills = notes[["Q37", "Q38", "Q31", "Q41"]].rename(
     columns={"Q37": "name", "Q38": "email", "Q41": "coach", "Q31": "skill_name"}
@@ -126,7 +129,7 @@ spring2019 = spring2019.dropna(subset=["id"]).set_index(["study", "id"])
 
 
 # %% Fall 2019 TAP
-skills = pd.read_csv(skills_path + "Fall 2019 TAP Skills.csv")
+skills = pd.read_csv(SKILLS_PATH + "Fall 2019 TAP Skills.csv")
 skills["skill"] = "behavior" + skills.skill.map(str)
 skills["skill_name"] = skills.skill.map(behavior_num_to_label)
 
@@ -140,5 +143,5 @@ skill_df = pd.concat([fall2017, fall2018, spring2018, spring2019, fall2019])
 skill_df = skill_df.merge(sim_data, how="left", left_index=True, right_index=True)
 # %% Save
 skill_df.to_csv(
-    start.raw_filepath + "coaching_notes/" + "skills_and_coaches.csv",
+    start.RAW_FILEPATH + "coaching_notes/" + "skills_and_coaches.csv",
 )

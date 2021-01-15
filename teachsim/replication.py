@@ -7,7 +7,7 @@ import numpy as np
 from docsim.library import start
 
 # %%
-replication = pd.read_excel(start.raw_filepath + "replication/capstone_sim_results.xls")
+replication = pd.read_excel(start.RAW_FILEPATH + "replication/capstone_sim_results.xls")
 # %%
 # script similarity
 # lsa, stop, wgt
@@ -22,7 +22,7 @@ replication = replication[
 ].set_index("sim_id")
 
 # %%
-original = pd.read_csv(start.clean_filepath + "results_spring2019.csv").set_index("id")
+original = pd.read_csv(start.CLEAN_FILEPATH + "results_spring2019.csv").set_index("id")
 
 
 # %%
@@ -56,4 +56,4 @@ ax.legend(loc="upper right")
 ax.set_xlabel("Adherence Scores")
 ax.set_ylabel("Kernel Density")
 # %%
-fig.savefig(start.table_filepath + "results_spring2019_replication.png")
+fig.savefig(start.TABLE_FILEPATH + "results_spring2019_replication.png")

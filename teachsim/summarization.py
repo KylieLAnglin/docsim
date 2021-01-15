@@ -2,7 +2,7 @@ import spacy
 import pytextrank
 
 
-transcript_df = pd.read_csv(start.clean_filepath + "text_transcripts.csv")
+transcript_df = pd.read_csv(start.CLEAN_FILEPATH + "text_transcripts.csv")
 transcript_df["id"] = transcript_df.id.astype(str)
 transcript_df = transcript_df.set_index(["study", "id"])
 

@@ -7,7 +7,7 @@ from docsim.library import start
 
 # %%
 
-results = pd.read_csv(start.clean_filepath + "results.csv")
+results = pd.read_csv(start.CLEAN_FILEPATH + "results.csv")
 
 # %%
 
@@ -24,7 +24,7 @@ columns = [2, 3, 4, 5, 6, 7]
 
 # %% Script Similarity
 
-file = start.table_filepath + "table1_fidelity.xlsx"
+file = start.TABLE_FILEPATH + "table1_fidelity.xlsx"
 wb = load_workbook(file)
 ws = wb.active
 
@@ -32,7 +32,7 @@ ws = wb.active
 def script_sim_table(study: str, row: int):
     for tech, col in zip(techniques, columns):
         results = pd.read_csv(
-            start.clean_filepath + "results" + tech + ".csv"
+            start.CLEAN_FILEPATH + "results" + tech + ".csv"
         ).set_index("study", "id")
         value = round(
             results.loc[study].script_sim.mean(),
@@ -53,7 +53,7 @@ script_sim_table("fall2018", 7)
 def study_sim_table(study: str, row: int):
     for tech, col in zip(techniques, columns):
         results = pd.read_csv(
-            start.clean_filepath + "results" + tech + ".csv"
+            start.CLEAN_FILEPATH + "results" + tech + ".csv"
         ).set_index("study", "id")
         value = round(
             results.loc[study].sim_spring2018.mean(),
@@ -63,7 +63,7 @@ def study_sim_table(study: str, row: int):
     wb.save(file)
 
 
-file = start.table_filepath + "table2_replicability.xlsx"
+file = start.TABLE_FILEPATH + "table2_replicability.xlsx"
 wb = load_workbook(file)
 ws = wb.active
 
@@ -96,11 +96,11 @@ def study_matrix(study: str, row: int):
     wb.save(file)
 
 
-file = start.table_filepath + "table3_replicability_matrix.xlsx"
+file = start.TABLE_FILEPATH + "table3_replicability_matrix.xlsx"
 wb = load_workbook(file)
 ws = wb.active
 
-results = pd.read_csv(start.clean_filepath + "results_stop_wgt_lsa.csv").set_index(
+results = pd.read_csv(start.CLEAN_FILEPATH + "results_stop_wgt_lsa.csv").set_index(
     "study", "id"
 )
 

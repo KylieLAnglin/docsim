@@ -11,8 +11,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from library import start
 
-clean_filepath = start.clean_filepath
-table_filepath = start.table_filepath
+clean_filepath = start.CLEAN_FILEPATH
+table_filepath = start.TABLE_FILEPATH
 # %%
 
 transcript_df = pd.read_csv(clean_filepath + 'text_transcripts.csv')
@@ -139,4 +139,3 @@ results_pair[results_pair.feedback2 == True].session_sim.hist()
 results_mean[results_mean.feedback2 == True].session_sim.hist() 
 
 # No but same distribution. Think about this later. 
-                         

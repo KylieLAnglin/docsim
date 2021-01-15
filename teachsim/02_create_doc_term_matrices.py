@@ -6,10 +6,10 @@ from docsim.library import process_text
 
 # %%
 
-df_corpus = pd.read_csv(start.clean_filepath + "text_transcripts.csv").set_index(
+df_corpus = pd.read_csv(start.CLEAN_FILEPATH + "text_transcripts.csv").set_index(
     ["study", "id"]
 )
-df_ideal = pd.read_csv(start.clean_filepath + "text_scripts.csv").set_index(
+df_ideal = pd.read_csv(start.CLEAN_FILEPATH + "text_scripts.csv").set_index(
     ["study", "id"]
 )
 df = df_corpus.append(df_ideal)
@@ -30,7 +30,7 @@ matrix["text"] = [
     for text in df.clean_text
 ]
 
-matrix.to_csv(start.clean_filepath + "matrix.csv")
+matrix.to_csv(start.CLEAN_FILEPATH + "matrix.csv")
 
 # %%
 matrix = process_text.vectorize_text(
@@ -46,7 +46,7 @@ matrix["text"] = [
     )
     for text in df.clean_text
 ]
-matrix.to_csv(start.clean_filepath + "matrix_wgt.csv")
+matrix.to_csv(start.CLEAN_FILEPATH + "matrix_wgt.csv")
 
 # %%
 matrix = process_text.vectorize_text(
@@ -62,7 +62,7 @@ matrix["text"] = [
     )
     for text in df.clean_text
 ]
-matrix.to_csv(start.clean_filepath + "matrix_stop.csv")
+matrix.to_csv(start.CLEAN_FILEPATH + "matrix_stop.csv")
 
 # %%
 # # Stop and weight
@@ -79,7 +79,7 @@ matrix["text"] = [
     )
     for text in df.clean_text
 ]
-matrix.to_csv(start.clean_filepath + "matrix_stop_wgt.csv")
+matrix.to_csv(start.CLEAN_FILEPATH + "matrix_stop_wgt.csv")
 
 # %% Stem
 matrix = process_text.vectorize_text(
@@ -97,7 +97,7 @@ matrix["text"] = [
     )
     for text in df.clean_text
 ]
-matrix.to_csv(start.clean_filepath + "matrix_stem.csv")
+matrix.to_csv(start.CLEAN_FILEPATH + "matrix_stem.csv")
 
 # %% Stop and Stem
 matrix = process_text.vectorize_text(
@@ -114,7 +114,7 @@ matrix["text"] = [
     )
     for text in df.clean_text
 ]
-matrix.to_csv(start.clean_filepath + "matrix_stop_stem.csv")
+matrix.to_csv(start.CLEAN_FILEPATH + "matrix_stop_stem.csv")
 
 
 # %% # Stop Stem and Weight
@@ -131,7 +131,7 @@ matrix["text"] = [
     )
     for text in df.clean_text
 ]
-matrix.to_csv(start.clean_filepath + "matrix_stop_stem_wgt.csv")
+matrix.to_csv(start.CLEAN_FILEPATH + "matrix_stop_stem_wgt.csv")
 
 # %% LSA
 matrix = process_text.vectorize_text(
@@ -147,7 +147,7 @@ matrix["text"] = [
     )
     for text in df.clean_text
 ]
-matrix.to_csv(start.clean_filepath + "matrix_lsa.csv")
+matrix.to_csv(start.CLEAN_FILEPATH + "matrix_lsa.csv")
 
 # %% # LSA + Stop
 matrix = process_text.vectorize_text(
@@ -163,7 +163,7 @@ matrix["text"] = [
     )
     for text in df.clean_text
 ]
-matrix.to_csv(start.clean_filepath + "matrix_stop_lsa.csv")
+matrix.to_csv(start.CLEAN_FILEPATH + "matrix_stop_lsa.csv")
 
 
 # %% LSA, Weighting, Stop Words
@@ -180,7 +180,7 @@ matrix["text"] = [
     )
     for text in df.clean_text
 ]
-matrix.to_csv(start.clean_filepath + "matrix_stop_wgt_lsa.csv")
+matrix.to_csv(start.CLEAN_FILEPATH + "matrix_stop_wgt_lsa.csv")
 
 # %%
 matrix = process_text.vectorize_text(
@@ -196,4 +196,4 @@ matrix["text"] = [
     )
     for text in df.clean_text
 ]
-matrix.to_csv(start.clean_filepath + "matrix_stop_stem_wgt_lsa.csv")
+matrix.to_csv(start.CLEAN_FILEPATH + "matrix_stop_stem_wgt_lsa.csv")

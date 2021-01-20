@@ -15,6 +15,7 @@ def cleaning_protocol(raw_text_dict: dict, speaker_tags_df: pd.DataFrame):
     2. Only keep coach text
     3. Drop tags in brackets
     4. Drop coach tags
+    5. Fix missing white space after periods, question marks, and exclamation points
 
     Args:
         raw_text_dict (dict): Doc ID as keys, text as values

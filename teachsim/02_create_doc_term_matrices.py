@@ -19,6 +19,8 @@ df = df_corpus.append(df_ideal)
 matrix = process_text.vectorize_text(
     df, "clean_text", remove_stopwords=False, tfidf=False, lemma=False, lsa=False
 ).add_prefix("term_")
+
+
 matrix["text"] = [
     process_text.process_text(
         text=text,
@@ -36,6 +38,7 @@ matrix.to_csv(start.CLEAN_FILEPATH + "matrix.csv")
 matrix = process_text.vectorize_text(
     df, "clean_text", remove_stopwords=False, tfidf=True, lemma=False, lsa=False
 ).add_prefix("term_")
+
 matrix["text"] = [
     process_text.process_text(
         text=text,
@@ -52,6 +55,7 @@ matrix.to_csv(start.CLEAN_FILEPATH + "matrix_wgt.csv")
 matrix = process_text.vectorize_text(
     df, "clean_text", remove_stopwords=True, tfidf=False, lemma=False, lsa=False
 ).add_prefix("term_")
+
 matrix["text"] = [
     process_text.process_text(
         text=text,

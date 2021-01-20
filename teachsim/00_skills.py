@@ -20,6 +20,21 @@ STUDY_SHORT_NAMES = {
 
 LINKING_ROSTER_1819_PATH = SKILLS_PATH + "Linking Roster 2018.csv"
 
+BEHAVIOR_SKILL_LABELS = {
+    "Timely redirection": "behavior1",
+    "Specific redirection": "behavior2",
+    "Succinct redirection": "behavior3",
+    "Calm redirection": "behavior4",
+}
+
+FEEDBACK_SKILL_LABELS = {
+    "No coaching conversation, assigned to self reflection": "feedback0",
+    "Probing for textual evidence": "feedback1",
+    "Scaffolding students' understanding": "feedback2",
+    "Providing high-quality descriptive feedback": "feedback3",
+    "Probing for a warrant": "feedback4",
+}
+
 # %%
 
 # %% Import linking doc
@@ -36,24 +51,10 @@ sim_data = sim_data.rename(columns={"id_student": "id", "id_coach": "coach_id"})
 sim_data = sim_data.set_index(["study", "id"])
 
 # %% Label skills
-behavior_skill_labels = {
-    "Timely redirection": "behavior1",
-    "Specific redirection": "behavior2",
-    "Succinct redirection": "behavior3",
-    "Calm redirection": "behavior4",
-}
 
-behavior_num_to_label = {v: k for k, v in behavior_skill_labels.items()}
+behavior_num_to_label = {v: k for k, v in BEHAVIOR_SKILL_LABELS.items()}
 
-feedback_skill_labels = {
-    "No coaching conversation, assigned to self reflection": "feedback0",
-    "Probing for textual evidence": "feedback1",
-    "Scaffolding students' understanding": "feedback2",
-    "Providing high-quality descriptive feedback": "feedback3",
-    "Probing for a warrant": "feedback4",
-}
-
-feedback_num_to_label = {v: k for k, v in feedback_skill_labels.items()}
+feedback_num_to_label = {v: k for k, v in FEEDBACK_SKILL_LABELS.items()}
 
 
 # %% Fall 2017
@@ -87,7 +88,7 @@ skills = (
         columns={"Q1": "name", "Q16": "email", "Q6": "skill_name"}
     )
 ).dropna(how="all")
-skills["skill"] = skills.skill_name.map(feedback_skill_labels)
+skills["skill"] = skills.skill_name.map(FEEDBACK_SKILL_LABELS)
 
 skills = skills.merge(ids_1819[["id", "email"]], how="left", on="email")
 
@@ -120,7 +121,7 @@ skills = skills.merge(
 # linking doc with student IDs. Don't know yet how many transcripts don't \
 # link to a coach
 
-skills["skill"] = skills.skill_name.map(behavior_skill_labels)
+skills["skill"] = skills.skill_name.map(BEHAVIOR_SKILL_LABELS)
 skills = skills.rename(columns={"ID": "id"})[["id", "skill", "skill_name", "coach"]]
 
 spring2019 = skills
@@ -143,5 +144,5 @@ skill_df = pd.concat([fall2017, fall2018, spring2018, spring2019, fall2019])
 skill_df = skill_df.merge(sim_data, how="left", left_index=True, right_index=True)
 # %% Save
 skill_df.to_csv(
-    start.RAW_FILEPATH + "coaching_notes/" + "skills_and_coaches.csv",
+    SKILLS_PATH + "skills_and_coaches.csv",
 )

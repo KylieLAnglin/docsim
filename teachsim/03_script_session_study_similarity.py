@@ -15,7 +15,7 @@ script_df = pd.read_csv(start.CLEAN_FILEPATH + "text_scripts.csv").set_index(
 )
 text_df = transcript_df.append(script_df)
 
-text_df = text_df[["year", "semester", "scenario", "coach", "skill"]]
+text_df = text_df[["year", "semester", "filename", "scenario", "coach", "skill"]]
 
 # %% Create results
 def create_results(merged_df: pd.DataFrame):
@@ -39,7 +39,16 @@ def create_results(merged_df: pd.DataFrame):
     ]
 
     results = new_df[
-        ["year", "semester", "scenario", "skill", "coach", "text", "script_sim"]
+        [
+            "filename",
+            "year",
+            "semester",
+            "scenario",
+            "skill",
+            "coach",
+            "text",
+            "script_sim",
+        ]
     ]
 
     results["sim_fall2017"] = analyze.pairwise_distance(

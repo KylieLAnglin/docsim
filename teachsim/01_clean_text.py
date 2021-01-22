@@ -59,12 +59,22 @@ def cleaning_protocol(raw_text_dict: dict, speaker_tags_df: pd.DataFrame):
     return new_dict
 
 
-def extract_id(dict_with_id: dict, prefix: str, suffix: str):
+def extract_id_from_dict(dict_with_id: dict, prefix: str, suffix: str):
     new_dict = dictionary_tools.replace_string_key(dict_with_id, prefix, "")
     new_dict = dictionary_tools.replace_string_key(new_dict, suffix, "")
     new_dict = dictionary_tools.string_key_as_int(new_dict)
 
     return new_dict
+
+
+def extract_id_from_column(df: pd.DataFrame, prefix: str, suffix: str):
+    new_df = df.copy()
+    new_df["id"] = new_df.index
+    new_df["id"] = new_df.id.str.replace(prefix, "")
+    new_df["id"] = new_df.id.str.replace(suffix, "")
+    new_df["id"] = new_df["id"].astype(int)
+
+    return new_df
 
 
 # %% Fall 2017
@@ -77,21 +87,25 @@ raw_text = clean_text.import_text(
 
 # import speaker tags
 speaker_tags_df = pd.read_csv(filepath + "fall2017_speaker_tags.csv", header=0)
-
 cleaned_dict = cleaning_protocol(raw_text, speaker_tags_df)
 
-cleaned_dict = extract_id(cleaned_dict, prefix="", suffix="_c_Transcript.docx")
 
 text_df = pd.DataFrame.from_dict(
     cleaned_dict,
     orient="index",
     columns=["raw_text", "clean_text"],
 )
+
+
+text_df = extract_id_from_column(text_df, "", "_c_Transcript.docx")
+text_df = text_df.reset_index()
+text_df = text_df.rename(columns={"index": "filename"})
+
 text_df["study"] = "fall2017"
 text_df["year"] = 2017
 text_df["semester"] = "fall"
 text_df["scenario"] = "feedback"
-text_df = text_df.reset_index().rename(columns={"index": "id"}).set_index("id")
+text_df = text_df.set_index("id")
 fall2017 = text_df
 
 # %% Spring 2018
@@ -107,19 +121,25 @@ speaker_tags_df = pd.read_csv(filepath + "spring2018_speaker_tags.csv", header=0
 
 cleaned_dict = cleaning_protocol(raw_text, speaker_tags_df)
 
-cleaned_dict = extract_id(cleaned_dict, prefix="", suffix="-2C.docx")
 
 text_df = pd.DataFrame.from_dict(
     cleaned_dict,
     orient="index",
     columns=["raw_text", "clean_text"],
 )
+
+
+text_df = extract_id_from_column(text_df, prefix="", suffix="-2C.docx")
+text_df = text_df.reset_index()
+text_df = text_df.rename(columns={"index": "filename"})
+
 text_df["study"] = "spring2018"
 text_df["year"] = 2018
 text_df["semester"] = "spring"
 text_df["scenario"] = "behavior"
-text_df = text_df.reset_index().rename(columns={"index": "id"}).set_index("id")
+text_df = text_df.set_index("id")
 spring2018 = text_df
+
 
 # %% Fall 2018
 
@@ -134,18 +154,23 @@ speaker_tags_df = pd.read_csv(filepath + "fall2018_speaker_tags.csv", header=0)
 
 cleaned_dict = cleaning_protocol(raw_text, speaker_tags_df)
 
-cleaned_dict = extract_id(cleaned_dict, prefix="2018_", suffix="_3C_Transcript.docx")
 
 text_df = pd.DataFrame.from_dict(
     cleaned_dict,
     orient="index",
     columns=["raw_text", "clean_text"],
 )
+
+
+text_df = extract_id_from_column(text_df, prefix="2018_", suffix="_3C_Transcript.docx")
+text_df = text_df.reset_index()
+text_df = text_df.rename(columns={"index": "filename"})
+
 text_df["study"] = "fall2018"
 text_df["year"] = 2018
 text_df["semester"] = "fall"
 text_df["scenario"] = "feedback"
-text_df = text_df.reset_index().rename(columns={"index": "id"}).set_index("id")
+text_df = text_df.set_index("id")
 fall2018 = text_df
 
 # %% Spring2019
@@ -161,18 +186,22 @@ speaker_tags_df = pd.read_csv(filepath + "Spring2019_speaker_tags.csv", header=0
 
 cleaned_dict = cleaning_protocol(raw_text, speaker_tags_df)
 
-cleaned_dict = extract_id(cleaned_dict, prefix="2019_", suffix="_5C_Transcript.docx")
-
 text_df = pd.DataFrame.from_dict(
     cleaned_dict,
     orient="index",
     columns=["raw_text", "clean_text"],
 )
+
+text_df = extract_id_from_column(text_df, prefix="2019_", suffix="_5C_Transcript.docx")
+text_df = text_df.reset_index()
+text_df = text_df.rename(columns={"index": "filename"})
+
+
 text_df["study"] = "spring2019"
 text_df["year"] = 2019
 text_df["semester"] = "spring"
 text_df["scenario"] = "behavior"
-text_df = text_df.reset_index().rename(columns={"index": "id"}).set_index("id")
+text_df = text_df.set_index("id")
 spring2019 = text_df
 
 # %% Fall 2019 TAP
@@ -188,20 +217,25 @@ speaker_tags_df = pd.read_csv(filepath + "fall2019TAP_speaker_tags.csv", header=
 
 cleaned_dict = cleaning_protocol(raw_text, speaker_tags_df)
 
-cleaned_dict = extract_id(
-    cleaned_dict, prefix="01_1920_05_", suffix="_22c_Transcript.docx"
-)
 
 text_df = pd.DataFrame.from_dict(
     cleaned_dict,
     orient="index",
     columns=["raw_text", "clean_text"],
 )
+
+text_df = extract_id_from_column(
+    text_df, prefix="01_1920_05_", suffix="_22c_Transcript.docx"
+)
+text_df = text_df.reset_index()
+text_df = text_df.rename(columns={"index": "filename"})
+
+
 text_df["study"] = "fall2019TAP"
 text_df["year"] = 2019
 text_df["semester"] = "fall"
 text_df["scenario"] = "behavior"
-text_df = text_df.reset_index().rename(columns={"index": "id"}).set_index("id")
+text_df = text_df.set_index("id")
 fall2019TAP = text_df
 
 # %% Concatenate

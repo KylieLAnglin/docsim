@@ -8,6 +8,8 @@ from docsim.library import start
 # %%
 results = pd.read_csv(start.CLEAN_FILEPATH + "results_stop_stem_wgt_lsa.csv")
 results["filename"] = results.filename.str.replace(".docx", "")
+results["filename"] = results.filename.str.replace("_Transcript", "")
+
 results = results.set_index("filename")
 # %%
 gold_standard = pd.read_excel(start.RAW_FILEPATH + "Fidelity Coding Behavior.xlsx")
@@ -39,7 +41,7 @@ validation = validation[["script_sim", "fidelity"]]
 
 # %%
 
-mod = smf.ols(formula="script_sim ~ fidelity", data=validation)
+mod = smf.ols(formula="script_sim ~ + fidelity", data=validation)
 res = mod.fit()
 print(res.summary())
 

@@ -73,6 +73,14 @@ def remove_trailing_hyphen(s):
     return re.sub(r"(-+)\s", " ", re.sub(r" +", " ", s))
 
 
+def remove_leading_hyphen(s):
+    return re.sub(r"\s(-+)", " ", re.sub(r" +", " ", s))
+
+
+def remove_hyphens(s):
+    return s.replace("-", " ")
+
+
 def word_family_from_dict(text: str, families: dict):
     """Replace words found in dictionary values (list) with key
 

@@ -30,10 +30,30 @@ for word in spacy_stopwords:
             lexeme.is_stop = False
 
 contractions = ["n't", "'d", "'ll", "'m", "'re", "'s", "'ve"]
-spacy_stopwords.update(["-pron-", "-PRON-"])
-spacy_stopwords.update(["um", "uhm", "umm"])
-spacy_stopwords.update(["okay", "so", "yeah", "really", "kind", "of"])
+spacy_stopwords.update(
+    [
+        "-pron-",
+        "-PRON-",
+    ]
+)
 
+spacy_stopwords.update(
+    [
+        "um",
+        "uhm",
+        "umm",
+        # "okay",
+        # "so",
+        # "yeah",
+        # "really",
+        # "kind",
+        # "of",
+    ]
+)
+
+for word in spacy_stopwords:
+    lexeme = nlp.vocab[word]
+    lexeme.is_stop = True
 
 # %%
 
@@ -52,14 +72,14 @@ def process_text(
     elif not lemma:
         doc = " ".join([token.text for token in nlp(text)])
 
-    if remove_stopwords:
-        doc = " ".join([token.text for token in nlp(doc) if not token.is_stop])
-
     if remove_punct:
         doc = " ".join([token.text for token in nlp(doc) if not token.is_punct])
 
     if lower_case:
         doc = " ".join([token.lower_ for token in nlp(doc)])
+
+    if remove_stopwords:
+        doc = " ".join([token.text for token in nlp(doc) if not token.is_stop])
 
     return doc
 

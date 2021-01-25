@@ -54,6 +54,11 @@ def cleaning_protocol(raw_text_dict: dict, speaker_tags_df: pd.DataFrame):
         for k, v in cleaned_coach_text.items()
     }
 
+    # remove hyphens
+    cleaned_coach_text = {
+        k: clean_text.remove_hyphens(v) for k, v in cleaned_coach_text.items()
+    }
+
     new_dict = {k: [raw_text[k]] + [cleaned_coach_text[k]] for k in raw_text.keys()}
 
     return new_dict

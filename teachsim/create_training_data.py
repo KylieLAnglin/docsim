@@ -36,7 +36,6 @@ gold_standard["fidelity"] = (
 )
 gold_standard = gold_standard[["fidelity"]]
 
-plt.hist(gold_standard.fidelity)
 # %%
 
 validation = gold_standard.merge(
@@ -56,6 +55,11 @@ validation = validation[
         "script_sim",
     ]
 ]
+
+validation = (
+    validation.reset_index().rename(columns={"index": "filename"}).set_index("filename")
+)
+# %%
 
 validation.to_csv(start.TABLE_FILEPATH + "training_full.csv")
 

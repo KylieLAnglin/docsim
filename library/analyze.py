@@ -30,9 +30,10 @@ def max_sim_of_rows(matrix: pd.DataFrame, main_index, comp_indices: list):
         [type]: [description]
     """
     if len(comp_indices) > 0:
-        max_sim = max(
-            [cosine_similarity_row(matrix, main_index, comp) for comp in comp_indices]
-        )
+        sims = [
+            cosine_similarity_row(matrix, main_index, comp) for comp in comp_indices
+        ]
+        max_sim = max(sims)
     else:
         max_sim = np.nan
 

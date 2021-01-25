@@ -4,48 +4,42 @@ import pandas as pd
 import statsmodels.formula.api as smf
 import matplotlib.pyplot as plt
 from docsim.library import start
+from docsim.library import analyze
+from docsim.library import process_text
 
-# %%
-results = pd.read_csv(start.CLEAN_FILEPATH + "results_stop_stem_wgt_lsa.csv")
-results["filename"] = results.filename.str.replace(".docx", "")
-results["filename"] = results.filename.str.replace("_Transcript", "")
+# %% import
 
-results = results.set_index("filename")
-# %%
-gold_standard = pd.read_excel(start.RAW_FILEPATH + "Fidelity Coding Behavior.xlsx")
-gold_standard = gold_standard.rename(
-    columns={
-        "Transcript File Name": "doc",
-        "Opening Components (out of 3)": "opening",
-        "Skill-Building Components (Out of 6)": "skill_building",
-        "Practice Components (out of 6)": "practice",
-        "Closing Components (out of 2)": "closing",
-    }
-).set_index("doc")
-
-gold_standard["fidelity"] = (
-    gold_standard.opening
-    + gold_standard.skill_building
-    + gold_standard.practice
-    + gold_standard.closing
-)
-
-# %%
-gold_standard = gold_standard[["fidelity"]]
-
-validation = gold_standard.merge(
-    results, how="inner", left_index=True, right_index=True
-)
-
-validation = validation[["script_sim", "fidelity"]]
+training = pd.read_csv(start.TABLE_FILEPATH + "training.csv")
 
 # %%
 
-mod = smf.ols(formula="script_sim ~ + fidelity", data=validation)
+mod = smf.ols(formula="script_sim ~ + fidelity", data=training)
 res = mod.fit()
 print(res.summary())
 
 
 # %%
-plt.plot(validation.script_sim, validation.fidelity, "o", color="black")
+plt.plot(training.fidelity, training.script_sim, "o", color="black", alpha=0.1)
+
+
+# %%
+validation[validation.fidelity == 10]
+
+# %%
+matrix = pd.read_csv(start.CLEAN_FILEPATH + "matrix_stop_stem_wgt.csv")
+matrix["id"] = matrix.id.astype(str)
+matrix = matrix.set_index(["study", "id"])
+matrix = matrix[list(matrix.filter(regex=("term")))]
+
+
+# %%
+scripts = results[(results.study == "model") & (results.scenario == "behavior")]
+scripts = scripts.set_index(["study", "id"])
+script_list = scripts.index.tolist()
+
+analyze.max_sim_of_rows_index(matrix, ("spring2019", "58"), script_list)
+
+process_text.what_words_matter(
+    matrix, ("spring2019", "58"), ("model", "behavior2a"), 10
+)
 # %%

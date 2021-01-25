@@ -46,6 +46,8 @@ families = {
         "impersonate",
     ],
     "avatar": ["Ethan", "Dev"],
+    "going": ["gon"],
+    "to": ["na"],
 }
 
 # %%
@@ -67,10 +69,26 @@ df["script_sim1"] = [
 process_text.what_words_matter(matrix, "6-2C", "behavior2", 10)
 process_text.what_words_matter(matrix, "49-2C", "behavior3", 10)
 process_text.what_words_matter(matrix, "78-2C", "behavior3", 10)
+process_text.what_words_matter(matrix, "2019_81_5C", "behavior3", 10)
+process_text.what_words_matter(matrix, "6-2C", "behavior2", 10)
 
+
+process_text.what_words_matter(matrix, "2019_58_5C", "behavior2", 20)
+
+# %%
+matrix = process_text.vectorize_text(
+    df, "new_text", remove_stopwords=True, tfidf=False, lemma=True, lsa=False
+).add_prefix("term_")
+
+df["script_sim2"] = [
+    analyze.cosine_similarity_row(matrix, row, df.loc[row].skill)
+    for row in matrix.index
+]
+
+process_text.what_words_matter(matrix, "6-2C", "behavior2", 20)
 
 # %%
 
-df["script_sim1"].to_csv(start.CLEAN_FILEPATH + "vectorizations.csv")
+df[["script_sim1", "script_sim2"]].to_csv(start.CLEAN_FILEPATH + "vectorizations.csv")
 
 # %%

@@ -17,12 +17,7 @@ training = training.merge(
     results, how="left", left_on="filename", right_on="filename", indicator=True
 )
 
-# training = training[training.training == 1]
-# %% Old
-
-mod = smf.ols(formula="script_sim ~ + fidelity", data=training)
-res = mod.fit()
-print(res.summary())
+training = training[training.training == 1]
 
 
 # %% New
@@ -34,5 +29,12 @@ print(res.summary())
 plt.plot(training.fidelity, training.script_sim1, "o", color="black", alpha=0.1)
 
 training.fidelity.corr(training.script_sim1)
+
+# %%
+mod = smf.ols(formula="script_sim2 ~ + fidelity", data=training)
+res = mod.fit()
+print(res.summary())
+
+plt.plot(training.fidelity, training.script_sim2, "o", color="black", alpha=0.1)
 
 # %%

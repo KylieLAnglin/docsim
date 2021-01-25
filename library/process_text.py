@@ -31,6 +31,8 @@ for word in spacy_stopwords:
 
 contractions = ["n't", "'d", "'ll", "'m", "'re", "'s", "'ve"]
 spacy_stopwords.update(["-pron-", "-PRON-"])
+spacy_stopwords.update(["um", "uhm", "okay", "so", "yeah"])
+
 
 # %%
 
@@ -203,7 +205,7 @@ def top_terms(doc_term_matrix: pd.DataFrame, row, show_num: int = 5):
 
     new_df = pd.DataFrame(list(zip(words, frequencies)), columns=["words", "frequency"])
     new_df = new_df.reset_index()
-    #new_df = new_df.sort_values(by=["frequency"])
+    # new_df = new_df.sort_values(by=["frequency"])
     # print(new_df.columns[0])
 
     # new_df = new_df.sort_values(by=new_df.columns[0], ascending=False)

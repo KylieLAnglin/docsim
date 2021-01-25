@@ -16,3 +16,7 @@ src.code-workspace
 *.ipynb
 zz_archive/
 *checkpoint.ipynb
+*.DS_Store
+.DS_Store
+.DS_Store
+.DS_Store

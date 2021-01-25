@@ -31,7 +31,8 @@ for word in spacy_stopwords:
 
 contractions = ["n't", "'d", "'ll", "'m", "'re", "'s", "'ve"]
 spacy_stopwords.update(["-pron-", "-PRON-"])
-spacy_stopwords.update(["um", "uhm", "okay", "so", "yeah"])
+spacy_stopwords.update(["um", "uhm", "umm"])
+spacy_stopwords.update(["okay", "so", "yeah", "really", "kind", "of"])
 
 
 # %%
@@ -82,7 +83,7 @@ def vectorize_text(
     docs = [
         process_text(
             text,
-            lower_case=False,
+            lower_case=True,
             remove_punct=False,
             remove_stopwords=remove_stopwords,
             lemma=lemma,

@@ -13,8 +13,8 @@ results["filename"] = results.filename.str.replace("_Transcript", "")
 training = results.set_index("filename")
 training = training[training.study != "model"]
 training = training[training.scenario == "behavior"]
-training = training.sample(50, random_state=7)
-
+subset = training.sample(50, random_state=7)
+training["training"] = np.where(training.index.isin(subset.index), 1, 0)
 
 # %%
 gold_standard = pd.read_excel(start.RAW_FILEPATH + "Fidelity Coding Behavior.xlsx")
@@ -51,6 +51,7 @@ validation = validation[
         "scenario",
         "skill",
         "coach",
+        "training",
         "fidelity",
         "script_sim",
     ]

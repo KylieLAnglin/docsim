@@ -13,6 +13,8 @@ df_ideal = pd.read_csv(start.CLEAN_FILEPATH + "text_scriptsV2.csv")
 df = df_corpus.append(df_ideal)
 
 df["filename"] = df.filename.str.replace(".docx", "")
+df["filename"] = df.filename.str.replace("_Transcript", "")
+
 df = df.set_index("filename")
 
 df = df.dropna(subset=["skill"])
@@ -36,6 +38,12 @@ families = {
         "sing",
         "singing",
         "texting",
+        "drum",
+        "drumming",
+        "impersonation",
+        "impersonations",
+        "impersonating",
+        "impersonate",
     ],
     "avatar": ["Ethan", "Dev"],
 }
@@ -48,7 +56,7 @@ df["new_text"] = [
 
 # %%
 matrix = process_text.vectorize_text(
-    df, "new_text", remove_stopwords=True, tfidf=False, lemma=True, lsa=False
+    df, "new_text", remove_stopwords=True, tfidf=False, lemma=False, lsa=False
 ).add_prefix("term_")
 
 df["script_sim1"] = [
@@ -58,6 +66,7 @@ df["script_sim1"] = [
 
 process_text.what_words_matter(matrix, "6-2C", "behavior2", 10)
 process_text.what_words_matter(matrix, "49-2C", "behavior3", 10)
+process_text.what_words_matter(matrix, "78-2C", "behavior3", 10)
 
 
 # %%

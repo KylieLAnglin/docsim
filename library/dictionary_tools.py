@@ -50,3 +50,30 @@ def string_key_as_int(input_dict: dict):
         [dict]: new dictionary with int keys
     """
     return {int(k): v for k, v in input_dict.items()}
+
+
+test = {
+    "misbehavior": ["hum", "humming"],
+    "avatar": ["Ethan"],
+}
+result = {"hum": "misbehavior", "humming": "misbehavior", "Ethan": "avatar"}
+
+
+def long_inverse_dict_from_key_list(input_dict: dict):
+    """Given dict with list in values, create new dict with entry for term in lists with key now value
+
+    Args:
+        input_dict (dict): Dictionary with list as values
+
+    Returns:
+        new_dict (dict): Dictionary with key for every value in old dict
+    """
+    new_dict = {}
+    for key, value in input_dict.items():
+        for entry in value:
+            new_dict[entry] = key
+
+    return new_dict
+
+
+result = long_inverse_dict_from_key_list(test)

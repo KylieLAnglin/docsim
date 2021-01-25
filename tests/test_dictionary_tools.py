@@ -27,3 +27,12 @@ def test_replace_string_key():
 def test_string_key_as_int():
     result = dictionary_tools.string_key_as_int(test_dictionary_with_int_keys)
     assert result[1] == "test"
+
+
+def test_long_inverse_dict_from_key_list():
+    test = {
+        "misbehavior": ["hum", "humming"],
+        "avatar": ["Ethan"],
+    }
+    result = dictionary_tools.long_inverse_dict_from_key_list(test)
+    assert result["humming"] == "misbehavior"

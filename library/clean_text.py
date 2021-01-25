@@ -1,8 +1,14 @@
 import os
 import fnmatch
 import re
+import spacy
+
+nlp = spacy.load("en_core_web_lg", disable=["parser", "ner"])
+
 
 import docx
+
+from docsim.library import dictionary_tools
 
 
 def import_text(filepath: str, pattern: str, paragraph_tag: str = None):
@@ -65,3 +71,31 @@ def add_whitespace_after_punct(s):
 
 def remove_trailing_hyphen(s):
     return re.sub(r"(-+)\s", " ", re.sub(r" +", " ", s))
+
+
+def word_family_from_dict(text: str, families: dict):
+    """Replace words found in dictionary values (list) with key
+
+    Args:
+        text (str): String with substrings to replace
+        families (dict): Word family name in key, list of members as value
+
+    Returns:
+        new_text: String with word family members replaced with word family name
+    """
+    new_dict = dictionary_tools.long_inverse_dict_from_key_list(families)
+    doc = nlp(text)
+    old_words = list(new_dict.keys())
+
+    new_text = ""
+    for token in doc:
+        token = str(token.text)
+        if token in old_words:
+            token = token.replace(token, new_dict[token])
+
+        new_text = new_text + token + " "
+
+    # for word in new_dict:
+    #     new_text = new_text.replace(word, new_dict[word])
+
+    return new_text

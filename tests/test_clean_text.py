@@ -35,4 +35,20 @@ def test_add_whitespace_after_punct():
     test = "Hello. Hello.I'm Kylie."
     result = clean_text.add_whitespace_after_punct(test)
 
-    assert result == "Hello. Hello. I'm Kylie. "
+    assert result == "Hello.  Hello. I'm Kylie. "
+
+
+def test_word_family_from_dict():
+    test = "Ethan was humming, playing on his phone, and whispering. These are misbehaviors."
+
+    families = {
+        "misbehavior": ["hum", "humming", "phone", "whispering"],
+        "avatar": ["Ethan"],
+    }
+
+    result = clean_text.word_family_from_dict(text=test, families=families)
+
+    assert (
+        "avatar was misbehavior , playing on his misbehavior , and misbehavior . These are misbehaviors . "
+        == result
+    )

@@ -38,3 +38,8 @@ print(res.summary())
 plt.plot(training.fidelity, training.script_sim2, "o", color="black", alpha=0.1)
 
 # %%
+mod = smf.ols(formula="script_sim3 ~ + fidelity", data=training)
+res = mod.fit()
+print(res.summary())
+
+# %%

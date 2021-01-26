@@ -44,6 +44,10 @@ families = {
         "impersonations",
         "impersonating",
         "impersonate",
+        "darth",
+        "impression",
+        "noise",
+        "noises",
     ],
     "avatar": ["Ethan", "Dev"],
     "going": ["gon"],
@@ -86,9 +90,23 @@ df["script_sim2"] = [
 ]
 
 process_text.what_words_matter(matrix, "6-2C", "behavior2", 20)
+process_text.what_words_matter(matrix, "01_1920_05_008_22c", "behavior2", 20)
+process_text.top_terms(matrix, "01_1920_05_008_22c", 10)
+
+# %%
+matrix = process_text.vectorize_text(
+    df, "new_text", remove_stopwords=True, tfidf=True, lemma=True, lsa=False
+).add_prefix("term_")
+
+df["script_sim3"] = [
+    analyze.cosine_similarity_row(matrix, row, df.loc[row].skill)
+    for row in matrix.index
+]
 
 # %%
 
-df[["script_sim1", "script_sim2"]].to_csv(start.CLEAN_FILEPATH + "vectorizations.csv")
+df[["script_sim1", "script_sim2", "script_sim3"]].to_csv(
+    start.CLEAN_FILEPATH + "vectorizations.csv"
+)
 
 # %%

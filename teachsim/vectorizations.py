@@ -1,6 +1,9 @@
 # %%
 import pandas as pd
 
+from gensim.models.doc2vec import Doc2Vec, TaggedDocument
+
+
 from docsim.library import start
 from docsim.library import process_text
 from docsim.library import analyze
@@ -48,10 +51,14 @@ families = {
         "impression",
         "noise",
         "noises",
+        "mumble",
+        "game",
+        "silly",
     ],
-    "avatar": ["Ethan", "Dev"],
+    "avatar": ["Ethan", "Dev", "Ava", "Jasmine"],
     "going": ["gon"],
     "to": ["na"],
+    "redirection": ["voice", "pocket", "eyes", "ears", "finger", "verbal"],
 }
 
 # %%
@@ -61,52 +68,104 @@ df["new_text"] = [
 ]
 
 # %%
-matrix = process_text.vectorize_text(
+matrix0 = process_text.vectorize_text(
+    df, "new_text", remove_stopwords=False, tfidf=False, lemma=False, lsa=False
+).add_prefix("term_")
+
+df["script_sim0"] = [
+    analyze.cosine_similarity_row(matrix0, row, df.loc[row].skill)
+    for row in matrix0.index
+]
+
+# %%
+matrix1 = process_text.vectorize_text(
     df, "new_text", remove_stopwords=True, tfidf=False, lemma=False, lsa=False
 ).add_prefix("term_")
 
 df["script_sim1"] = [
-    analyze.cosine_similarity_row(matrix, row, df.loc[row].skill)
-    for row in matrix.index
+    analyze.cosine_similarity_row(matrix1, row, df.loc[row].skill)
+    for row in matrix1.index
 ]
 
-process_text.what_words_matter(matrix, "6-2C", "behavior2", 10)
-process_text.what_words_matter(matrix, "49-2C", "behavior3", 10)
-process_text.what_words_matter(matrix, "78-2C", "behavior3", 10)
-process_text.what_words_matter(matrix, "2019_81_5C", "behavior3", 10)
-process_text.what_words_matter(matrix, "6-2C", "behavior2", 10)
+process_text.what_words_matter(matrix1, "6-2C", "behavior2", 10)
+process_text.what_words_matter(matrix1, "49-2C", "behavior3", 10)
+process_text.what_words_matter(matrix1, "78-2C", "behavior3", 10)
+process_text.what_words_matter(matrix1, "2019_81_5C", "behavior3", 10)
+process_text.what_words_matter(matrix1, "6-2C", "behavior2", 10)
 
+process_text.what_words_matter(matrix1, "2019_58_5C", "behavior2", 10)
 
-process_text.what_words_matter(matrix, "2019_58_5C", "behavior2", 20)
+process_text.what_words_matter(matrix1, "2019_58_5C", "behavior2", 20)
 
 # %%
-matrix = process_text.vectorize_text(
+matrix2 = process_text.vectorize_text(
     df, "new_text", remove_stopwords=True, tfidf=False, lemma=True, lsa=False
 ).add_prefix("term_")
 
 df["script_sim2"] = [
-    analyze.cosine_similarity_row(matrix, row, df.loc[row].skill)
-    for row in matrix.index
+    analyze.cosine_similarity_row(matrix2, row, df.loc[row].skill)
+    for row in matrix2.index
 ]
 
-process_text.what_words_matter(matrix, "6-2C", "behavior2", 20)
-process_text.what_words_matter(matrix, "01_1920_05_008_22c", "behavior2", 20)
-process_text.top_terms(matrix, "01_1920_05_008_22c", 10)
+process_text.what_words_matter(matrix2, "6-2C", "behavior2", 20)
+process_text.what_words_matter(matrix2, "01_1920_05_008_22c", "behavior2", 20)
+process_text.top_terms(matrix2, "01_1920_05_008_22c", 10)
 
-# %%
-matrix = process_text.vectorize_text(
-    df, "new_text", remove_stopwords=True, tfidf=True, lemma=True, lsa=False
-).add_prefix("term_")
+process_text.what_words_matter(matrix2, "99-2C", "behavior3", 20)
 
-df["script_sim3"] = [
-    analyze.cosine_similarity_row(matrix, row, df.loc[row].skill)
-    for row in matrix.index
-]
 
-# %%
+# # %%
+# matrix = process_text.vectorize_text(
+#     df, "new_text", remove_stopwords=True, tfidf=False, lemma=True, lsa=True
+# ).add_prefix("term_")
 
-df[["script_sim1", "script_sim2", "script_sim3"]].to_csv(
-    start.CLEAN_FILEPATH + "vectorizations.csv"
-)
+# df["script_sim2_lsa"] = [
+#     analyze.cosine_similarity_row(matrix, row, df.loc[row].skill)
+#     for row in matrix.index
+# ]
+
+# process_text.what_words_matter(matrix, "6-2C", "behavior2", 20)
+# process_text.what_words_matter(matrix, "01_1920_05_008_22c", "behavior2", 20)
+# # process_text.top_terms(matrix, "01_1920_05_008_22c", 10)
+
+
+# # %%
+# matrix = process_text.vectorize_text(
+#     df, "new_text", remove_stopwords=True, tfidf=True, lemma=True, lsa=False
+# ).add_prefix("term_")
+
+# df["script_sim3"] = [
+#     analyze.cosine_similarity_row(matrix, row, df.loc[row].skill)
+#     for row in matrix.index
+# ]
+
+# process_text.what_words_matter(matrix, "6-2C", "behavior2", 20)
+
+# # %% Doc 2 Vec
+
+# model = Doc2Vec.load(start.CLEAN_FILEPATH + "doc2vec.model")
+
+# tokenized_docs = [word_tokenize(row.lower()) for row in df.clean_text]
+
+# matrix_lists = [model.infer_vector(doc) for doc in tokenized_docs]
+# matrix = pd.DataFrame(matrix_lists, index=df.index)
+
+# df["script_sim4"] = [
+#     analyze.cosine_similarity_row(matrix, row, df.loc[row].skill)
+#     for row in matrix.index
+# ]
+
+# # %%
+
+df[
+    [
+        "script_sim0",
+        "script_sim1",
+        "script_sim2",
+        # "script_sim2_lsa",
+        # "script_sim3",
+        # "script_sim4",
+    ]
+].to_csv(start.CLEAN_FILEPATH + "vectorizations.csv")
 
 # %%

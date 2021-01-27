@@ -228,15 +228,7 @@ def top_terms(doc_term_matrix: pd.DataFrame, row, show_num: int = 5):
 
     new_df = pd.DataFrame(list(zip(words, frequencies)), columns=["words", "frequency"])
     new_df = new_df.reset_index()
-    new_df = new_df.sort_values(by=["frequency"])
-
-    new_df = new_df.sort_values(by=new_df.columns[0], ascending=False)
-
-    divide by total word count
-    total = int(new_df.sum(axis=0))
-    print(total)
-
-    new_df = new_df.div(new_df.total, axis=0).drop(columns=["total"])
+    new_df = new_df.sort_values(by=["frequency"], ascending=False)
 
     return new_df.head(show_num)
 

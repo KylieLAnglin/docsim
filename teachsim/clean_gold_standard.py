@@ -59,7 +59,9 @@ linking[["study", "id", "filename", "qualtrics_filename", "_merge"]].to_csv(
 
 # %%
 
-corrected_linking = pd.read_excel(start.RAW_FILEPATH + "qualtrics_linking.xlsx")
+corrected_linking = pd.read_excel(
+    start.RAW_FILEPATH + "qualtrics_linking.xls", engine="xlrd"
+)
 # %%
 cleaned_gold = gold[["qualtrics_filename", "fidelity", "quality"]].merge(
     corrected_linking[["filename", "qualtrics_filename"]],
@@ -87,4 +89,11 @@ cleaned_gold = cleaned_gold[
         "quality",
     ]
 ]
+# %% Random hold-out sample
+subset = cleaned_gold.sample(60, random_state=7)
+cleaned_gold["training"] = np.where(cleaned_gold.index.isin(subset.index), 1, 0)
+
+# %%
 cleaned_gold.to_csv(start.RAW_FILEPATH + "/validation/" + "human_codes.csv")
+
+# %%

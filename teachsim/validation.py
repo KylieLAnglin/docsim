@@ -16,8 +16,13 @@ training = pd.read_csv(start.RAW_FILEPATH + "/validation/" + "human_codes.csv")
 
 results = pd.read_csv(start.CLEAN_FILEPATH + "vectorizations.csv")
 
+# %%
 training = training.merge(
-    results, how="left", left_on="filename", right_on="filename", indicator=True
+    results,
+    how="left",
+    left_on=["study", "id"],
+    right_on=["study", "id"],
+    indicator=True,
 )
 
 training = training[training.training == 0]

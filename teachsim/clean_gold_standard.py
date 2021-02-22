@@ -43,6 +43,22 @@ gold["qualtrics_filename"] = gold.qualtrics_filename.str.replace("c", "")
 
 gold["qualtrics_filename"] = gold.qualtrics_filename.str.replace("-", "_")
 
+gold["double_coded"] = gold.duplicated(subset=["qualtrics_filename"], keep=False)
+
+gold["fidelity"] = gold.fidelity.astype(float)
+gold["quality"] = gold.quality.astype(float)
+
+duplicates = gold[gold.double_coded == True]
+duplicates = (
+    duplicates.groupby(["qualtrics_filename", "scenario"])
+    .mean()
+    .reset_index()
+    .set_index("qualtrics_filename")
+)
+
+gold = gold[gold.double_coded == False].set_index("qualtrics_filename")
+gold = gold.append(duplicates)
+gold = gold.reset_index()
 
 # %%
 transcripts = pd.read_csv(start.CLEAN_FILEPATH + "text_transcripts.csv")

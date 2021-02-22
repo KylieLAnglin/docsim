@@ -19,7 +19,7 @@ def cleaning_protocol(raw_text_dict: dict, speaker_tags_df: pd.DataFrame):
 
     Args:
         raw_text_dict (dict): Doc ID as keys, text as values
-        speaker_tags_df (pd.DataFrame): Doc ID in col 1, previous coach tag in col 2
+        speaker_tags_df (pd.DataFrame): Doc ID in col 1 (doc), previous coach tag in col 2
 
     Returns:
         [dict]: Doc ID as keys, cleaned text as values

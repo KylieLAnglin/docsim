@@ -13,6 +13,7 @@ from openpyxl import load_workbook
 # %% import
 
 training = pd.read_csv(start.RAW_FILEPATH + "/validation/" + "human_codes.csv")
+training["id"] = training.id.astype(str)
 
 results = pd.read_csv(start.CLEAN_FILEPATH + "vectorizations.csv")
 
@@ -75,12 +76,15 @@ col = col + 1
 plt.plot(training.fidelity, training.script_sim3, "o", color="black", alpha=0.1)
 
 
-# %%
+# %% BEST
+# THIS IS THE BEST
 mod = smf.ols(formula="script_sim4 ~ + fidelity", data=training)
 res = mod.fit()
 print(res.summary())
 ws.cell(row=row, column=col).value = round(res.rsquared, 2)
 col = col + 1
+
+plt.plot(training.fidelity, training.script_sim4, "o", color="black", alpha=0.1)
 
 # %%
 

@@ -98,23 +98,24 @@ df["new_text"] = [
 ]
 
 # %%
-matrix0 = process_text.vectorize_text(
-    df, "new_text", remove_stopwords=False, tfidf=False, lemma=False, lsa=False
-).add_prefix("term_")
-
-df["script_sim0"] = [
-    analyze.cosine_similarity_row(matrix0, row, df.loc[row].skill)
-    for row in matrix0.index
-]
-
-# %%
 matrix1 = process_text.vectorize_text(
-    df, "new_text", remove_stopwords=True, tfidf=False, lemma=False, lsa=False
+    df, "new_text", remove_stopwords=False, tfidf=False, lemma=False, lsa=False
 ).add_prefix("term_")
 
 df["script_sim1"] = [
     analyze.cosine_similarity_row(matrix1, row, df.loc[row].skill)
     for row in matrix1.index
+]
+
+
+# %%
+matrix2 = process_text.vectorize_text(
+    df, "new_text", remove_stopwords=True, tfidf=False, lemma=False, lsa=False
+).add_prefix("term_")
+
+df["script_sim2"] = [
+    analyze.cosine_similarity_row(matrix2, row, df.loc[row].skill)
+    for row in matrix2.index
 ]
 
 # process_text.what_words_matter(matrix1, "6-2C", "behavior2", 10)
@@ -127,13 +128,13 @@ df["script_sim1"] = [
 # process_text.what_words_matter(matrix1, "2019_58_5C", "behavior2", 20)
 
 # %%
-matrix2 = process_text.vectorize_text(
+matrix3 = process_text.vectorize_text(
     df, "new_text", remove_stopwords=True, tfidf=True, lemma=False, lsa=False
 ).add_prefix("term_")
 
-df["script_sim2"] = [
-    analyze.cosine_similarity_row(matrix2, row, df.loc[row].skill)
-    for row in matrix2.index
+df["script_sim3"] = [
+    analyze.cosine_similarity_row(matrix3, row, df.loc[row].skill)
+    for row in matrix3.index
 ]
 
 # process_text.what_words_matter(matrix2, "6-2C", "behavior2", 20)
@@ -143,14 +144,7 @@ df["script_sim2"] = [
 # process_text.what_words_matter(matrix2, "99-2C", "behavior3", 20)
 
 # %%
-matrix3 = process_text.vectorize_text(
-    df, "new_text", remove_stopwords=True, tfidf=False, lemma=True, lsa=False
-).add_prefix("term_")
 
-df["script_sim3"] = [
-    analyze.cosine_similarity_row(matrix3, row, df.loc[row].skill)
-    for row in matrix3.index
-]
 
 # %%
 matrix4 = process_text.vectorize_text(
@@ -163,8 +157,11 @@ df["script_sim4"] = [
 ]
 
 # %%
+
+
+# %%
 matrix5 = process_text.vectorize_text(
-    df, "new_text", remove_stopwords=True, tfidf=False, lemma=False, lsa=True
+    df, "new_text", remove_stopwords=True, tfidf=True, lemma=True, lsa=True
 ).add_prefix("term_")
 
 df["script_sim5"] = [
@@ -172,29 +169,63 @@ df["script_sim5"] = [
     for row in matrix5.index
 ]
 
-# %%
-matrix6 = process_text.vectorize_text(
-    df, "new_text", remove_stopwords=True, tfidf=True, lemma=True, lsa=True
-).add_prefix("term_")
 
-df["script_sim6"] = [
-    analyze.cosine_similarity_row(matrix6, row, df.loc[row].skill)
-    for row in matrix6.index
-]
+# %%
+
+df[df.study != "model"][
+    [
+        "study",
+        "id",
+        "year",
+        "semester",
+        "scenario",
+        "skill",
+        "coach",
+        "script_sim1",
+        "script_sim2",
+        "script_sim3",
+        "script_sim4",
+        "script_sim5",
+    ]
+].to_csv(start.CLEAN_FILEPATH + "script_sims.csv")
+
+# %%
+
+## Other vectorizations
+
+# matrix = process_text.vectorize_text(
+#     df, "new_text", remove_stopwords=True, tfidf=False, lemma=True, lsa=False
+# ).add_prefix("term_")
+
+# df["script_sim"] = [
+#     analyze.cosine_similarity_row(matrix, row, df.loc[row].skill)
+#     for row in matrix.index
+# ]
+
+
+# matrix = process_text.vectorize_text(
+#     df, "new_text", remove_stopwords=True, tfidf=False, lemma=False, lsa=True
+# ).add_prefix("term_")
+
+# df["script_sim"] = [
+#     analyze.cosine_similarity_row(matrix, row, df.loc[row].skill)
+#     for row in matrix.index
+# ]
+
 
 # %% Doc 2 Vec
 
-model = Doc2Vec.load(start.CLEAN_FILEPATH + "doc2vec.model")
+# model = Doc2Vec.load(start.CLEAN_FILEPATH + "doc2vec.model")
 
-tokenized_docs = [word_tokenize(row.lower()) for row in df.clean_text]
+# tokenized_docs = [word_tokenize(row.lower()) for row in df.clean_text]
 
-matrix_lists = [model.infer_vector(doc) for doc in tokenized_docs]
-matrix7 = pd.DataFrame(matrix_lists, index=df.index)
+# matrix_lists = [model.infer_vector(doc) for doc in tokenized_docs]
+# matrix7 = pd.DataFrame(matrix_lists, index=df.index)
 
-df["script_sim7"] = [
-    analyze.cosine_similarity_row(matrix7, row, df.loc[row].skill)
-    for row in matrix7.index
-]
+# df["script_sim7"] = [
+#     analyze.cosine_similarity_row(matrix7, row, df.loc[row].skill)
+#     for row in matrix7.index
+# ]
 
 # %% Doc 2 Vec with Pre-processing (performs worse than without)
 # stop = process_text.spacy_stopwords
@@ -211,43 +242,68 @@ df["script_sim7"] = [
 # ]
 
 # %%
-matrix8 = process_text.vectorize_text(
-    df,
-    "new_text",
-    remove_stopwords=False,
-    tfidf=True,
-    lemma=False,
-    lsa=False,
-    n_gram_range=(1, 2),
-).add_prefix("term_")
+# matrix8 = process_text.vectorize_text(
+#     df,
+#     "new_text",
+#     remove_stopwords=False,
+#     tfidf=True,
+#     lemma=False,
+#     lsa=False,
+#     n_gram_range=(1, 2),
+# ).add_prefix("term_")
 
-df["script_sim8"] = [
-    analyze.cosine_similarity_row(matrix8, row, df.loc[row].skill)
-    for row in matrix8.index
+# df["script_sim8"] = [
+#     analyze.cosine_similarity_row(matrix8, row, df.loc[row].skill)
+#     for row in matrix8.index
+# ]
+
+# %% Replicability
+
+
+def create_replicability_columns(doc_term_matrix: pd.DataFrame, column_prefix: str):
+    matrix = (
+        df[["study", "id"]]
+        .merge(doc_term_matrix, left_index=True, right_index=True)
+        .reset_index()
+        .set_index(["study", "id"])
+        .drop(labels="filename", axis=1)
+    )
+    df[column_prefix + "study1"] = analyze.pairwise_distance(
+        matrix, matrix.loc["spring2018"]
+    )
+    df[column_prefix + "study2"] = analyze.pairwise_distance(
+        matrix, matrix.loc["spring2019"]
+    )
+    df[column_prefix + "study3"] = analyze.pairwise_distance(
+        matrix, matrix.loc["fall2019TAP"]
+    )
+    df[column_prefix + "study4"] = analyze.pairwise_distance(
+        matrix, matrix.loc["fall2017"]
+    )
+    df[column_prefix + "study5"] = analyze.pairwise_distance(
+        matrix, matrix.loc["fall2018"]
+    )
+
+    return matrix
+
+
+create_replicability_columns(matrix1, "rep1_")
+create_replicability_columns(matrix2, "rep2_")
+create_replicability_columns(matrix3, "rep3_")
+create_replicability_columns(matrix4, "rep4_")
+create_replicability_columns(matrix4, "rep5_")
+
+
+columns = [
+    "study",
+    "id",
+    "year",
+    "semester",
+    "scenario",
+    "skill",
+    "coach",
 ]
-
-
-# %%
-
-df[
-    [
-        "study",
-        "id",
-        "year",
-        "semester",
-        "scenario",
-        "skill",
-        "coach",
-        "script_sim0",
-        "script_sim1",
-        "script_sim2",
-        "script_sim3",
-        "script_sim4",
-        "script_sim5",
-        "script_sim6",
-        "script_sim7",
-        "script_sim8",
-    ]
-].to_csv(start.CLEAN_FILEPATH + "vectorizations.csv")
+columns = columns + [col for col in df if col.startswith("rep")]
+df[df.study != "model"][columns].to_csv(start.CLEAN_FILEPATH + "study_sims.csv")  # %%
 
 # %%

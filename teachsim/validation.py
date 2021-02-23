@@ -16,6 +16,8 @@ training = pd.read_csv(start.RAW_FILEPATH + "/validation/" + "human_codes.csv")
 training["id"] = training.id.astype(str)
 
 results = pd.read_csv(start.CLEAN_FILEPATH + "script_sims.csv")
+results["id"] = results.id.astype(str)
+
 
 # %%
 training = training[["study", "id", "training", "fidelity", "quality"]].merge(
@@ -83,7 +85,3 @@ col = col + 1
 
 # %%
 wb.save(file)
-
-# %%
-
-## Other vectorizations

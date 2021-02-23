@@ -142,6 +142,7 @@ fall2019 = fall2019.set_index(["study", "id"])
 # %%
 skill_df = pd.concat([fall2017, fall2018, spring2018, spring2019, fall2019])
 skill_df = skill_df.merge(sim_data, how="left", left_index=True, right_index=True)
+skill_df = skill_df[skill_df.skill != "feedback0"]
 # %% Save
 skill_df.to_csv(
     SKILLS_PATH + "skills_and_coaches.csv",

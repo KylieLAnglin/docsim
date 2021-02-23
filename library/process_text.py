@@ -30,6 +30,8 @@ for word in spacy_stopwords:
             lexeme.is_stop = False
 
 contractions = ["n't", "'d", "'ll", "'m", "'re", "'s", "'ve"]
+
+spacy_stopwords.update(contractions)
 spacy_stopwords.update(
     [
         "-pron-",
@@ -47,9 +49,7 @@ spacy_stopwords.update(
         "so",
         "yeah",
         "like",
-        # "really",
-        # "kind",
-        # "of",
+        "really",
     ]
 )
 
@@ -58,6 +58,37 @@ for word in spacy_stopwords:
     lexeme.is_stop = True
 
 # %%
+def process_text_nltk(
+    text: str,
+    lower_case: bool = True,
+    remove_punct: bool = True,
+    remove_stopwords: bool = False,
+    lemma: bool = False,
+):
+
+    tokens = nltk.word_tokenize(text)
+
+    if lower_case:
+        tokens = [token.lower() if token.isalpha() else token for token in tokens]
+
+    if remove_punct:
+        tokens = [token for token in tokens if token.isalpha()]
+
+    if remove_stopwords:
+        tokens = [token for token in tokens if not token in spacy_stopwords]
+
+    if lemma:
+        tokens = [nltk.wordnet.WordNetLemmatizer().lemmatize(token) for token in tokens]
+
+    # if lemma:  # lemma needs to go first because spacy lemmatizer depends on context
+    #     doc = " ".join([ps.stem(token)])
+
+    # elif not lemma:
+    #     doc = " ".join([token.text for token in nlp(text)])
+
+    doc = " ".join(tokens)
+    return doc
+
 
 # %%
 def process_text(
@@ -100,10 +131,11 @@ def vectorize_text(
     lemma: bool = False,
     lsa: bool = False,
     n_components: int = 100,
+    n_gram_range=(1, 1),
 ):
 
     docs = [
-        process_text(
+        process_text_nltk(
             text,
             lower_case=True,
             remove_punct=False,
@@ -114,10 +146,10 @@ def vectorize_text(
     ]
 
     if tfidf == False:
-        vec = CountVectorizer()
+        vec = CountVectorizer(ngram_range=(1, 1))
 
     elif tfidf:
-        vec = TfidfVectorizer()
+        vec = TfidfVectorizer(ngram_range=(1, 1))
 
     X = vec.fit_transform(docs)
     matrix = pd.DataFrame(X.toarray(), columns=vec.get_feature_names(), index=df.index)

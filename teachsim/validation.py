@@ -26,7 +26,7 @@ training = training[["study", "id", "training", "fidelity", "quality"]].merge(
     indicator=True,
 )
 
-training = training[training.training == 0]
+# training = training[training.training == 0]
 
 
 # %%
@@ -109,6 +109,15 @@ mod = smf.ols(formula="script_sim7 ~ + fidelity", data=training)
 res = mod.fit()
 print(res.summary())
 ws.cell(row=row, column=col).value = round(res.rsquared, 2)
+col = col + 1
+
+# %%
+mod = smf.ols(formula="script_sim8 ~ + fidelity", data=training)
+res = mod.fit()
+print(res.summary())
+ws.cell(row=row, column=col).value = round(res.rsquared, 2)
+col = col + 1
+
 
 # %%
 wb.save(file)

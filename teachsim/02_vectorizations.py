@@ -22,6 +22,17 @@ df = df.set_index("filename")
 df = df.dropna(subset=["skill"])
 
 # %%
+cleaning_families = {
+    "avatar": ["Ethan", "Dev", "Ava", "Jasmine"],
+    "avatar's": ["Ethan's", "Dev's", "Ava's", "Jasmines'"],
+    "gonna": ["going to"],
+    "kinda": ["kind of"],
+    "wanna": ["want to"],
+    "pretend": ["I'll be", "I’m going to be a"],
+    "improve": ["shape"],
+}
+
+
 behavior_families = {
     "misbehavior": [
         "hum",
@@ -53,18 +64,17 @@ behavior_families = {
         "mumble",
         "game",
         "silly",
+        "superhero",
+        "superheros",
+        "drummin",
+        "Darth Vadar",
+        "Jedi",
+        "Trump",
     ],
-    "avatar": ["Ethan", "Dev", "Ava", "Jasmine"],
-    "going": ["gon"],
-    "to": ["na"],
     "redirection": ["voice", "pocket", "eyes", "ears", "finger", "verbal"],
 }
 
 feedback_families = {
-    "avatar": ["Ethan", "Dev", "Ava", "Jasmine"],
-    "avatar's": ["Ethan's", "Dev's", "Ava's", "Jasmines'"],
-    "to": ["na"],
-    "redirection": ["voice", "pocket", "eyes", "ears", "finger", "verbal"],
     "text": ["paragraph", "sentence"],
 }
 
@@ -83,6 +93,9 @@ df_feedback["new_text"] = [
 ]
 
 df = df_feedback.append(df_behavior)
+df["new_text"] = [
+    clean_text.word_family_from_dict(text, cleaning_families) for text in df.new_text
+]
 
 # %%
 matrix0 = process_text.vectorize_text(
@@ -183,14 +196,30 @@ df["script_sim7"] = [
     for row in matrix7.index
 ]
 
-# %% Doc 2 Vec with Pre-processing
-stop = process_text.spacy_stopwords
-tokenized_docs_no_stop = [
-    [i for i in word_tokenize(row.lower()) if i not in stop] for row in df.clean_text
-]
+# %% Doc 2 Vec with Pre-processing (performs worse than without)
+# stop = process_text.spacy_stopwords
+# tokenized_docs_no_stop = [
+#     [i for i in word_tokenize(row.lower()) if i not in stop] for row in df.clean_text
+# ]
 
-matrix_lists = [model.infer_vector(doc) for doc in tokenized_docs_no_stop]
-matrix8 = pd.DataFrame(matrix_lists, index=df.index)
+# matrix_lists = [model.infer_vector(doc) for doc in tokenized_docs_no_stop]
+# matrix8 = pd.DataFrame(matrix_lists, index=df.index)
+
+# df["script_sim8"] = [
+#     analyze.cosine_similarity_row(matrix8, row, df.loc[row].skill)
+#     for row in matrix8.index
+# ]
+
+# %%
+matrix8 = process_text.vectorize_text(
+    df,
+    "new_text",
+    remove_stopwords=False,
+    tfidf=True,
+    lemma=False,
+    lsa=False,
+    n_gram_range=(1, 2),
+).add_prefix("term_")
 
 df["script_sim8"] = [
     analyze.cosine_similarity_row(matrix8, row, df.loc[row].skill)

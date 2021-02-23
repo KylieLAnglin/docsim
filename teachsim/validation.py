@@ -18,7 +18,7 @@ training["id"] = training.id.astype(str)
 results = pd.read_csv(start.CLEAN_FILEPATH + "vectorizations.csv")
 
 # %%
-training = training.merge(
+training = training[["study", "id", "training", "fidelity", "quality"]].merge(
     results,
     how="left",
     left_on=["study", "id"],
@@ -100,6 +100,9 @@ res = mod.fit()
 print(res.summary())
 ws.cell(row=row, column=col).value = round(res.rsquared, 2)
 col = col + 1
+training.fidelity.corr(training.script_sim6)
+plt.plot(training.fidelity, training.script_sim6, "o", color="black", alpha=0.1)
+
 
 # %%
 mod = smf.ols(formula="script_sim7 ~ + fidelity", data=training)

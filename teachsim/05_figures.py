@@ -10,24 +10,26 @@ from docsim.library import start
 
 
 # %%
-results = pd.read_csv(start.CLEAN_FILEPATH + "results_stop_stem_wgt_lsa.csv").set_index(
+rep_results = pd.read_csv(start.CLEAN_FILEPATH + "study_sims.csv").set_index(
     ["study", "id"]
 )
-results["study"] = [i[0] for i in results.index]
-results["study_sim"] = np.where(
-    results.study == "fall2017",
-    results.sim_fall2017,
+
+# %%
+rep_results["study"] = [i[0] for i in rep_results.index]
+rep_results["study_sim"] = np.where(
+    rep_results.study == "fall2017",
+    rep_results.rep4_study4,
     np.where(
-        results.study == "fall2018",
-        results.sim_fall2018,
+        rep_results.study == "fall2018",
+        rep_results.rep4_study5,
         np.where(
-            results.study == "spring2018",
-            results.sim_spring2018,
+            rep_results.study == "spring2018",
+            rep_results.rep4_study1,
             np.where(
-                results.study == "spring2019",
-                results.sim_spring2019,
+                rep_results.study == "spring2019",
+                rep_results.rep4_study2,
                 np.where(
-                    results.study == "fall2019TAP", results.sim_fall2019TAP, np.nan
+                    rep_results.study == "fall2019TAP", rep_results.rep4_study3, np.nan
                 ),
             ),
         ),
@@ -39,11 +41,16 @@ sns.set_style("white")
 
 # %% Fidelity Results
 
-study1_values = results.loc["spring2018"].script_sim
-study2_values = results.loc["spring2019"].script_sim
-study3_values = results.loc["fall2019TAP"].script_sim
-study4_values = results.loc["fall2017"].script_sim
-study5_values = results.loc["fall2018"].script_sim
+script_results = pd.read_csv(start.CLEAN_FILEPATH + "script_sims.csv").set_index(
+    ["study", "id"]
+)
+
+
+study1_values = script_results.loc["spring2018"].script_sim4
+study2_values = script_results.loc["spring2019"].script_sim4
+study3_values = script_results.loc["fall2019TAP"].script_sim4
+study4_values = script_results.loc["fall2017"].script_sim4
+study5_values = script_results.loc["fall2018"].script_sim4
 
 
 # %% Figure 1 Fidelity Score Distributions
@@ -132,19 +139,19 @@ ax = plt.axes()
 #             fontsize=15)
 
 coach_code = {"Casedy": "C", "Sarah": "A", "Alex": "D", "Arielle": "B"}
-results["coach_code"] = results["coach"].map(coach_code)
+script_results["coach_code"] = script_results["coach"].map(coach_code)
 
 
 sns.boxplot(
     x="coach_code",
-    y="script_sim",
-    data=results.loc["fall2018"],
+    y="script_sim4",
+    data=script_results.loc["fall2018"],
     color="white",
 )
 sns.swarmplot(
     x="coach_code",
-    y="script_sim",
-    data=results.loc["fall2018"],
+    y="script_sim4",
+    data=script_results.loc["fall2018"],
     color="black",
 )
 
@@ -169,15 +176,14 @@ plt.show()
 
 for coach in ["A", "B", "C", "D"]:
     print(
-        results[
-            (results.coach_code == coach)
-            & (results.semester == "fall")
-            & (results.year == 2018)
-        ].script_sim.median()
+        script_results[
+            (script_results.coach_code == coach)
+            & (script_results.semester == "fall")
+            & (script_results.year == 2018)
+        ].script_sim4.median()
     )
 
 # %% Figure 3: Panel of Histograms
-
 
 fig, axs = plt.subplots(nrows=2, ncols=3, figsize=(10, 10))
 ax1 = axs[0, 0]
@@ -240,25 +246,25 @@ plt.savefig(start.TABLE_FILEPATH + "Figure 3: Fidelity Panels", dpi=200)
 # fall 2017
 
 
-study = results.loc[["fall2017", "fall2018"]]
-sns.scatterplot(study.script_sim, study.study_sim, marker="", hue=study.study)
-plt.xlabel("Adherence Score")
-plt.ylabel("Replicability Score")
+# study = results.loc[["fall2017", "fall2018"]]
+# sns.scatterplot(study.script_sim, study.study_sim, marker="", hue=study.study)
+# plt.xlabel("Adherence Score")
+# plt.ylabel("Replicability Score")
 
 
-for i, txt in enumerate(study.loc["fall2017"].index):
-    plt.annotate(
-        txt,
-        (study.loc["fall2017"].script_sim[i], study.loc["fall2017"].study_sim[i]),
-        color="blue",
-    )
+# for i, txt in enumerate(study.loc["fall2017"].index):
+#     plt.annotate(
+#         txt,
+#         (study.loc["fall2017"].script_sim[i], study.loc["fall2017"].study_sim[i]),
+#         color="blue",
+#     )
 
-for i, txt in enumerate(study.loc["fall2018"].index):
-    plt.annotate(
-        txt,
-        (study.loc["fall2018"].script_sim[i], study.loc["fall2018"].study_sim[i]),
-        color="darkorange",
-    )
+# for i, txt in enumerate(study.loc["fall2018"].index):
+#     plt.annotate(
+#         txt,
+#         (study.loc["fall2018"].script_sim[i], study.loc["fall2018"].study_sim[i]),
+#         color="darkorange",
+#     )
 
 
 # %%

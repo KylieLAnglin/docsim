@@ -46,11 +46,11 @@ script_results = pd.read_csv(start.CLEAN_FILEPATH + "script_sims.csv").set_index
 )
 
 
-study1_values = script_results.loc["spring2018"].script_sim4
-study2_values = script_results.loc["spring2019"].script_sim4
-study3_values = script_results.loc["fall2019TAP"].script_sim4
-study4_values = script_results.loc["fall2017"].script_sim4
-study5_values = script_results.loc["fall2018"].script_sim4
+study1_values = script_results.loc["spring2018"].script_sim3
+study2_values = script_results.loc["spring2019"].script_sim3
+study3_values = script_results.loc["fall2019TAP"].script_sim3
+study4_values = script_results.loc["fall2017"].script_sim3
+study5_values = script_results.loc["fall2018"].script_sim3
 
 
 # %% Figure 1 Fidelity Score Distributions
@@ -138,19 +138,24 @@ ax = plt.axes()
 # ax.set_title('Figure 2: Fidelity Scores for Feedback Study 2 by Coach',
 #             fontsize=15)
 
-coach_code = {"Casedy": "C", "Sarah": "A", "Alex": "D", "Arielle": "B"}
+coach_code = {
+    "Sarah": "A",
+    "Arielle": "B",
+    "Casedy": "C",
+    "Alex": "D",
+}
 script_results["coach_code"] = script_results["coach"].map(coach_code)
-
+script_results = script_results.sort_values(by="coach_code")
 
 sns.boxplot(
     x="coach_code",
-    y="script_sim4",
+    y="script_sim3",
     data=script_results.loc["fall2018"],
     color="white",
 )
 sns.swarmplot(
     x="coach_code",
-    y="script_sim4",
+    y="script_sim3",
     data=script_results.loc["fall2018"],
     color="black",
 )
@@ -180,7 +185,7 @@ for coach in ["A", "B", "C", "D"]:
             (script_results.coach_code == coach)
             & (script_results.semester == "fall")
             & (script_results.year == 2018)
-        ].script_sim4.median()
+        ].script_sim3.median()
     )
 
 # %% Figure 3: Panel of Histograms
@@ -196,21 +201,16 @@ bins = np.linspace(0, 0.75, num=30)
 
 # fig.suptitle('Figure 3: Fidelity Scores  with Unusual Transcripts Highlighted',
 #            fontsize=15)
-
 ax1.hist(study1_values, bins, color="darkgray", alpha=0.75)
 ax1.set_xlabel("Behavior Study 1")
 
 ax2.hist(study2_values, bins, color="darkgray", alpha=0.75)
 ax2.set_xlabel("Behavior Study 2")
-ax2.hist(
-    study2_values.where((study2_values < 0.18) | (study2_values > 0.37)),
-    bins,
-    color="black",
-)
+
 
 ax3.hist(study3_values, bins, color="darkgray", alpha=0.75)
 ax3.set_xlabel("Behavior Study 3")
-ax3.hist(study3_values.where(study3_values < 0.20), bins, color="black")
+ax3.hist(study3_values.where(study3_values < 0.15), bins, color="black")
 
 ax4.hist(study4_values, bins, color="darkgray", alpha=1)
 ax4.set_xlabel("Feedback Study 1")
@@ -222,7 +222,11 @@ ax4.hist(
 
 ax5.hist(study5_values, bins, color="darkgray", alpha=1)
 ax5.set_xlabel("Feedback Study 2")
-ax5.hist(study5_values.where((study5_values > 0.61)), bins, color="black")
+ax5.hist(
+    study5_values.where((study5_values < 0.23) | (study5_values > 0.5)),
+    bins,
+    color="black",
+)
 
 for ax in [ax1, ax2, ax3, ax4, ax5]:
     ax.set_ylim(0, 20)

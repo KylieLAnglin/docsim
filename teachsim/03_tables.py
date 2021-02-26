@@ -37,11 +37,16 @@ def script_sim_table(study: str, row: int):
 
 
 script_sim_table("spring2018", 3)
-script_sim_table("spring2018", 3)
 script_sim_table("spring2019", 4)
 script_sim_table("fall2019TAP", 5)
 script_sim_table("fall2017", 6)
 script_sim_table("fall2018", 7)
+
+results.loc["spring2018"]["script_sim3"].std()
+results.loc["spring2019"]["script_sim3"].std()
+results.loc["fall2019TAP"]["script_sim3"].std()
+results.loc["fall2017"]["script_sim3"].std()
+results.loc["fall2018"]["script_sim3"].std()
 
 # %% Script Similarity
 

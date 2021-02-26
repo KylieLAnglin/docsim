@@ -45,12 +45,12 @@ def print_vignette_row(scenario: str, row: int, ascending: bool, location: int):
     ws.cell(row=row, column=scenario_col).value = scenario
 
     df_scenario = df[df.scenario == scenario]
-    df_scenario = df_scenario.sort_values(by="script_sim4", ascending=ascending)
+    df_scenario = df_scenario.sort_values(by="script_sim3", ascending=ascending)
 
     filename = df_scenario.iloc[location]["filename"]
     ws.cell(row=row, column=filename_col).value = filename
 
-    sim = df_scenario.iloc[location]["script_sim4"]
+    sim = df_scenario.iloc[location]["script_sim3"]
     ws.cell(row=row, column=similarity_col).value = round(sim, 2)
 
     text = df_scenario.iloc[location]["clean_text"].split()[0:200]

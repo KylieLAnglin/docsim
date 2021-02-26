@@ -8,20 +8,24 @@ from docsim.library import qualtrics
 pd.set_option("display.max_rows", 500)
 
 QUALTRICS_EXPORT = (
-    start.RAW_FILEPATH + "/validation/" + "Fidelity Coding survey 2021 02 17.csv"
+    start.RAW_FILEPATH + "/validation/" + "Fidelity Coding survey 2021 02 24.csv"
 )
 
 
 gold = pd.read_csv(QUALTRICS_EXPORT)
 labels = qualtrics.extract_column_labels(csv_path=QUALTRICS_EXPORT)
 gold = qualtrics.select_valid_rows(survey=gold, keep_previews=False, min_duration=15)
-gold = gold[["Q2", "Q3", "SC1", "SC3"]]
+gold = gold[["Q2", "Q3", "SC1", "SC3", "Q26#1_1", "Q26#1_2", "Q26#1_3", "Q26#1_4"]]
 gold = gold.rename(
     columns={
         "Q2": "qualtrics_filename",
         "Q3": "scenario",
         "SC1": "fidelity",
         "SC3": "quality",
+        "Q26#1_1": "content_opening_cat",
+        "Q26#1_2": "content_positive_cat",
+        "Q26#1_3": "content_growth_cat",
+        "Q26#1_4": "content_closing_cat",
     }
 )
 gold["qualtrics_filename"] = gold.qualtrics_filename.str.replace("-updated", "")
@@ -47,6 +51,26 @@ gold["double_coded"] = gold.duplicated(subset=["qualtrics_filename"], keep=False
 
 gold["fidelity"] = gold.fidelity.astype(float)
 gold["quality"] = gold.quality.astype(float)
+
+rubric_mapping = {
+    "0 - misaligned": 0,
+    "1-poorly aligned": 1,
+    "2-somewhat aligned": 2,
+    "3-well aligned": 3,
+}
+
+
+gold["content_opening"] = gold.content_opening_cat.map(rubric_mapping)
+gold["content_positive"] = gold.content_positive_cat.map(rubric_mapping)
+gold["content_growth"] = gold.content_growth_cat.map(rubric_mapping)
+gold["content_closing"] = gold.content_closing_cat.map(rubric_mapping)
+
+gold["content"] = (
+    gold.content_opening
+    + gold.content_positive
+    + gold.content_growth
+    + gold.content_closing
+) / 4
 
 duplicates = gold[gold.double_coded == True]
 duplicates = (
@@ -99,7 +123,7 @@ linking[["study", "id", "filename", "qualtrics_filename", "_merge"]].to_csv(
 # %%
 
 cleaned_gold = transcripts.merge(
-    gold[["qualtrics_filename", "fidelity", "quality"]],
+    gold[["qualtrics_filename", "fidelity", "quality", "content"]],
     how="left",
     left_on="filename",
     right_on="qualtrics_filename",
@@ -120,6 +144,7 @@ cleaned_gold = cleaned_gold[
         "coach",
         "fidelity",
         "quality",
+        "content",
     ]
 ]
 

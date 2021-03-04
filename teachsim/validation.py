@@ -31,6 +31,19 @@ training = training[
 )
 
 # training = training[training.training == 0]
+training.fidelity.corr(training.script_sim4)
+
+
+fidelity_median = training.fidelity.median()
+
+low = training[training.fidelity < 11]
+high = training[training.fidelity >= 11]
+
+print(
+    training[(training.fidelity <= 10) | (training.fidelity > 10)].fidelity.corr(
+        training[(training.fidelity <= 10) | (training.fidelity > 10)].script_sim4
+    )
+)
 
 
 # %%

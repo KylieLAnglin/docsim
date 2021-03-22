@@ -14,20 +14,101 @@ QUALTRICS_EXPORT = (
 
 gold = pd.read_csv(QUALTRICS_EXPORT)
 labels = qualtrics.extract_column_labels(csv_path=QUALTRICS_EXPORT)
+
+# %%
 gold = qualtrics.select_valid_rows(survey=gold, keep_previews=False, min_duration=15)
-gold = gold[["Q2", "Q3", "SC1", "SC3", "Q26#1_1", "Q26#1_2", "Q26#1_3", "Q26#1_4"]]
-gold = gold.rename(
-    columns={
-        "Q2": "qualtrics_filename",
-        "Q3": "scenario",
-        "SC1": "fidelity",
-        "SC3": "quality",
-        "Q26#1_1": "content_opening_cat",
-        "Q26#1_2": "content_positive_cat",
-        "Q26#1_3": "content_growth_cat",
-        "Q26#1_4": "content_closing_cat",
-    }
-)
+# gold = gold[["Q2", "Q3", "SC1", "SC3", "Q26#1_1", "Q26#1_2", "Q26#1_3", "Q26#1_4"]]
+components = {
+    "Q4_1": "open_1",
+    "Q4_2": "open_2",
+    "Q4_3": "open_3",
+    "Q5_1": "skill_1",
+    "Q5_2": "skill_2",
+    "Q5_3": "skill_3",
+    "Q5_4": "skill_4",
+    "Q5_5": "skill_5",
+    "Q5_6": "skill_6",
+    "Q6_1": "practice_1",
+    "Q6_2": "practice_2",
+    "Q6_3": "practice_3",
+    "Q6_4": "practice_4",
+    "Q6_5": "practice_5",
+    "Q6_6": "practice_6",
+    "Q7_1": "close_1",
+    "Q7_2": "close_2",
+}
+
+gold = gold.rename(columns=components)
+
+replace_categorical_values = {"Yes (1)": 1, "No (0)": 0, "Partially (1/2)": 0.5}
+gold = gold.replace(replace_categorical_values)
+
+other_vars = {
+    "Q2": "qualtrics_filename",
+    "Q3": "scenario",
+    "SC1": "fidelity_auto_sum",
+    "SC3": "quality",
+    "Q26#1_1": "content_opening_cat",
+    "Q26#1_2": "content_positive_cat",
+    "Q26#1_3": "content_growth_cat",
+    "Q26#1_4": "content_closing_cat",
+}
+
+gold = gold.rename(columns=other_vars)
+
+keep_vars = list(components.values()) + list(other_vars.values())
+
+gold = gold[keep_vars]
+
+# %%
+
+gold["fidelity"] = gold[list(components.values())].sum(axis=1)
+
+gold["test_sum"] = gold[
+    [
+        "open_1",
+        "open_2",
+        "open_3",
+        "skill_1",
+        "skill_2",
+        "skill_3",
+        "skill_4",
+        "skill_5",
+        "skill_6",
+        "practice_1",
+        "practice_2",
+        "practice_3",
+        "close_1",
+        "close_2",
+    ]
+].sum(axis=1)
+
+gold["fidelity_auto_sum"] = gold.fidelity_auto_sum.astype(float)
+gold["quality"] = gold.quality.astype(float)
+
+gold["fidelity_high_reliability"] = gold[
+    [
+        "open_1",
+        "open_2",
+        "open_3",
+        "skill_1",
+        "skill_2",
+        "skill_3",
+        # "skill_4",
+        "skill_5",
+        "skill_6",
+        "practice_1",
+        "practice_2",
+        # "practice_3",
+        "practice_4",
+        "practice_5",
+        "practice_6",
+        "close_1",
+        # "close_2",
+    ]
+].sum(axis=1)
+
+# %%
 gold["qualtrics_filename"] = gold.qualtrics_filename.str.replace("-updated", "")
 gold["qualtrics_filename"] = gold.qualtrics_filename.str.replace("_updated", "")
 gold["qualtrics_filename"] = gold.qualtrics_filename.str.replace(" (updated)", "")
@@ -49,8 +130,6 @@ gold["qualtrics_filename"] = gold.qualtrics_filename.str.replace("-", "_")
 
 gold["double_coded"] = gold.duplicated(subset=["qualtrics_filename"], keep=False)
 
-gold["fidelity"] = gold.fidelity.astype(float)
-gold["quality"] = gold.quality.astype(float)
 
 rubric_mapping = {
     "0 - misaligned": 0,
@@ -123,7 +202,15 @@ linking[["study", "id", "filename", "qualtrics_filename", "_merge"]].to_csv(
 # %%
 
 cleaned_gold = transcripts.merge(
-    gold[["qualtrics_filename", "fidelity", "quality", "content"]],
+    gold[
+        [
+            "qualtrics_filename",
+            "fidelity",
+            "quality",
+            "content",
+            "fidelity_high_reliability",
+        ]
+    ],
     how="left",
     left_on="filename",
     right_on="qualtrics_filename",
@@ -145,6 +232,7 @@ cleaned_gold = cleaned_gold[
         "fidelity",
         "quality",
         "content",
+        "fidelity_high_reliability",
     ]
 ]
 

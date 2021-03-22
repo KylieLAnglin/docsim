@@ -4,8 +4,7 @@ import pandas as pd
 import statsmodels.formula.api as smf
 import matplotlib.pyplot as plt
 from docsim.library import start
-from docsim.library import analyze
-from docsim.library import process_text
+
 
 from openpyxl import load_workbook
 
@@ -21,7 +20,15 @@ results["id"] = results.id.astype(str)
 
 # %%
 training = training[
-    ["study", "id", "training", "fidelity", "quality", "content"]
+    [
+        "study",
+        "id",
+        "training",
+        "fidelity",
+        "quality",
+        "content",
+        "fidelity_high_reliability",
+    ]
 ].merge(
     results,
     how="left",
@@ -161,7 +168,7 @@ print(
 print(
     len(
         training[
-            (training.fidelity < fidelity_low) & (training.script_sim3 > fidelity_low)
+            (training.fidelity < fidelity_low) & (training.script_sim3 > script_low)
         ]
     ),
     "low-fidelity, high-similarity",
@@ -204,6 +211,7 @@ ws.cell(row=row, column=col).value = round(
 )
 col = col + 1
 
+plt.plot(training.fidelity, training.script_sim4, "o", color="black", alpha=0.1)
 
 # %% BEST
 # THIS IS THE BEST

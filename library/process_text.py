@@ -146,10 +146,10 @@ def vectorize_text(
     ]
 
     if tfidf == False:
-        vec = CountVectorizer(ngram_range=(1, 1))
+        vec = CountVectorizer(ngram_range=n_gram_range)
 
     elif tfidf:
-        vec = TfidfVectorizer(ngram_range=(1, 1))
+        vec = TfidfVectorizer(ngram_range=n_gram_range)
 
     X = vec.fit_transform(docs)
     matrix = pd.DataFrame(X.toarray(), columns=vec.get_feature_names(), index=df.index)

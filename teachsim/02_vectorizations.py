@@ -203,6 +203,21 @@ df["script_sim5"] = [
     for row in matrix5.index
 ]
 
+matrix6 = process_text.vectorize_text(
+    df,
+    "new_text",
+    remove_stopwords=True,
+    tfidf=True,
+    lemma=False,
+    lsa=False,
+    n_gram_range=(1, 3),
+).add_prefix("term_")
+
+df["script_sim6"] = [
+    analyze.cosine_similarity_row(matrix6, row, df.loc[row].skill)
+    for row in matrix6.index
+]
+
 
 # %%
 
@@ -220,6 +235,7 @@ df[df.study != "model"][
         "script_sim3",
         "script_sim4",
         "script_sim5",
+        "script_sim6",
     ]
 ].to_csv(start.CLEAN_FILEPATH + "script_sims.csv")
 

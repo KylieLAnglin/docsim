@@ -23,13 +23,20 @@ df = df.dropna(subset=["skill"])
 
 # %%
 cleaning_families = {
-    "avatar": ["Ethan", "Dev", "Ava", "Jasmine"],
-    "avatar's": ["Ethan's", "Dev's", "Ava's", "Jasmines'"],
+    "avatar1": [
+        "Ethan",
+        "Dev",
+    ],
+    "avatar2": ["Ava", "Jasmine", "Savannah"],
+    "avatar's": ["Ethan's", "Dev's", "Ava's", "Jasmines'", "Savannah's"],
     "gonna": ["going to"],
     "kinda": ["kind of"],
     "wanna": ["want to"],
-    "pretend": ["I'll be", "I’m going to be a"],
-    "improve": ["shape"],
+    "pretend": [
+        "I'll be",
+        "I’m going to be",
+        "role play",
+    ],
 }
 
 
@@ -45,33 +52,58 @@ behavior_families = {
         "off",
         "beat-box",
         "beat-boxing",
+        "beat-boxes",
         "beat",
-        "rocket",
+        "beatbox",
+        "beatboxing",
+        "rocket club",
         "phone",
         "sing",
+        "sings",
         "singing",
+        "text",
+        "texts",
         "texting",
         "drum",
+        "drums",
         "drumming",
+        "bang",
+        "bangs",
+        "banging",
+        "impression",
         "impersonation",
         "impersonations",
-        "impersonating",
-        "impersonate",
-        "darth",
-        "impression",
         "noise",
         "noises",
+        "noisy",
         "mumble",
+        "video",
         "game",
         "silly",
         "superhero",
         "superheros",
-        "drummin",
-        "Darth Vadar",
-        "Jedi",
-        "Trump",
+        "darth vadar",
+        "jedi",
+        "trump",
+        "tap",
+        "taps",
+        "tapping",
+        "side conversation",
+        "beach",
+        "pencil",
+        "pencils",
     ],
-    "redirection": ["voice", "pocket", "eyes", "ears", "finger", "verbal"],
+    "redirection": [
+        "voice",
+        "pocket",
+        "eyes",
+        "ears",
+        "finger",
+        "verbal",
+        "re-direction",
+        "re-directions",
+    ],
+    "tone": ["abrasive", "intimidating", "harsh"],
 }
 
 feedback_families = {
@@ -83,7 +115,7 @@ feedback_families = {
 df_behavior = df[df.scenario == "behavior"]
 df_behavior["new_text"] = [
     clean_text.word_family_from_dict(text, behavior_families)
-    for text in df_behavior.clean_text
+    for text in df_behavior.clean_text.str.lower()
 ]
 
 df_feedback = df[df.scenario == "feedback"]
@@ -93,6 +125,8 @@ df_feedback["new_text"] = [
 ]
 
 df = df_feedback.append(df_behavior)
+
+
 df["new_text"] = [
     clean_text.word_family_from_dict(text, cleaning_families) for text in df.new_text
 ]
@@ -260,50 +294,50 @@ df[df.study != "model"][
 # %% Replicability
 
 
-def create_replicability_columns(doc_term_matrix: pd.DataFrame, column_prefix: str):
-    matrix = (
-        df[["study", "id"]]
-        .merge(doc_term_matrix, left_index=True, right_index=True)
-        .reset_index()
-        .set_index(["study", "id"])
-        .drop(labels="filename", axis=1)
-    )
-    df[column_prefix + "study1"] = analyze.pairwise_distance(
-        matrix, matrix.loc["spring2018"]
-    )
-    df[column_prefix + "study2"] = analyze.pairwise_distance(
-        matrix, matrix.loc["spring2019"]
-    )
-    df[column_prefix + "study3"] = analyze.pairwise_distance(
-        matrix, matrix.loc["fall2019TAP"]
-    )
-    df[column_prefix + "study4"] = analyze.pairwise_distance(
-        matrix, matrix.loc["fall2017"]
-    )
-    df[column_prefix + "study5"] = analyze.pairwise_distance(
-        matrix, matrix.loc["fall2018"]
-    )
+# def create_replicability_columns(doc_term_matrix: pd.DataFrame, column_prefix: str):
+#     matrix = (
+#         df[["study", "id"]]
+#         .merge(doc_term_matrix, left_index=True, right_index=True)
+#         .reset_index()
+#         .set_index(["study", "id"])
+#         .drop(labels="filename", axis=1)
+#     )
+#     df[column_prefix + "study1"] = analyze.pairwise_distance(
+#         matrix, matrix.loc["spring2018"]
+#     )
+#     df[column_prefix + "study2"] = analyze.pairwise_distance(
+#         matrix, matrix.loc["spring2019"]
+#     )
+#     df[column_prefix + "study3"] = analyze.pairwise_distance(
+#         matrix, matrix.loc["fall2019TAP"]
+#     )
+#     df[column_prefix + "study4"] = analyze.pairwise_distance(
+#         matrix, matrix.loc["fall2017"]
+#     )
+#     df[column_prefix + "study5"] = analyze.pairwise_distance(
+#         matrix, matrix.loc["fall2018"]
+#     )
 
-    return matrix
-
-
-create_replicability_columns(matrix1, "rep1_")
-create_replicability_columns(matrix2, "rep2_")
-create_replicability_columns(matrix3, "rep3_")
-create_replicability_columns(matrix4, "rep4_")
-create_replicability_columns(matrix4, "rep5_")
+#     return matrix
 
 
-columns = [
-    "study",
-    "id",
-    "year",
-    "semester",
-    "scenario",
-    "skill",
-    "coach",
-]
-columns = columns + [col for col in df if col.startswith("rep")]
-df[df.study != "model"][columns].to_csv(start.CLEAN_FILEPATH + "study_sims.csv")  # %%
+# create_replicability_columns(matrix1, "rep1_")
+# create_replicability_columns(matrix2, "rep2_")
+# create_replicability_columns(matrix3, "rep3_")
+# create_replicability_columns(matrix4, "rep4_")
+# create_replicability_columns(matrix4, "rep5_")
 
-# %%
+
+# columns = [
+#     "study",
+#     "id",
+#     "year",
+#     "semester",
+#     "scenario",
+#     "skill",
+#     "coach",
+# ]
+# columns = columns + [col for col in df if col.startswith("rep")]
+# df[df.study != "model"][columns].to_csv(start.CLEAN_FILEPATH + "study_sims.csv")  # %%
+
+# # %%

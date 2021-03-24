@@ -93,12 +93,23 @@ def word_family_from_dict(text: str, families: dict):
     """
     new_dict = dictionary_tools.long_inverse_dict_from_key_list(families)
 
-    doc = nlp(text)
     old_words = list(new_dict.keys())
 
     new_text = text
     for old_word in old_words:
         new_text = new_text.replace(old_word, new_dict[old_word])
+        new_text = new_text.replace(
+            " " + old_word + " ", " " + new_dict[old_word] + " "
+        )
+        new_text = new_text.replace(
+            " " + old_word + ".", " " + new_dict[old_word] + "."
+        )
+        new_text = new_text.replace(
+            " " + old_word + ",", " " + new_dict[old_word] + ","
+        )
+        new_text = new_text.replace(
+            "[" + old_word + " ", " " + "[" + new_dict[old_word] + " "
+        )
 
     # for word in new_dict:
     #     new_text = new_text.replace(word, new_dict[word])

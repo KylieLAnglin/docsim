@@ -64,27 +64,25 @@ gold = gold[keep_vars]
 
 gold["fidelity"] = gold[list(components.values())].sum(axis=1)
 
-gold["test_sum"] = gold[
-    [
-        "open_1",
-        "open_2",
-        "open_3",
-        "skill_1",
-        "skill_2",
-        "skill_3",
-        "skill_4",
-        "skill_5",
-        "skill_6",
-        "practice_1",
-        "practice_2",
-        "practice_3",
-        "close_1",
-        "close_2",
-    ]
+gold["fidelity_auto_sum"] = gold.fidelity_auto_sum.astype(float)
+
+gold["fidelity_skills"] = gold[
+    ["skill_1", "skill_2", "skill_3", "skill_4", "skill_5", "skill_6"]
 ].sum(axis=1)
 
-gold["fidelity_auto_sum"] = gold.fidelity_auto_sum.astype(float)
+gold["fidelity_practice"] = gold[
+    ["practice_1", "practice_2", "practice_3", "practice_4", "practice_5", "practice_6"]
+].sum(axis=1)
+
+
+gold["fidelity_open"] = gold[["open_1", "open_2"]].sum(axis=1)
+
+gold["fidelity_close"] = gold[["close_1", "close_2"]].sum(axis=1)
+
 gold["quality"] = gold.quality.astype(float)
+
+# %%
+
 
 gold["fidelity_high_reliability"] = gold[
     [
@@ -143,6 +141,21 @@ gold["content_opening"] = gold.content_opening_cat.map(rubric_mapping)
 gold["content_positive"] = gold.content_positive_cat.map(rubric_mapping)
 gold["content_growth"] = gold.content_growth_cat.map(rubric_mapping)
 gold["content_closing"] = gold.content_closing_cat.map(rubric_mapping)
+
+gold["fidelity_content_opening"] = gold.fidelity_open * gold.content_opening
+gold["fidelity_content_skill"] = gold.fidelity_open * gold.content_positive
+gold["fidelity_content_practice"] = gold.fidelity_open * gold.content_growth
+gold["fidelity_content_close"] = gold.fidelity_open * gold.content_closing
+
+gold["fidelity_content"] = gold[
+    [
+        "fidelity_content_opening",
+        "fidelity_content_skill",
+        "fidelity_content_practice",
+        "fidelity_content_close",
+    ]
+].sum(axis=1)
+
 
 gold["content"] = (
     gold.content_opening
@@ -209,6 +222,11 @@ cleaned_gold = transcripts.merge(
             "quality",
             "content",
             "fidelity_high_reliability",
+            "fidelity_skills",
+            "fidelity_practice",
+            "fidelity_open",
+            "fidelity_close",
+            "fidelity_content",
         ]
     ],
     how="left",
@@ -233,6 +251,11 @@ cleaned_gold = cleaned_gold[
         "quality",
         "content",
         "fidelity_high_reliability",
+        "fidelity_skills",
+        "fidelity_practice",
+        "fidelity_open",
+        "fidelity_close",
+        "fidelity_content",
     ]
 ]
 

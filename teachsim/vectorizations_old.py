@@ -12,7 +12,7 @@ from docsim.library import clean_text
 # %%
 
 df_corpus = pd.read_csv(start.CLEAN_FILEPATH + "text_transcripts.csv")
-df_ideal = pd.read_csv(start.CLEAN_FILEPATH + "text_scriptsV2.csv")
+df_ideal = pd.read_csv(start.CLEAN_FILEPATH + "text_scripts.csv")
 df = df_corpus.append(df_ideal)
 
 df["filename"] = df.filename.str.replace(".docx", "")
@@ -180,6 +180,26 @@ df["script_sim8"] = [
 ]
 
 
+# %% N-Grams
+matrix9 = process_text.vectorize_text(
+    df, "new_text", remove_stopwords=False, tfidf=False, lemma=False, lsa=False
+).add_prefix("term_")
+
+df["script_sim9"] = [
+    analyze.cosine_similarity_row(matrix9, row, df.loc[row].skill)
+    for row in matrix9.index
+]
+
+# %%
+matrix10 = process_text.vectorize_text(
+    df, "new_text", remove_stopwords=True, tfidf=False, lemma=False, lsa=False
+).add_prefix("term_")
+
+df["script_sim10"] = [
+    analyze.cosine_similarity_row(matrix10, row, df.loc[row].skill)
+    for row in matrix10.index
+]
+
 # %%
 
 df[
@@ -200,6 +220,8 @@ df[
         "script_sim6",
         "script_sim7",
         "script_sim8",
+        "script_sim9",
+        "script_sim10",
     ]
 ].to_csv(start.CLEAN_FILEPATH + "vectorizations.csv")
 

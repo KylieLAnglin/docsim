@@ -36,6 +36,7 @@ training = training[
     right_on=["study", "id"],
     indicator=True,
 )
+training.to_csv(start.CLEAN_FILEPATH + "script_sims_fidelity.csv")
 
 # training = training[training.training == 0]
 training.fidelity.corr(training.script_sim4)

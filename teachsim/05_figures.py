@@ -250,7 +250,7 @@ plt.savefig(start.TABLE_FILEPATH + "Figure 3: Fidelity Panels", dpi=200)
 # fall 2017
 
 
-# study = results.loc[["fall2017", "fall2018"]]
+# study = script.loc[["fall2017", "fall2018"]]
 # sns.scatterplot(study.script_sim, study.study_sim, marker="", hue=study.study)
 # plt.xlabel("Adherence Score")
 # plt.ylabel("Replicability Score")
@@ -271,4 +271,66 @@ plt.savefig(start.TABLE_FILEPATH + "Figure 3: Fidelity Panels", dpi=200)
 #     )
 
 
+# %%
+behavior = script_results.loc[["spring2018", "spring2019", "fall2019TAP"]]
+behavior = behavior[behavior.filename != "103-2C"]
+fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 10))
+
+bins = np.linspace(0, 0.75, num=50)
+
+
+# fig.suptitle('Figure 3: Fidelity Scores  with Unusual Transcripts Highlighted',
+#            fontsize=15)
+ax.hist(behavior.script_sim3, bins, color="darkgray", alpha=0.75)
+ax.hist(
+    behavior[behavior.script_sim3 <= 0.150].script_sim3, bins, color="black", alpha=0.75
+)
+ax.hist(
+    behavior[behavior.script_sim3 >= 0.3469].script_sim3,
+    bins,
+    color="black",
+    alpha=0.75,
+)
+ax.hist(
+    behavior[(behavior.script_sim3 < 0.24) & (behavior.script_sim3 > 0.23)].script_sim3,
+    bins,
+    color="black",
+    alpha=0.75,
+)
+
+
+# ax.plot(0.255, 23.5, "*", color="black")
+# ax.plot(
+#     0.276,
+#     11.5,
+#     "*",
+#     color="black",
+# )
+# ax.plot(0.281, 11.5, "*", color="black")
+
+# ax.plot(0.140, 3, "*", color="black")
+# ax.plot(0.160, 12, "*", color="black")
+# ax.plot(0.165, 12, "*", color="black")
+
+
+ax.plot(0.255, -0.5, "*", color="black", label="Transcript with Ideal Implementation")
+ax.plot(
+    0.276,
+    -0.5,
+    "*",
+    color="black",
+)
+ax.plot(0.281, -0.5, "*", color="black")
+
+ax.plot(
+    0.140, -0.5, "*", color="gray", label="Transcript with Inadequate Implementation"
+)
+ax.plot(0.160, -0.5, "*", color="gray")
+ax.plot(0.165, -0.5, "*", color="gray")
+
+ax.legend()
+
+# Highest fidelity at 0.276, 0.28, 0.36
+
+ax.set_xlabel("Adherence Scores")
 # %%

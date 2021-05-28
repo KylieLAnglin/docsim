@@ -14,7 +14,6 @@ from sklearn.decomposition import TruncatedSVD
 from sklearn.preprocessing import Normalizer
 from nltk.corpus import stopwords
 
-from agileteacher.library import start
 
 nlp = spacy.load("en_core_web_lg", disable=["parser", "ner"])
 

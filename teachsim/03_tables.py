@@ -48,6 +48,38 @@ results.loc["fall2019TAP"]["script_sim3"].std()
 results.loc["fall2017"]["script_sim3"].std()
 results.loc["fall2018"]["script_sim3"].std()
 
+# %% LSA Appendix
+file = start.TABLE_FILEPATH + "LSA Appendix.xlsx"
+wb = load_workbook(file)
+ws = wb.active
+
+columns = [2, 3, 4]
+
+script_sims = [
+    "script_sim5",
+    "script_sim7",
+    "script_sim8",
+]
+
+
+def script_sim_table(study: str, row: int):
+
+    for script_sim, col in zip(script_sims, columns):
+        value = round(
+            results.loc[study][script_sim].mean(),
+            2,
+        )
+        ws.cell(row=row, column=col).value = value
+    wb.save(file)
+
+
+script_sim_table("spring2018", 3)
+script_sim_table("spring2019", 4)
+script_sim_table("fall2019TAP", 5)
+script_sim_table("fall2017", 6)
+script_sim_table("fall2018", 7)
+
+
 # %% Script Similarity
 
 

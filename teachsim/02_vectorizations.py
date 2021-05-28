@@ -200,7 +200,7 @@ df["script_sim5"] = [
     analyze.cosine_similarity_row(matrix5, row, df.loc[row].skill)
     for row in matrix5.index
 ]
-
+# %%
 matrix6 = process_text.vectorize_text(
     df,
     "new_text",
@@ -222,23 +222,24 @@ matrix7 = process_text.vectorize_text(
     "new_text",
     remove_stopwords=True,
     tfidf=True,
-    lemma=False,
-    lsa=False,
+    lemma=True,
+    lsa=True,
     n_components=50,
 ).add_prefix("term_")
+
 
 df["script_sim7"] = [
     analyze.cosine_similarity_row(matrix7, row, df.loc[row].skill)
     for row in matrix7.index
 ]
-
+# %%
 matrix8 = process_text.vectorize_text(
     df,
     "new_text",
     remove_stopwords=True,
     tfidf=True,
-    lemma=False,
-    lsa=False,
+    lemma=True,
+    lsa=True,
     n_components=200,
 ).add_prefix("term_")
 

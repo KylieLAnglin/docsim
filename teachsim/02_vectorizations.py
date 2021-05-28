@@ -1,8 +1,6 @@
 # %%
 import pandas as pd
 
-from gensim.models.doc2vec import Doc2Vec, TaggedDocument
-from nltk.tokenize import word_tokenize
 
 from docsim.library import start
 from docsim.library import process_text
@@ -218,6 +216,37 @@ df["script_sim6"] = [
     for row in matrix6.index
 ]
 
+# %% Add 50, 100, 150, 200 LSA topics
+matrix7 = process_text.vectorize_text(
+    df,
+    "new_text",
+    remove_stopwords=True,
+    tfidf=True,
+    lemma=False,
+    lsa=False,
+    n_components=50,
+).add_prefix("term_")
+
+df["script_sim7"] = [
+    analyze.cosine_similarity_row(matrix7, row, df.loc[row].skill)
+    for row in matrix7.index
+]
+
+matrix8 = process_text.vectorize_text(
+    df,
+    "new_text",
+    remove_stopwords=True,
+    tfidf=True,
+    lemma=False,
+    lsa=False,
+    n_components=200,
+).add_prefix("term_")
+
+df["script_sim8"] = [
+    analyze.cosine_similarity_row(matrix8, row, df.loc[row].skill)
+    for row in matrix8.index
+]
+
 
 # %%
 
@@ -236,6 +265,8 @@ df[df.study != "model"][
         "script_sim4",
         "script_sim5",
         "script_sim6",
+        "script_sim7",
+        "script_sim8",
     ]
 ].to_csv(start.CLEAN_FILEPATH + "script_sims.csv")
 

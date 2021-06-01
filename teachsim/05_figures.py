@@ -271,16 +271,28 @@ plt.savefig(start.TABLE_FILEPATH + "Figure 3: Fidelity Panels", dpi=200)
 #     )
 
 
-# %%
+# %% Figure 3
+# Four lowest transcripts
+behavior[["filename", "script_sim3"]].sort_values(by="script_sim3").head(4)
+
+# Four closest to the median
+median_script_sim3 = behavior.script_sim3.median()
+behavior["distance_to_median"] = abs(behavior.script_sim3 - median_script_sim3)
+behavior[["filename", "script_sim3", "distance_to_median"]].sort_values(
+    by="distance_to_median"
+).head(4)
+
+
+# Four highest transcripts
+behavior[["filename", "script_sim3"]].sort_values(by="script_sim3").tail(4)
+
+
 behavior = script_results.loc[["spring2018", "spring2019", "fall2019TAP"]]
 behavior = behavior[behavior.filename != "103-2C"]
 fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 10))
 
 bins = np.linspace(0, 0.75, num=50)
 
-
-# fig.suptitle('Figure 3: Fidelity Scores  with Unusual Transcripts Highlighted',
-#            fontsize=15)
 ax.hist(behavior.script_sim3, bins, color="darkgray", alpha=0.75)
 ax.hist(
     behavior[behavior.script_sim3 <= 0.150].script_sim3, bins, color="black", alpha=0.75

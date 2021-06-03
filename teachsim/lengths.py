@@ -11,9 +11,8 @@ from docsim.library import clean_text
 
 # %%
 
-df_corpus = pd.read_csv(start.CLEAN_FILEPATH + "text_transcripts.csv")
+df = pd.read_csv(start.CLEAN_FILEPATH + "text_transcripts.csv")
 
-df = df_corpus[df_corpus.scenario == "behavior"]
 
 df["processed_text"] = [
     process_text.process_text(
@@ -34,12 +33,20 @@ df["word_count"] = list_of_lengths
 print(df[df.study == "spring2018"].word_count.mean())  # 740
 print(df[df.study == "spring2019"].word_count.mean())  # 768
 print(df[df.study == "fall2019TAP"].word_count.mean())  # 769
+print(df[df.study == "fall2017"].word_count.mean())  #
+print(df[df.study == "fall2018"].word_count.mean())  #
+
+# %%
+
 
 print(df[df.study == "spring2018"].word_count.std())  # 133
 print(df[df.study == "spring2019"].word_count.std())  # 102
 print(df[df.study == "fall2019TAP"].word_count.std())  # 125
+print(df[df.study == "fall2017"].word_count.std())  # 136
+print(df[df.study == "fall2018"].word_count.std())  #
 
-print(df[df.scenario == "behavior"].word_count.mean())  # 133
+
+print(df.word_count.mean())  # 133
 
 
 # %%

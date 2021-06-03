@@ -197,7 +197,7 @@ ax3 = axs[0, 2]
 ax4 = axs[1, 0]
 ax5 = axs[1, 1]
 
-bins = np.linspace(0, 0.75, num=30)
+bins = np.linspace(0, 0.5, num=30)
 
 # fig.suptitle('Figure 3: Fidelity Scores  with Unusual Transcripts Highlighted',
 #            fontsize=15)

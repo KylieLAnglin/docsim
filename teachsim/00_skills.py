@@ -145,5 +145,5 @@ skill_df = skill_df.merge(sim_data, how="left", left_index=True, right_index=Tru
 skill_df = skill_df[skill_df.skill != "feedback0"]
 # %% Save
 skill_df.to_csv(
-    SKILLS_PATH + "skills_and_coaches.csv",
+    start.RAW_FILEPATH + "skills_and_coaches.csv",
 )

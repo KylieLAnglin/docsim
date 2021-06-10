@@ -1,4 +1,5 @@
 # %%
+from os import link
 import re
 
 import pandas as pd
@@ -19,7 +20,7 @@ def cleaning_protocol(raw_text_dict: dict, speaker_tags_df: pd.DataFrame):
 
     Args:
         raw_text_dict (dict): Doc ID as keys, text as values
-        speaker_tags_df (pd.DataFrame): Doc ID in col 1 (doc), previous coach tag in col 2
+        speaker_tags_df (pd.DataFrame): filename in "doc" column, coach tag in "coach" column
 
     Returns:
         [dict]: Doc ID as keys, cleaned text as values
@@ -85,177 +86,34 @@ def extract_id_from_column(df: pd.DataFrame, prefix: str, suffix: str):
 # %% Fall 2017
 
 # import text
-filepath = start.RAW_FILEPATH + "fall_2017/coaching/"
+filepath = start.RAW_FILEPATH + "transcripts/"
 raw_text = clean_text.import_text(
     filepath=filepath, pattern="*docx", paragraph_tag="[New Speaker] "
 )
 
 # import speaker tags
-speaker_tags_df = pd.read_csv(filepath + "fall2017_speaker_tags.csv", header=0)
+linking_file = pd.read_csv(start.RAW_FILEPATH + "linking_files.csv", header=0)
+speaker_tags_df = linking_file[["filename", "speaker"]].rename(
+    columns={"filename": "doc", "speaker": "coach"}
+)
+
+speaker_tags_df = speaker_tags_df.dropna()
 cleaned_dict = cleaning_protocol(raw_text, speaker_tags_df)
 
-
+# %%
 text_df = pd.DataFrame.from_dict(
     cleaned_dict,
     orient="index",
     columns=["raw_text", "clean_text"],
 )
 
-
-text_df = extract_id_from_column(text_df, "", "_c_Transcript.docx")
-text_df = text_df.reset_index()
-text_df = text_df.rename(columns={"index": "filename"})
-
-text_df["study"] = "fall2017"
-text_df["year"] = 2017
-text_df["semester"] = "fall"
-text_df["scenario"] = "feedback"
-text_df = text_df.set_index("id")
-fall2017 = text_df
-
-# %% Spring 2018
-
-# import text
-filepath = start.RAW_FILEPATH + "spring_2018/coaching/"
-raw_text = clean_text.import_text(
-    filepath=filepath, pattern="*docx", paragraph_tag="[New Speaker] "
-)
-
-# import speaker tags
-speaker_tags_df = pd.read_csv(filepath + "spring2018_speaker_tags.csv", header=0)
-
-cleaned_dict = cleaning_protocol(raw_text, speaker_tags_df)
-
-
-text_df = pd.DataFrame.from_dict(
-    cleaned_dict,
-    orient="index",
-    columns=["raw_text", "clean_text"],
+text_df = (
+    text_df.merge(linking_file, left_index=True, right_on="filename")
+    .rename(columns={"person_id": "id"})
+    .set_index(["study", "id"])
 )
 
 
-text_df = extract_id_from_column(text_df, prefix="", suffix="-2C.docx")
-text_df = text_df.reset_index()
-text_df = text_df.rename(columns={"index": "filename"})
-
-text_df["study"] = "spring2018"
-text_df["year"] = 2018
-text_df["semester"] = "spring"
-text_df["scenario"] = "behavior"
-text_df = text_df.set_index("id")
-spring2018 = text_df
-
-
-# %% Fall 2018
-
-# import text
-filepath = start.RAW_FILEPATH + "fall_2018/coaching/"
-raw_text = clean_text.import_text(
-    filepath=filepath, pattern="*docx", paragraph_tag="[New Speaker] "
-)
-
-# import speaker tags
-speaker_tags_df = pd.read_csv(filepath + "fall2018_speaker_tags.csv", header=0)
-
-cleaned_dict = cleaning_protocol(raw_text, speaker_tags_df)
-
-
-text_df = pd.DataFrame.from_dict(
-    cleaned_dict,
-    orient="index",
-    columns=["raw_text", "clean_text"],
-)
-
-
-text_df = extract_id_from_column(text_df, prefix="2018_", suffix="_3C_Transcript.docx")
-text_df = text_df.reset_index()
-text_df = text_df.rename(columns={"index": "filename"})
-
-text_df["study"] = "fall2018"
-text_df["year"] = 2018
-text_df["semester"] = "fall"
-text_df["scenario"] = "feedback"
-text_df = text_df.set_index("id")
-fall2018 = text_df
-
-# %% Spring2019
-
-# import text
-filepath = start.RAW_FILEPATH + "spring_2019/coaching/"
-raw_text = clean_text.import_text(
-    filepath=filepath, pattern="*docx", paragraph_tag="[New Speaker] "
-)
-
-# import speaker tags
-speaker_tags_df = pd.read_csv(filepath + "Spring2019_speaker_tags.csv", header=0)
-
-cleaned_dict = cleaning_protocol(raw_text, speaker_tags_df)
-
-text_df = pd.DataFrame.from_dict(
-    cleaned_dict,
-    orient="index",
-    columns=["raw_text", "clean_text"],
-)
-
-text_df = extract_id_from_column(text_df, prefix="2019_", suffix="_5C_Transcript.docx")
-text_df = text_df.reset_index()
-text_df = text_df.rename(columns={"index": "filename"})
-
-
-text_df["study"] = "spring2019"
-text_df["year"] = 2019
-text_df["semester"] = "spring"
-text_df["scenario"] = "behavior"
-text_df = text_df.set_index("id")
-spring2019 = text_df
-
-# %% Fall 2019 TAP
-
-# import text
-filepath = start.RAW_FILEPATH + "fall_2019_TAP/coaching/"
-raw_text = clean_text.import_text(
-    filepath=filepath, pattern="*docx", paragraph_tag="[New Speaker] "
-)
-
-# import speaker tags
-speaker_tags_df = pd.read_csv(filepath + "fall2019TAP_speaker_tags.csv", header=0)
-
-cleaned_dict = cleaning_protocol(raw_text, speaker_tags_df)
-
-
-text_df = pd.DataFrame.from_dict(
-    cleaned_dict,
-    orient="index",
-    columns=["raw_text", "clean_text"],
-)
-
-text_df = extract_id_from_column(
-    text_df, prefix="01_1920_05_", suffix="_22c_Transcript.docx"
-)
-text_df = text_df.reset_index()
-text_df = text_df.rename(columns={"index": "filename"})
-
-
-text_df["study"] = "fall2019TAP"
-text_df["year"] = 2019
-text_df["semester"] = "fall"
-text_df["scenario"] = "behavior"
-text_df = text_df.set_index("id")
-fall2019TAP = text_df
-
-# %% Concatenate
-df = pd.concat([fall2017, spring2018, fall2018, spring2019, fall2019TAP])
-df = df.reset_index().set_index(["study", "id"])
-
-# %% Merge skills
-skills = pd.read_csv(
-    start.RAW_FILEPATH + "coaching_notes/" + "skills_and_coaches.csv",
-    index_col=["study", "id"],
-)
-
-df = df.merge(skills, how="left", left_index=True, right_index=True)
-
-
-df.to_csv(start.CLEAN_FILEPATH + "text_transcripts.csv")
+text_df.to_csv(start.CLEAN_FILEPATH + "text_transcripts.csv")
 
 # %%

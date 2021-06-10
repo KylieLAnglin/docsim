@@ -150,14 +150,6 @@ df["script_sim2"] = [
     for row in matrix2.index
 ]
 
-# process_text.what_words_matter(matrix1, "6-2C", "behavior2", 10)
-# process_text.what_words_matter(matrix1, "49-2C", "behavior3", 10)
-# process_text.what_words_matter(matrix1, "78-2C", "behavior3", 10)
-# process_text.what_words_matter(matrix1, "6-2C", "behavior2", 10)
-
-# process_text.what_words_matter(matrix1, "2019_58_5C", "behavior2", 10)
-
-# process_text.what_words_matter(matrix1, "2019_58_5C", "behavior2", 20)
 
 # %%
 matrix3 = process_text.vectorize_text(
@@ -169,11 +161,6 @@ df["script_sim3"] = [
     for row in matrix3.index
 ]
 
-# process_text.what_words_matter(matrix2, "6-2C", "behavior2", 20)
-# process_text.what_words_matter(matrix2, "01_1920_05_008_22c", "behavior2", 20)
-# process_text.top_terms(matrix2, "01_1920_05_008_22c", 10)
-
-# process_text.what_words_matter(matrix2, "99-2C", "behavior3", 20)
 
 # %%
 
@@ -273,71 +260,6 @@ df[df.study != "model"][
 
 # %%
 
-## Other vectorizations
-
-# matrix = process_text.vectorize_text(
-#     df, "new_text", remove_stopwords=True, tfidf=False, lemma=True, lsa=False
-# ).add_prefix("term_")
-
-# df["script_sim"] = [
-#     analyze.cosine_similarity_row(matrix, row, df.loc[row].skill)
-#     for row in matrix.index
-# ]
-
-
-# matrix = process_text.vectorize_text(
-#     df, "new_text", remove_stopwords=True, tfidf=False, lemma=False, lsa=True
-# ).add_prefix("term_")
-
-# df["script_sim"] = [
-#     analyze.cosine_similarity_row(matrix, row, df.loc[row].skill)
-#     for row in matrix.index
-# ]
-
-
-# %% Doc 2 Vec
-
-# model = Doc2Vec.load(start.CLEAN_FILEPATH + "doc2vec.model")
-
-# tokenized_docs = [word_tokenize(row.lower()) for row in df.clean_text]
-
-# matrix_lists = [model.infer_vector(doc) for doc in tokenized_docs]
-# matrix7 = pd.DataFrame(matrix_lists, index=df.index)
-
-# df["script_sim7"] = [
-#     analyze.cosine_similarity_row(matrix7, row, df.loc[row].skill)
-#     for row in matrix7.index
-# ]
-
-# %% Doc 2 Vec with Pre-processing (performs worse than without)
-# stop = process_text.spacy_stopwords
-# tokenized_docs_no_stop = [
-#     [i for i in word_tokenize(row.lower()) if i not in stop] for row in df.clean_text
-# ]
-
-# matrix_lists = [model.infer_vector(doc) for doc in tokenized_docs_no_stop]
-# matrix8 = pd.DataFrame(matrix_lists, index=df.index)
-
-# df["script_sim8"] = [
-#     analyze.cosine_similarity_row(matrix8, row, df.loc[row].skill)
-#     for row in matrix8.index
-# ]
-
-# %%
-# matrix8 = process_text.vectorize_text(
-#     df,
-#     "new_text",
-#     remove_stopwords=False,
-#     tfidf=True,
-#     lemma=False,
-#     lsa=False,
-#     n_gram_range=(1, 2),
-# ).add_prefix("term_")
-
-# df["script_sim8"] = [
-#     analyze.cosine_similarity_row(matrix8, row, df.loc[row].skill)
-#     for row in matrix8.index
-# ]
 
 # %% Replicability
 

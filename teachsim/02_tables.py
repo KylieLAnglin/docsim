@@ -10,7 +10,7 @@ from docsim.library import start
 results = pd.read_csv(start.CLEAN_FILEPATH + "script_sims.csv").set_index("study", "id")
 
 # %%
-file = start.TABLE_FILEPATH + "table1_fidelity.xlsx"
+file = start.TABLE_FILEPATH + "table2.xlsx"
 wb = load_workbook(file)
 ws = wb.active
 
@@ -80,47 +80,12 @@ script_sim_table("fall2017", 6)
 script_sim_table("fall2018", 7)
 
 
-# %% Script Similarity
-
-
-# %% Study Similarity - Spring 2019 Baseline
+# %% Study Matrix
 
 results = pd.read_csv(start.CLEAN_FILEPATH + "study_sims.csv").set_index("study", "id")
 
-file = start.TABLE_FILEPATH + "table2_replicability.xlsx"
-wb = load_workbook(file)
-ws = wb.active
 
-study_sims = [
-    "rep1_study1",
-    "rep2_study1",
-    "rep3_study1",
-    "rep4_study1",
-    "rep5_study1",
-]
-
-
-def study_sim_table(study: str, row: int):
-
-    for study_sim, col in zip(study_sims, columns):
-        value = round(
-            results.loc[study][study_sim].mean(),
-            2,
-        )
-        ws.cell(row=row, column=col).value = value
-    wb.save(file)
-
-
-study_sim_table("spring2018", 3)
-study_sim_table("spring2019", 4)
-study_sim_table("fall2019TAP", 5)
-study_sim_table("fall2017", 6)
-study_sim_table("fall2018", 7)
-
-
-# %% Study Matrix
-
-file = start.TABLE_FILEPATH + "table3_replicability_matrix.xlsx"
+file = start.TABLE_FILEPATH + "table3.xlsx"
 wb = load_workbook(file)
 ws = wb.active
 

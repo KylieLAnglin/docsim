@@ -258,8 +258,6 @@ df[df.study != "model"][
     ]
 ].to_csv(start.CLEAN_FILEPATH + "script_sims.csv")
 
-# %%
-
 
 # %% Replicability
 

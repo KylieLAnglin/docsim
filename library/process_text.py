@@ -132,6 +132,21 @@ def vectorize_text(
     n_components: int = 100,
     n_gram_range=(1, 1),
 ):
+    """Returns a document-term matrix
+
+    Args:
+        df (pd.DataFrame): Dataframe containing text to be vectorized in a column
+        text_col (str): Name of column containing text
+        remove_stopwords (bool, optional): Remove stop words?. Defaults to False.
+        tfidf (bool, optional): Tf-IDF weight?. Defaults to False.
+        lemma (bool, optional): Lemmatize?. Defaults to False.
+        lsa (bool, optional): Perform LSA?. Defaults to False.
+        n_components (int, optional): Number of LSA components to keep. Defaults to 100.
+        n_gram_range (tuple, optional): Number of n-grams. Defaults to (1, 1).
+
+    Returns:
+        pd.DataFrame: Document-term matrix
+    """
 
     docs = [
         process_text_nltk(

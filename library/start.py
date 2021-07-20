@@ -1,9 +1,6 @@
-MAIN_DIR = "/Users/kylie/"
-# MAIN_DIR = "/Users/kylieanglin/"
+# Update main directory here
+MAIN_DIR = "/Users/kylie/Dropbox/Active/Semantic Similarity Replication Files/"
 
-DATA_DIR = MAIN_DIR + "Dropbox/Active/Semantic Similarity Replication Files/"
-CODE_DIR = MAIN_DIR + "docsim/Semantic Similarity Replication Files/"
-
-RAW_FILEPATH = DATA_DIR + "data/"
-CLEAN_FILEPATH = DATA_DIR + "data/clean/"
-TABLE_FILEPATH = DATA_DIR + "results/"
+RAW_FILEPATH = MAIN_DIR + "data/"
+CLEAN_FILEPATH = MAIN_DIR + "data/clean/"
+TABLE_FILEPATH = MAIN_DIR + "results/"

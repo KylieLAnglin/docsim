@@ -3,16 +3,13 @@ import fnmatch
 import re
 import spacy
 
-nlp = spacy.load("en_core_web_lg", disable=["parser", "ner"])
-
-
 import docx
 
 from docsim.library import dictionary_tools
 
 
 def import_text(filepath: str, pattern: str, paragraph_tag: str = None):
-    """Searches folder for docx files and extracts text
+    """Searches folder for docx files and extracts plain text with a tag indicating each new paragraph
 
     Args:
         filepath (str): filepath to folder containing docx files

@@ -17,7 +17,6 @@ df["skill"] = ["behavior" + str(list(filter(str.isdigit, doc))[0]) for doc in df
 
 
 behavior = df
-# %%
 
 # %% Feedback
 ideal_dict = clean_text.import_text(

@@ -63,6 +63,7 @@ def process_text_nltk(
     remove_punct: bool = True,
     remove_stopwords: bool = False,
     lemma: bool = False,
+    string_or_list: str = "string",
 ):
 
     tokens = nltk.word_tokenize(text)
@@ -85,7 +86,11 @@ def process_text_nltk(
     # elif not lemma:
     #     doc = " ".join([token.text for token in nlp(text)])
 
-    doc = " ".join(tokens)
+    if string_or_list != "list":
+        doc = " ".join(tokens)
+    else:
+        doc = tokens
+
     return doc
 
 

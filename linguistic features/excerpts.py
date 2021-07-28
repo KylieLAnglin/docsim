@@ -1,7 +1,10 @@
 # %%
 import pandas as pd
 import nltk
+import openpyxl
+
 from docsim.library import process_text
+
 
 gi = pd.read_csv("/Users/kylie/generalinquirer.xls")
 # %%
@@ -103,5 +106,88 @@ df["goal_words"] = gi_search("Goal", df)[0]
 df["goal_word_count"] = gi_search("Goal", df)[1]
 
 # %%
-
+df = df.set_index("Filename")
 df.to_csv("/Users/kylie/Dropbox/Active/docsim/excerpt_description.csv")
+
+df["strong_to_weak"] = df.strong_word_count / (
+    df.strong_word_count + df.weak_word_count
+)
+df["active_to_passive"] = df.active_word_count / (
+    df.active_word_count + df.passive_word_count
+)
+df["future_to_past"] = df.future / (df.future + df.past)
+# %% Create formatted table
+TABLE_PATH = "/Users/kylie/Dropbox/Active/docsim/data/excerpts/"
+transcript = "01_1920_05_085_22c_Transcript"
+file = TABLE_PATH + transcript + ".xlsx"
+wb = openpyxl.Workbook()
+ws = wb.active
+transcript = transcript + ".txt"
+
+ws.cell(row=1, column=1).value = "Example Output"
+ws.cell(row=2, column=2).value = "Benchmark"
+ws.cell(row=2, column=3).value = "Transcript Distance"
+ws.cell(row=2, column=4).value = "Transcript Similarity"
+
+
+def paste_values(row: int, label: str, value: str):
+    ws.cell(row=row, column=1).value = label
+    benchmark_value = df.loc["behavior1.txt", value]
+    transcript_value = df.loc["01_1920_05_085_22c_Transcript.txt", value]
+
+    ws.cell(row=row, column=2).value = round(benchmark_value, 3)
+    diff = benchmark_value - transcript_value
+    ws.cell(row=row, column=3).value = round(diff, 3)
+    sim = 1 - abs(diff)
+    ws.cell(row=row, column=4).value = round(sim, 3)
+
+    wb.save(file)
+
+
+paste_values(row=3, label="Type-Token Ratio", value="lemma_ttr")
+paste_values(row=4, label="Average Adjacent Overlap", value="adjacent_overlap_all_sent")
+paste_values(row=5, label="Average Word2Vec Value", value="word2vec_1_all_sent")
+paste_values(row=6, label="Proportion causal Words", value="all_causal")
+paste_values(row=7, label="Proportion strong vs weak words", value="strong_to_weak")
+paste_values(
+    row=8, label="Proportion active vs passive words", value="active_to_passive"
+)
+paste_values(row=9, label="Proportion future to past verbs", value="future_to_past")
+# %%
+TABLE_PATH = "/Users/kylie/Dropbox/Active/docsim/data/excerpts/"
+transcript = "01_1920_05_021_22c_Transcript"
+file = TABLE_PATH + transcript + ".xlsx"
+wb = openpyxl.Workbook()
+ws = wb.active
+transcript = transcript + ".txt"
+
+ws.cell(row=1, column=1).value = "Example Output"
+ws.cell(row=2, column=2).value = "Benchmark"
+ws.cell(row=2, column=3).value = "Transcript Distance"
+ws.cell(row=2, column=4).value = "Transcript Similarity"
+
+
+def paste_values(row: int, label: str, value: str):
+    ws.cell(row=row, column=1).value = label
+    benchmark_value = df.loc["behavior1.txt", value]
+    transcript_value = df.loc["01_1920_05_021_22c_Transcript.txt", value]
+
+    ws.cell(row=row, column=2).value = round(benchmark_value, 5)
+    diff = benchmark_value - transcript_value
+    ws.cell(row=row, column=3).value = round(diff, 5)
+    sim = 1 - abs(diff)
+    ws.cell(row=row, column=4).value = round(sim, 5)
+
+    wb.save(file)
+
+
+paste_values(row=3, label="Type-Token Ratio", value="lemma_ttr")
+paste_values(row=4, label="Average Adjacent Overlap", value="adjacent_overlap_all_sent")
+paste_values(row=5, label="Average Word2Vec Value", value="word2vec_1_all_sent")
+paste_values(row=6, label="Proportion causal Words", value="all_causal")
+paste_values(row=7, label="Proportion strong vs weak words", value="strong_to_weak")
+paste_values(
+    row=8, label="Proportion active vs passive words", value="active_to_passive"
+)
+paste_values(row=9, label="Proportion future to past verbs", value="future_to_past")
+# %%

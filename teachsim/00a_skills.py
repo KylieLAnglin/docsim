@@ -138,6 +138,31 @@ fall2019 = skills
 fall2019["study"] = "fall2019TAP"
 fall2019 = fall2019.set_index(["study", "id"])
 
+# %% Spring 2020
+notes = pd.read_csv(SKILLS_PATH + "Spring 2020 Coaching Notes.csv")
+notes = qualtrics.select_valid_rows(notes, keep_previews=True, min_duration=0)
+notes_labels = qualtrics.extract_column_labels(
+    SKILLS_PATH + "Spring 2020 Coaching Notes.csv"
+)
+notes = notes.rename(
+    columns={"Q37": "name", "Q38": "email", "Q19": "skill_name", "Q41": "coach"}
+)
+skills = skills[["name", "email", "coach", "skill_name"]]
+
+# Merge skills to participant ids
+ids2020 = pd.read_csv(SKILLS_PATH + "Randomization_Spring2020_MR_CM_FE_Final.csv")
+ids2020 = ids2020.rename(columns={"participant_id": "id"})
+skills = skills.merge(
+    ids2020[["id", "email"]], how="left", left_on="email", right_on="email"
+)
+skills["skill"] = skills.skill_name.map(BEHAVIOR_SKILL_LABELS)
+
+# KYlie YOU ARE HERE. AFTER UPDATING IDS.
+
+# spring2020 = skills
+# spring2020["study"] = "spring2020"
+# spring2020 = spring2020.dropna(subset=["id"]).set_index(["study", "id"])
+
 
 # %%
 skill_df = pd.concat([fall2017, fall2018, spring2018, spring2019, fall2019])

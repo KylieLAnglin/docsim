@@ -83,8 +83,6 @@ def extract_id_from_column(df: pd.DataFrame, prefix: str, suffix: str):
     return new_df
 
 
-# %% Fall 2017
-
 # import text
 filepath = start.RAW_FILEPATH + "transcripts/"
 raw_text = clean_text.import_text(

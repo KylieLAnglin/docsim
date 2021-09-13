@@ -147,28 +147,39 @@ notes_labels = qualtrics.extract_column_labels(
 notes = notes.rename(
     columns={"Q37": "name", "Q38": "email", "Q19": "skill_name", "Q41": "coach"}
 )
-skills = skills[["name", "email", "coach", "skill_name"]]
+skills = notes[["name", "email", "coach", "skill_name"]]
 
 # Merge skills to participant ids
-ids2020 = pd.read_csv(SKILLS_PATH + "Randomization_Spring2020_MR_CM_FE_Final.csv")
-ids2020 = ids2020.rename(columns={"participant_id": "id"})
+ids2020 = pd.read_csv(SKILLS_PATH + "Randomization_Fall2019_Coaching_Final.csv")
+ids2020 = ids2020.rename(columns={"student": "id"})
 skills = skills.merge(
-    ids2020[["id", "email"]], how="left", left_on="email", right_on="email"
+    ids2020[["id", "email"]],
+    how="left",
+    left_on="email",
+    right_on="email",
+)  # missing 6
+skills["skill"] = skills.skill_name.map(
+    {
+        "Timely": "behavior1",
+        "Specific": "behavior2",
+        "Succinct": "behavior3",
+        "Calm": "behavior4",
+    }
 )
-skills["skill"] = skills.skill_name.map(BEHAVIOR_SKILL_LABELS)
-
-# KYlie YOU ARE HERE. AFTER UPDATING IDS.
-
-# spring2020 = skills
-# spring2020["study"] = "spring2020"
-# spring2020 = spring2020.dropna(subset=["id"]).set_index(["study", "id"])
+spring2020 = skills
+spring2020["study"] = "spring2020"
+spring2020 = spring2020.dropna(subset=["id"]).set_index(["study", "id"])
 
 
 # %%
-skill_df = pd.concat([fall2017, fall2018, spring2018, spring2019, fall2019])
+skill_df = pd.concat([fall2017, fall2018, spring2018, spring2019, fall2019, spring2020])
 skill_df = skill_df.merge(sim_data, how="left", left_index=True, right_index=True)
 skill_df = skill_df[skill_df.skill != "feedback0"]
 # %% Save
 skill_df.to_csv(
     SKILLS_PATH + "skills_and_coaches.csv",
 )
+
+spring2020.to_csv(start.MAIN_DIR + "spring2020_coach_tags.csv")
+
+# %%
